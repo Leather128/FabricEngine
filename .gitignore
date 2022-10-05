@@ -1,0 +1,7 @@
+bin/
+.vscode/
+
+.assets_old/
+.export_old/
+.mods_old/
+.source_old/

@@ -1,0 +1,14 @@
+{
+    "title": "Friday Night Funkin'",
+	"description": "The base game. That's basically it.",
+	"author": "",
+    "authors": [
+        ["ninjamuffin99", "Programmer"],
+        ["PhantomArcade3K", "Art"],
+        ["evilsk8r", "Art"],
+        ["Kawaisprite", "Music"]
+    ],
+	"api_version": "0.1.0",
+	"mod_version": "0.2.8",
+	"license": "Apache 2.0"
+}
