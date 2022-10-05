@@ -1,1 +1,1 @@
-import assets.*;
+// nothing yet

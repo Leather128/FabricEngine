@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
 	<!-- App Info -->
-	<app title="Leather Engine" file="LeatherEngine" main="Main" version="0.0.1" company="Leather128" />
+	<app title="Fabric Engine" file="FabricEngine" main="Main" version="0.1.0" company="Leather128" />
 
 	<!-- Preloader -->
 	<app preloader="flixel.system.FlxPreloader" />
@@ -28,7 +28,6 @@
 
 	<source path="src" />
 	<assets path="assets" />
-	<assets path="mods" embed="false" />
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
 
