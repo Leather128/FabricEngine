@@ -78,7 +78,7 @@ class Info extends openfl.text.TextField
 		// Actual text
 		text = '${fps} fps
 		${Utilities.formatBytes(Memory.getCurrentUsage(), true)}/${Utilities.formatBytes(Memory.getPeakUsage())}
-		${#if debug 'debug-build (?)' #else '' #end}
+		${#if debug 'debug-build-${Main.build_number}' #else '' #end}
 		';
 	}
 }

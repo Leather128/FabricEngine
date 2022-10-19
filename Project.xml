@@ -29,6 +29,8 @@
 	<source path="src" />
 	<assets path="assets" embed="false" />
 
+	<assets path="build.txt" embed="false" />
+
 	<!-- ______________________________ Haxedefines _____________________________ -->
 
 	<!--Optimise inputs, be careful you will get null errors if you don't use conditionals in your game-->

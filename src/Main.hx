@@ -15,10 +15,19 @@ class Main extends openfl.display.Sprite
 		@author Leather128
 	**/
 	public static var fps_counter:base.Info;
+
+	/**
+	 * The build number of the game.
+	 * @author Leather128
+	 */
+	public static var build_number:Int = 0;
 	
 	public function new()
 	{
 		super();
+
+		// Simple loading of the build number on startup.
+		build_number = Std.parseInt(sys.io.File.getContent(sys.FileSystem.absolutePath('build.txt')));
 
 		// Fixes some assets not loading properly
 		flixel.graphics.FlxGraphic.defaultPersist = true;
