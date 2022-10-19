@@ -27,7 +27,7 @@
 	<set name="BUILD_DIR" value="bin/debug" if="debug" />
 
 	<source path="src" />
-	<assets path="assets" />
+	<assets path="assets" embed="false" />
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
 

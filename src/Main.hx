@@ -1,26 +1,33 @@
 package;
 
-import flixel.FlxGame;
-import openfl.display.Sprite;
+import openfl.events.KeyboardEvent;
+import openfl.events.Event;
+import flixel.FlxG;
 
 /**
-	The main class that starts our program.
-**/
-class Main extends Sprite
+ * The main class that starts our program.
+ * @author Leather128
+ */
+class Main extends openfl.display.Sprite
 {
 	/**
-		The current `openfl.display.FPS` being used (only shown on desktop platforms).
+		The current info display being used (only shown on desktop platforms or in debug mode).
+		@author Leather128
 	**/
-	public static var fps_counter:openfl.display.FPS;
+	public static var fps_counter:base.Info;
 	
 	public function new()
 	{
 		super();
 
-		addChild(new FlxGame(0, 0, PlayState));
+		// Fixes some assets not loading properly
+		flixel.graphics.FlxGraphic.defaultPersist = true;
+		addChild(new flixel.FlxGame(0, 0, funkin.scenes.Test));
 
-		fps_counter = new openfl.display.FPS(10, 3, 0xFFFFFFFF);
-		#if desktop
+		// Create FPS Counter even if it's not shown just in case.
+		fps_counter = new base.Info(10, 3, 0xFFFFFFFF);
+		#if (desktop || debug)
+		// Only add FPS Counter if on desktop OR you're using a debug build.
 		addChild(fps_counter);
 		#end
 	}

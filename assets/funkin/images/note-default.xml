@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="note-default.png">
+	<!-- Created with Adobe Flash CS6 version 12.0.0.481 -->
+	<!-- http://www.adobe.com/products/flash.html -->
+	<SubTexture name="down0000" x="1" y="172" width="157" height="154"/>
+	<SubTexture name="down hold0000" x="307" y="540" width="50" height="44"/>
+	<SubTexture name="down hold end0000" x="317" y="475" width="50" height="64"/>
+	<SubTexture name="down20000" x="159" y="172" width="157" height="154"/>
+	<SubTexture name="down2 hold0000" x="358" y="540" width="50" height="44"/>
+	<SubTexture name="down2 hold end0000" x="368" y="475" width="50" height="64"/>
+	<SubTexture name="left0000" x="172" y="1" width="154" height="157"/>
+	<SubTexture name="left hold0000" x="205" y="547" width="50" height="44"/>
+	<SubTexture name="left hold end0000" x="419" y="475" width="50" height="64"/>
+	<SubTexture name="left20000" x="317" y="159" width="154" height="157"/>
+	<SubTexture name="left2 hold0000" x="256" y="547" width="50" height="44"/>
+	<SubTexture name="left2 hold end0000" x="1" y="482" width="50" height="64"/>
+	<SubTexture name="right0000" x="327" y="1" width="154" height="157"/>
+	<SubTexture name="right hold0000" x="1" y="547" width="50" height="44"/>
+	<SubTexture name="right hold end0000" x="52" y="482" width="50" height="64"/>
+	<SubTexture name="right20000" x="317" y="317" width="154" height="157"/>
+	<SubTexture name="right2 hold0000" x="103" y="547" width="50" height="44"/>
+	<SubTexture name="right2 hold end0000" x="103" y="482" width="50" height="64"/>
+	<SubTexture name="square0000" x="1" y="1" width="170" height="170"/>
+	<SubTexture name="square hold0000" x="154" y="547" width="50" height="44"/>
+	<SubTexture name="square hold end0000" x="154" y="482" width="50" height="64"/>
+	<SubTexture name="up0000" x="1" y="327" width="157" height="154"/>
+	<SubTexture name="up hold0000" x="52" y="547" width="50" height="44"/>
+	<SubTexture name="up hold end0000" x="205" y="482" width="50" height="64"/>
+	<SubTexture name="up20000" x="159" y="327" width="157" height="154"/>
+	<SubTexture name="up2 hold0000" x="409" y="540" width="50" height="44"/>
+	<SubTexture name="up2 hold end0000" x="256" y="482" width="50" height="64"/>
+</TextureAtlas>
