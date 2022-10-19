@@ -46,8 +46,8 @@ class Info extends openfl.text.TextField
 
 		this.x = x;
 		this.y = y;
-		this.width = 1280;
-		this.height = 720;
+		width = 1280;
+		height = 720;
 
 		selectable = mouseEnabled = false;
 		// VCR OSD Mono is the font name of assets/funkin/fonts/vcr.ttf
