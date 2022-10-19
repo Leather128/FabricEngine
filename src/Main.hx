@@ -21,13 +21,24 @@ class Main extends openfl.display.Sprite
 	 * @author Leather128
 	 */
 	public static var build_number:Int = 0;
+
+	/**
+	 * Last commit of the game before this build was made.
+	 * @author Leather128
+	 */
+	public static var commit_id:String = "";
 	
 	public function new()
 	{
 		super();
 
-		// Simple loading of the build number on startup.
-		build_number = Std.parseInt(sys.io.File.getContent(sys.FileSystem.absolutePath('build.txt')));
+		// Simple loading of the build number and commit id on startup.
+		#if sys
+		if (sys.FileSystem.exists(sys.FileSystem.absolutePath('build.txt')) && sys.FileSystem.exists(sys.FileSystem.absolutePath('commit.txt'))) {
+			build_number = Std.parseInt(sys.io.File.getContent(sys.FileSystem.absolutePath('build.txt')));
+			commit_id = sys.io.File.getContent(sys.FileSystem.absolutePath('commit.txt'));
+		}
+		#end
 
 		// Fixes some assets not loading properly
 		flixel.graphics.FlxGraphic.defaultPersist = true;

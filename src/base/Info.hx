@@ -46,8 +46,8 @@ class Info extends openfl.text.TextField
 
 		this.x = x;
 		this.y = y;
-		this.width = flixel.FlxG.height;
-		this.height = flixel.FlxG.height;
+		this.width = 1280;
+		this.height = 720;
 
 		selectable = mouseEnabled = false;
 		// VCR OSD Mono is the font name of assets/funkin/fonts/vcr.ttf
@@ -78,7 +78,7 @@ class Info extends openfl.text.TextField
 		// Actual text
 		text = '${fps} fps
 		${Utilities.formatBytes(Memory.getCurrentUsage(), true)}/${Utilities.formatBytes(Memory.getPeakUsage())}
-		${#if debug 'debug-build-${Main.build_number}' #else '' #end}
+		${#if debug 'debug-build-${Main.build_number} (${Main.commit_id})' #else '' #end}
 		';
 	}
 }
