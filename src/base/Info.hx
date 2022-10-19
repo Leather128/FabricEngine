@@ -71,10 +71,14 @@ class Info extends openfl.text.TextField
 
 		fps = times.length;
 
-		// Pretty self explanatory, 1048576.0 is just the number
-		memory_usage = flixel.math.FlxMath.roundDecimal(Memory.getCurrentUsage() / 1048576.0, 2);
-		memory_usage_peak = flixel.math.FlxMath.roundDecimal(Memory.getPeakUsage() / 1048576.0, 2);
+		// Memory calculations for the 5 people who will use it.
+		memory_usage = Std.parseFloat(Utilities.formatBytes(Memory.getCurrentUsage(), true));
+		memory_usage_peak = Std.parseFloat(Utilities.formatBytes(Memory.getPeakUsage(), true));
 
-        text = '${fps}fps\n${memory_usage}/${memory_usage_peak}mb\n${#if debug 'debug\n' #else '' #end}';
+		// Actual text
+		text = '${fps} fps
+		${Utilities.formatBytes(Memory.getCurrentUsage(), true)}/${Utilities.formatBytes(Memory.getPeakUsage())}
+		${#if debug 'debug-build (?)' #else '' #end}
+		';
 	}
 }

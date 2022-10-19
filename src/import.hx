@@ -2,6 +2,7 @@
 
 import base.Input;
 import base.Sprite;
+import base.Utilities;
 import base.assets.Assets;
 
 using StringTools;
