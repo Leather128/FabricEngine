@@ -5,9 +5,8 @@ package base.assets;
  * certain functions.
  * @author Leather128
  */
-enum AssetType
-{
-    IMAGE;
-    SPARROW;
-    AUDIO;
+enum AssetType {
+	IMAGE;
+	SPARROW;
+	AUDIO;
 }

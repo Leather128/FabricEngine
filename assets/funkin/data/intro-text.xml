@@ -1,0 +1,30 @@
+<!DOCTYPE fabric-intro >
+<intro bpm="102" >
+    <randomized-text>
+        <text path="data/intro-messages.txt" key="$intro-messages" delimeter="--" values="-1,-2" />
+    </randomized-text>
+
+    <lines>
+        <line value="ninjamuffin99, phantomArcade, kawaisprite, evilsk8er" type="line" beat="1" />
+        <line value="present" type="line" beat="3" />
+
+        <line type="clear" beat="4" />
+
+        <line value="In association, with" type="line" beat="5" />
+        <line value="newgrounds" type="line" beat="7" />
+        <line value="ngSpr" type="sprite" beat="7" />
+
+        <line type="clear" beat="8" />
+
+        <line value="$intro-messages-1" type="randomized" beat="9" />
+        <line value="$intro-messages-2" type="randomized" beat="11" />
+
+        <line type="clear" beat="12" />
+
+        <line value="Friday" type="line" beat="13" />
+        <line value="Night" type="line" beat="14" />
+        <line value="Funkin" type="line" beat="15" />
+
+        <line value="start_intro" type="event" beat="16" />
+    </lines>
+</intro>

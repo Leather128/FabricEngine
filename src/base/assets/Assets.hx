@@ -7,8 +7,7 @@ import openfl.display.BitmapData;
  * 
  * @author Leather128
  */
-class Assets
-{
+class Assets {
     /**
      * Image extension used for assets.
      * @author Leather128
@@ -40,8 +39,7 @@ class Assets
      * @return String
      * @author Leather128
      */
-    public static function absolute_path(rel_path):String
-    {
+    public static function absolute_path(rel_path):String {
         #if sys
         return sys.FileSystem.absolutePath(rel_path);
         #else
@@ -56,8 +54,7 @@ class Assets
      * @return Bool
      * @author Leather128
      */
-    public static function exists(path:String):Bool
-    {
+    public static function exists(path:String):Bool {
         #if sys
         return sys.FileSystem.exists(path);
         #else
@@ -72,11 +69,9 @@ class Assets
      * @return String
      * @author Leather128
      */
-    public static function asset(path:String):String
-    {
-        if (preferred_mod != null) // If the file exists in preferred_mod then return that.
-            if (exists(absolute_path('assets/$preferred_mod/$path')))
-                return absolute_path('assets/$preferred_mod/$path');
+    public static function asset(path:String):String {
+        if (preferred_mod != null && exists(absolute_path('assets/$preferred_mod/$path'))) // If the file exists in preferred_mod then return that.
+            return absolute_path('assets/$preferred_mod/$path');
 
         return absolute_path('assets/funkin/$path');
     }
@@ -88,8 +83,7 @@ class Assets
      * @return String
      * @author Leather128
      */
-    public static function text(path:String):String
-    {
+    public static function text(path:String):String {
         #if sys
         return sys.io.File.getContent(asset(path));
         #else
@@ -105,8 +99,7 @@ class Assets
      * @return flixel.system.FlxAssets.FlxGraphicAsset
      * @author Leather128
      */
-    public static function image(path:String):flixel.system.FlxAssets.FlxGraphicAsset
-    {
+    public static function image(path:String):flixel.system.FlxAssets.FlxGraphicAsset {
         // Automatically add image extension if not specified
         if (!path.endsWith(IMAGE_EXT)) path += IMAGE_EXT;
         // If the image isn't already cached, load and cache it.

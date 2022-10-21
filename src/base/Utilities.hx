@@ -4,8 +4,7 @@ package base;
  * A class full of various utilities for different tasks.
  * @author Leather128
  */
-class Utilities
-{
+class Utilities {
     /**
      * List of formatting for different byte amounts
      * in an array formatted like this:
@@ -39,7 +38,7 @@ class Utilities
      * @return String
      * @author Leather128
      */
-    public static function formatBytes(bytes:Int, only_value:Bool = false, precision:Int = 2):String {
+    public static function format_bytes(bytes:Int, only_value:Bool = false, precision:Int = 2):String {
         var formatted_bytes:String = "?";
         
         for (i in 0...byte_formats.length) {

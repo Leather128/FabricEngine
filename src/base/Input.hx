@@ -5,8 +5,7 @@ package base;
  * 
  * @author Leather128
  */
-class Input
-{
+class Input {
     /**
      * Map of `String`s to `flixel.input.keyboard.FlxKey`s with easier to understand and modify names.
      * @author Leather128
@@ -31,15 +30,11 @@ class Input
      * @return Bool
      * @author Leather128
      */
-    public static function is(action:String, ?state:flixel.input.FlxInput.FlxInputState = JUST_PRESSED, ?exact:Bool = false):Bool
-    {
+    public static function is(action:String, ?state:flixel.input.FlxInput.FlxInputState = JUST_PRESSED, ?exact:Bool = false):Bool {
         // exact checks
-        if (!exact)
-        {
-            if (state == PRESSED && is(action, JUST_PRESSED))
-                return true;
-            if (state == RELEASED && is(action, JUST_RELEASED))
-                return true;
+        if (!exact) {
+            if (state == PRESSED && is(action, JUST_PRESSED)) return true;
+            if (state == RELEASED && is(action, JUST_RELEASED)) return true;
         }
         
         // If action is in the action map, check for that instead.
@@ -55,8 +50,7 @@ class Input
      * @return flixel.input.FlxInput.FlxInputState
      * @author Leather128
      */
-    public static function get(action:String):flixel.input.FlxInput.FlxInputState
-    {
+    public static function get(action:String):flixel.input.FlxInput.FlxInputState {
         // this shit dumb af but it works (for something that shouldn't be used often tbh)
         if (is(action, JUST_PRESSED)) return JUST_PRESSED;
         if (is(action, PRESSED)) return PRESSED;

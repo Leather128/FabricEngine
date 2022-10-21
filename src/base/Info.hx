@@ -8,11 +8,10 @@ import external.memory.Memory;
  * 
  * @author Leather128
  */
-class Info extends openfl.text.TextField
-{
+class Info extends openfl.text.TextField {
 	/**
 	 * Current frames per second of the program.
-     * @author Leather128
+	 * @author Leather128
 	 */
 	public var fps:Int = 0;
 
@@ -27,21 +26,20 @@ class Info extends openfl.text.TextField
 	 * @author Leather128
 	 */
 	public var memory_usage_peak:Float = 0;
-    
-    /**
-     * Current elapsed program time in milliseconds.
-     * @author Leather128
-     */
-    public var current_time:Float = 0.0;
 
-    /**
-     * Array of all previous times (in milliseconds)
-     * @author Leather128
-     */
-    public var times:Array<Float> = [];
+	/**
+	 * Current elapsed program time in milliseconds.
+	 * @author Leather128
+	 */
+	public var current_time:Float = 0.0;
 
-	public function new(x:Float = 10, y:Float = 3, color:Int = 0xFFFFFF)
-	{
+	/**
+	 * Array of all previous times (in milliseconds)
+	 * @author Leather128
+	 */
+	public var times:Array<Float> = [];
+
+	public function new(x:Float = 10, y:Float = 3, color:Int = 0xFFFFFF) {
 		super();
 
 		this.x = x;
@@ -60,24 +58,22 @@ class Info extends openfl.text.TextField
 	 * @param deltaTime Time between now and the last frame (in milliseconds).
 	 * @author Leather128
 	 */
-	public override function __enterFrame(deltaTime:Float):Void
-	{
+	public override function __enterFrame(deltaTime:Float):Void {
 		// Frames per second calculations
 		current_time += deltaTime;
 		times.push(current_time);
 
-		while (times[0] < current_time - 1000)
-			times.shift();
+		while (times[0] < current_time - 1000) times.shift();
 
 		fps = times.length;
 
 		// Memory calculations for the 5 people who will use it.
-		memory_usage = Std.parseFloat(Utilities.formatBytes(Memory.getCurrentUsage(), true));
-		memory_usage_peak = Std.parseFloat(Utilities.formatBytes(Memory.getPeakUsage(), true));
+		memory_usage = Std.parseFloat(Utilities.format_bytes(Memory.getCurrentUsage(), true));
+		memory_usage_peak = Std.parseFloat(Utilities.format_bytes(Memory.getPeakUsage(), true));
 
 		// Actual text
 		text = '${fps} fps
-		${Utilities.formatBytes(Memory.getCurrentUsage(), true)}/${Utilities.formatBytes(Memory.getPeakUsage())}
+		${Utilities.format_bytes(Memory.getCurrentUsage(), true)}/${Utilities.format_bytes(Memory.getPeakUsage())}
 		${#if debug 'debug-build-${Main.build_number} (${Main.commit_id})' #else '' #end}
 		';
 	}
