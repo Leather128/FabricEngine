@@ -2,7 +2,6 @@ package base;
 
 /**
  * Class to get input in a cleaner and more customizable fashion than regular flixel code.
- * 
  * @author Leather128
  */
 class Input {
@@ -39,9 +38,9 @@ class Input {
         
         // If action is in the action map, check for that instead.
         if (action_map.exists(action))
-            return flixel.FlxG.keys.checkStatus(action_map.get(action), state) || flixel.FlxG.keys.checkStatus(action_map.get('${action}_alt'), state);
+            return FlxG.keys.checkStatus(action_map.get(action), state) || FlxG.keys.checkStatus(action_map.get('${action}_alt'), state);
 
-        return flixel.FlxG.keys.checkStatus(flixel.input.keyboard.FlxKey.fromString(action), state);
+        return FlxG.keys.checkStatus(flixel.input.keyboard.FlxKey.fromString(action), state);
     }
 
     /**

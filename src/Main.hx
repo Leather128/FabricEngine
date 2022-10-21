@@ -7,19 +7,16 @@ package;
 class Main extends openfl.display.Sprite {
 	/**
 		The current info display being used (only shown on desktop platforms or in debug mode).
-		@author Leather128
 	**/
 	public static var fps_counter:base.Info;
 
 	/**
 	 * The build number of the game.
-	 * @author Leather128
 	 */
 	public static var build_number:Int = 0;
 
 	/**
 	 * Last commit of the game before this build was made.
-	 * @author Leather128
 	 */
 	public static var commit_id:String = "";
 	
@@ -34,8 +31,6 @@ class Main extends openfl.display.Sprite {
 		}
 		#end
 
-		// Fixes some assets not loading properly
-		flixel.graphics.FlxGraphic.defaultPersist = true;
 		addChild(new flixel.FlxGame(0, 0, funkin.scenes.TitleScreen));
 
 		// Create FPS Counter even if it's not shown just in case.

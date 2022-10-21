@@ -1,8 +1,18 @@
 // List of all the Classes/Typedefs/Enums/etc to be imported by default
 
+// Engine Imports
+
 import base.Input;
 import base.Sprite;
 import base.Utilities;
 import base.assets.Assets;
+
+// Funkin Imports
+
+import funkin.Conductor;
+
+// Flixel Imports
+
+import flixel.FlxG;
 
 using StringTools;

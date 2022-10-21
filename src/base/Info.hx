@@ -11,31 +11,26 @@ import external.memory.Memory;
 class Info extends openfl.text.TextField {
 	/**
 	 * Current frames per second of the program.
-	 * @author Leather128
 	 */
 	public var fps:Int = 0;
 
 	/**
 	 * Current memory usage of the program in megabytes.
-	 * @author Leather128
 	 */
 	public var memory_usage:Float = 0;
 
 	/**
 	 * The peak of the memory usage of the program in megabytes.
-	 * @author Leather128
 	 */
 	public var memory_usage_peak:Float = 0;
 
 	/**
 	 * Current elapsed program time in milliseconds.
-	 * @author Leather128
 	 */
 	public var current_time:Float = 0.0;
 
 	/**
-	 * Array of all previous times (in milliseconds)
-	 * @author Leather128
+	 * Array of all previous times (in milliseconds).
 	 */
 	public var times:Array<Float> = [];
 

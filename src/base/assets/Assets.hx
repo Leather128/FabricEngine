@@ -10,25 +10,21 @@ import openfl.display.BitmapData;
 class Assets {
     /**
      * Image extension used for assets.
-     * @author Leather128
      */
     public static final IMAGE_EXT:String = ".png";
 
     /**
      * Audio extension used for assets.
-     * @author Leather128
      */
     public static final AUDIO_EXT:String = ".ogg";
 
     /**
-     * Map of `String`s to `Dynamic`s (file paths to file content).
-     * @author Leather128
+     * Map of `String`s to `Dynamic`s used for faster loading times (file paths to file content).
      */
     public static var cache:Map<String, Dynamic> = [];
 
     /**
      * Current mod to prefer over others when checking for assets.
-     * @author Leather128
      */
     public static var preferred_mod(default, null):String;
 
@@ -77,6 +73,14 @@ class Assets {
     }
 
     /**
+     * Clears the cache manually for all assets.
+     */
+    public static function clear_cache():Void {
+        // For now we literally just do this lmfao
+        cache.clear();
+    }
+
+    /**
      * Loads and returns the text from the specified `path`.
      * 
      * @param path Path to the text file.
@@ -106,5 +110,22 @@ class Assets {
         if (!cache.exists(path)) cache.set(path, flixel.graphics.FlxGraphic.fromBitmapData(BitmapData.fromFile(asset(path)), false, null, false));
 
         return cache.get(path); // Return image from the cache.
+    }
+
+    /**
+     * Load and return audio from the specified `path`
+     * (starts in `assets` folder)
+     * 
+     * @param path Path to the audio.
+     * @return flixel.system.FlxAssets.FlxSoundAsset
+     * @author Leather128
+     */
+    public static function audio(path:String):flixel.system.FlxAssets.FlxSoundAsset {
+        // Automatically add audio extension if not specified
+        if (!path.endsWith(AUDIO_EXT)) path += AUDIO_EXT;
+        // If the audio isn't already cached, load and cache it.
+        if (!cache.exists(path)) cache.set(path, flash.media.Sound.fromFile(asset(path)));
+
+        return cache.get(path); // Return audio from the cache.
     }
 }

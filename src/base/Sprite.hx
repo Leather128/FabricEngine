@@ -10,7 +10,6 @@ import flixel.math.FlxPoint;
 class Sprite extends flixel.FlxSprite {
     /**
      * Map of the offsets for different animations in this sprite.
-     * @author Leather128
      */
     public var offsets:Map<String, flixel.math.FlxPoint> = [];
 
@@ -52,32 +51,38 @@ class Sprite extends flixel.FlxSprite {
     }
 
     /**
-     * Adds animation to this sprite.
+     * Adds animation to this sprite and returns this sprite after for chaining.
      * 
      * @param name Name of the animation.
      * @param prefix Prefix of the animation in the spritesheet.
      * @param framerate Framerate of the animation (FPS).
      * @param looped Whether the animation is looped.
      * @param indices (Optional) List of ints corresponding to the frames to use.
+     * @return Sprite
      * @author Leather128
      */
-    public function add_animation(name:String, prefix:String, framerate:Int = 24, looped:Bool = false, ?indices:Array<Int>, ?offset:Array<Float>):Void {
+    public function add_animation(name:String, prefix:String, ?framerate:Int = 24, ?looped:Bool = false, ?indices:Array<Int>, ?offset:Array<Float>):Sprite {
         // actual animation adding
         if (indices != null) animation.addByIndices(name, prefix, indices, '', framerate, looped);
         else animation.addByPrefix(name, prefix, framerate, looped);
         // offsets
         if (offset != null) offsets.set(name, new flixel.math.FlxPoint(offset[0], offset[1]));
+
+        return this;
     }
 
     /**
-     * Play the specified animation using `animation.play()`.
+     * Play the specified animation using `animation.play()` and returns this sprite after for chaining.
      * @param name Name of the animation to play.
      * @param forced Whether or not to force it to play.
+     * @return Sprite
      * @author Leather128
      */
-    public function play_animation(name:String, ?forced:Bool = false):Void {
+    public function play_animation(name:String, ?forced:Bool = false):Sprite {
         animation.play(name, forced);
         // offsets
         if (offsets.exists(name)) offset.copyFrom(offsets.get(name));
+
+        return this;
     }
 }
