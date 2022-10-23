@@ -10,12 +10,29 @@ import funkin.sprites.ui.Alphabet;
  * @author Leather128
  */
 class TitleScreen extends FunkinScene {
-    // xml data :D
+	/**
+	 * Current intro xml data.
+	 */
 	var data:haxe.xml.Access = new haxe.xml.Access(Xml.parse(Assets.text('data/intro-text.xml')).firstElement());
+
+    /**
+     * Array of all the xml line objects.
+     */
     var lines:Array<haxe.xml.Access> = [];
+
+    /**
+     * Map of `String`s to the value of that randomized line of text.
+     */
     var randomized_lines:Map<String, Dynamic> = new Map<String, Dynamic>();
 
+    /**
+     * Group of all the current other sprites on screen.
+     */
     var intro_sprites:FlxSpriteGroup = new FlxSpriteGroup();
+
+    /**
+     * Group of all the current `Alphabet` instances on screen.
+     */
     var intro_lines:FlxTypedSpriteGroup<Alphabet> = new FlxTypedSpriteGroup<Alphabet>();
 
     // sprites
@@ -23,11 +40,24 @@ class TitleScreen extends FunkinScene {
     var gf:Sprite = new Sprite(FlxG.width * 0.4, FlxG.height * 0.07).load('menus/title/gf', SPARROW);
     var enter:Sprite = new Sprite(100, FlxG.height * 0.8).load('menus/title/enter', SPARROW);
 
+    /**
+     * Music file name
+     */
     public static var music_title:String = 'normal';
 
+    /**
+     * Has TitleScreen been loaded at least once?
+     */
     public static var initialized:Bool = false;
+
+    /**
+     * Is the game currently in the intro (credits).
+     */
     public static var in_intro:Bool = true;
 
+    /**
+     * Has the user already pressed enter to exit the menu?
+     */
     var pressed_enter:Bool = false;
 
 	override function create():Void {
