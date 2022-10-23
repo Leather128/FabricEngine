@@ -60,6 +60,7 @@
 
 	<!-- _______________________________ Libraries ______________________________ -->
 
+	<!-- haxelib git flixel https://github.com/YoshiCrafter29/flixel.git btw -->
 	<haxelib name="flixel" />
 	<haxelib name="flixel-addons" />
 	<haxelib name="flixel-ui" />

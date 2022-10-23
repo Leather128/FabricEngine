@@ -1,5 +1,7 @@
 package funkin.scenes;
 
+// hallo i like potatoes
+
 class Test extends FunkinScene {
     var freddy_bear_faz:Sprite = new Sprite().load("freddy");
 
