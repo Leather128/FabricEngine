@@ -1,5 +1,7 @@
 package funkin.scenes;
 
+import flixel.addons.transition.FlxTransitionableState;
+
 /**
  * Base state class to use for all states in the `funkin` package.
  * @author Leather128
@@ -26,6 +28,10 @@ class FunkinScene extends flixel.addons.ui.FlxUIState {
     }
 
     override function create():Void {
+        // Automatically set the transitions //
+        transIn = FlxTransitionableState.defaultTransIn;
+        transOut = FlxTransitionableState.defaultTransOut;
+        
         super.create();
 
         // Remove cached assets (prevents memory leaks that i can prevent)
@@ -40,8 +46,9 @@ class FunkinScene extends flixel.addons.ui.FlxUIState {
         FlxG.bitmap.mapCacheAsDestroyable();
         FlxG.bitmap.clearCache();
 
-        // Clear actual assets from OpenFL itself
+        // Clear actual assets from OpenFL and Lime itself
         var cache:openfl.utils.AssetCache = cast openfl.utils.Assets.cache;
+        var lime_cache:lime.utils.AssetCache = cast lime.utils.Assets.cache;
 
         // this totally isn't copied from polymod/backends/OpenFLBackend.hx trust me
         for (key in cache.bitmapData.keys()) cache.bitmapData.remove(key);
@@ -49,9 +56,9 @@ class FunkinScene extends flixel.addons.ui.FlxUIState {
         for (key in cache.sound.keys()) cache.sound.remove(key);
 
         // this totally isn't copied from polymod/backends/LimeBackend.hx trust me
-        for (key in lime.utils.Assets.cache.audio.keys()) lime.utils.Assets.cache.audio.remove(key);
-		for (key in lime.utils.Assets.cache.font.keys()) lime.utils.Assets.cache.font.remove(key);
-		for (key in lime.utils.Assets.cache.image.keys()) lime.utils.Assets.cache.image.remove(key);
+        for (key in lime_cache.image.keys()) lime_cache.image.remove(key);
+		for (key in lime_cache.font.keys()) lime_cache.font.remove(key);
+        for (key in lime_cache.audio.keys()) lime_cache.audio.remove(key);
 		
         // Run built-in garbage collector
         openfl.system.System.gc();
@@ -77,6 +84,9 @@ class FunkinScene extends flixel.addons.ui.FlxUIState {
 
         if (Input.is('f11')) FlxG.fullscreen = !FlxG.fullscreen;
         if (Input.is('f5')) FlxG.resetState();
+
+        // Miscellaneous //
+        FlxG.stage.frameRate = 1000;
 
         super.update(elapsed);
     }

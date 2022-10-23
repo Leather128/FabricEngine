@@ -12,7 +12,7 @@
 
         <line value="In association, with" type="line" beat="5" />
         <line value="newgrounds" type="line" beat="7" />
-        <line value="newgrounds_logo" type="sprite" beat="7" />
+        <line value="newgrounds_logo" type="sprite" x="center" y="374.4" scale="0.8" antialiased="true" beat="7" />
 
         <line type="clear" beat="8" />
 
@@ -25,6 +25,6 @@
         <line value="Night" type="line" beat="14" />
         <line value="Funkin" type="line" beat="15" />
 
-        <line value="start_intro" type="event" beat="16" />
+        <line value="exit_intro" type="event" beat="16" />
     </lines>
 </intro>

@@ -1,5 +1,6 @@
 package base;
 
+import flixel.graphics.FlxGraphic;
 import flixel.math.FlxPoint;
 
 /**

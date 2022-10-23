@@ -2,6 +2,7 @@ package funkin.scenes;
 
 import flixel.addons.transition.TransitionData;
 import flixel.addons.transition.FlxTransitionableState;
+import flixel.group.FlxSpriteGroup;
 import funkin.sprites.ui.Alphabet;
 
 /**
@@ -11,6 +12,11 @@ import funkin.sprites.ui.Alphabet;
 class TitleScreen extends FunkinScene {
     // xml data :D
 	var data:haxe.xml.Access = new haxe.xml.Access(Xml.parse(Assets.text('data/intro-text.xml')).firstElement());
+    var lines:Array<haxe.xml.Access> = [];
+    var randomized_lines:Map<String, Dynamic> = new Map<String, Dynamic>();
+
+    var intro_sprites:FlxSpriteGroup = new FlxSpriteGroup();
+    var intro_lines:FlxTypedSpriteGroup<Alphabet> = new FlxTypedSpriteGroup<Alphabet>();
 
     // sprites
 	var title:Sprite = new Sprite(-150, -100).load('menus/title/logo', SPARROW);
@@ -20,12 +26,43 @@ class TitleScreen extends FunkinScene {
     public static var music_title:String = 'normal';
 
     public static var initialized:Bool = false;
+    public static var in_intro:Bool = true;
+
+    var pressed_enter:Bool = false;
 
 	override function create():Void {
 		super.create();
 
+        // we preload shit sometimes because performance?!?!?! //
+
         // how to preload audio part 1:
         Assets.audio('sfx/menus/confirm');
+
+        lines = data.node.lines.nodes.line;
+
+        // preload images that show up in the intro
+        for (line in lines) if (line.att.type == 'sprite') Assets.image('images/menus/title/sprites/${line.att.value}');
+
+        // overengineered as hell lol
+        for (randomized_text in data.node.randomized_text.nodes.text) {
+            var original_lines:Array<String> = Assets.text(randomized_text.att.path).trim().split('\n');
+            var split_lines:Array<Array<String>> = [];
+
+            for (data in original_lines) split_lines.push(data.split(randomized_text.att.delimeter));
+            
+            var value:Array<String> = FlxG.random.getObject(split_lines);
+            var keys:Array<String> = randomized_text.att.values.trim().split(',');
+            
+            for (i in 0...keys.length) {
+                if (value.length - 1 >= i)
+                    randomized_lines.set(randomized_text.att.key + keys[i], value[i]);
+            }
+        }
+
+        // global vars
+        FlxG.fixedTimestep = false;
+        persistentDraw = persistentUpdate = true;
+        FlxG.sound.muteKeys = [ZERO];
 
         new flixel.util.FlxTimer().start(1, function(_):Void {
             if (!initialized) {
@@ -61,35 +98,122 @@ class TitleScreen extends FunkinScene {
             enter.add_animation('press', 'ENTER PRESSED', 24, true);
             enter.play_animation('idle', true);
             add(enter);
+
+            // make everything invisible at the start
+            gf.visible = title.visible = enter.visible = false;
+
+            add(intro_sprites);
+            add(intro_lines);
+
+            FlxG.mouse.visible = false;
         });
 	}
 
     override function update(elapsed:Float):Void {
         super.update(elapsed);
 
+        if (Input.is('exit')) openfl.system.System.exit(0);
+
         // cleaner code lol!!!
         if (!initialized) return;
 
+        // song position
         Conductor.song_position_raw = FlxG.sound.music.time;
         Conductor.song_position = Conductor.song_position_raw + Conductor.offset;
 
-        if (Input.is('accept')) {
+        // go to main menu lol
+        if (Input.is('accept') && !in_intro) {
+            if (pressed_enter) return;
+
+            pressed_enter = true;
+
             enter.play_animation('press', true);
 
             FlxG.camera.flash(flixel.util.FlxColor.WHITE, 1);
             FlxG.sound.play(Assets.audio('sfx/menus/confirm'), 0.7);
 
             FlxG.switchState(new MainMenu());
-        }
-
-        if (Input.is('exit')) openfl.system.System.exit(0);
+        } else if (Input.is('accept'))
+            exit_intro();
     }
 
     override function on_beat():Void {
         super.on_beat();
 
+        // funny animations
         title.play_animation('bump', true);
         gf.play_animation(gf.animation.curAnim.name == 'danceLeft' ? 'danceRight' : 'danceLeft', true);
+        
+        // haha if not in intro don't run intro code :O
+        if (!in_intro) return;
+
+        // parse lines
+        for (line in lines) {
+            // only parse line if it's the current beat (so no stupid duplicates!!!)
+            if (Std.parseInt(line.att.beat) != Conductor.beat) continue;
+
+            // giant switch case with all available line types
+            switch (line.att.type) {
+                case 'line':
+                    #if debug
+                    trace(line.att.value);
+                    #end
+                    
+                    // add text from all lines in the value property
+                    add_text(line.att.value.split(','));
+                case 'clear':
+                    #if debug
+                    trace('CLEARING STUFF');
+                    #end
+
+                    clear_intro_sprites();
+                case 'sprite':
+                    #if debug
+                    trace('SPAWNING SPRITE ${line.att.value}!');
+                    #end
+
+                    // load sprite
+                    var sprite:Sprite = new Sprite(0, 0, line.att.antialiased == 'true').load('menus/title/sprites/${line.att.value}');
+
+                    // set scale
+                    sprite.scale.set(Std.parseFloat(line.att.scale), Std.parseFloat(line.att.scale));
+                    sprite.updateHitbox();
+
+                    // allow for screen centering on x and y positions
+                    if (line.att.x.toLowerCase() != 'center') sprite.x = Std.parseFloat(line.att.x);
+                    else sprite.screenCenter(X);
+                    
+                    if (line.att.y.toLowerCase() != 'center') sprite.y = Std.parseFloat(line.att.y);
+                    else sprite.screenCenter(Y);
+
+                    // add to screen lol
+                    intro_sprites.add(sprite);
+                case 'randomized':
+                    #if debug
+                    trace('DISPLAYING RANDOMIZED ${line.att.value} (${randomized_lines.get(line.att.value)})!');
+                    #end
+
+                    // add randomized text from specified key (line.att.value is da key)
+                    add_text([randomized_lines.get(line.att.value)]);
+                case 'event':
+                    #if debug
+                    trace('RUNNING EVENT ${line.att.value}!');
+                    #end
+
+                    switch (line.att.value) {
+                        case 'exit_intro':
+                            #if debug
+                            trace('EXIT TO MAIN TITLE SCREEN');
+                            #end
+
+                            exit_intro();
+                        default:
+                            trace('${line.att.value} NOT IMPLEMENTED AS AN EVENT!');
+                    }
+                default:
+                    trace('${line.att.type} NOT IMPLEMENTED AS A LINE TYPE!');
+            }
+        }
     }
 
     /**
@@ -101,6 +225,48 @@ class TitleScreen extends FunkinScene {
         music_title = Date.now().getDay() == 5 ? 'friday' : 'normal';
         if (force_file != null) music_title = force_file;
 
+        // play specified music
         FlxG.sound.playMusic(Assets.audio('music/menus/${music_title}'));
+    }
+
+    /**
+     * Add Alphabet text to all the lines of text currently on screen.
+     * @param line_data Lines of text you want to add.
+     * @author Leather128
+     */
+    public function add_text(line_data:Array<String>):Void {
+        // because adding onto lines is important ig
+        var has_lines:Bool = intro_lines.length > 0;
+
+        for (i in 0...line_data.length) {
+            var text:String = line_data[i].trim();
+            
+            var alphabet:Alphabet = new Alphabet(0, ((has_lines ? i + intro_lines.length : i) * 60.0) + 200.0, text, true);
+            alphabet.screenCenter(X);
+            intro_lines.add(alphabet);
+        }
+    }
+
+    /**
+     * Clears all sprites from the intro of the game.
+     */
+    public function clear_intro_sprites():Void {
+        intro_sprites.forEachAlive(function(sprite:flixel.FlxSprite):Void { intro_sprites.remove(sprite, true); sprite.destroy(); });
+        intro_sprites.clear();
+
+        intro_lines.forEachAlive(function(sprite:Alphabet):Void { intro_lines.remove(sprite, true); sprite.destroy(); });
+        intro_lines.clear();
+    }
+
+    /**
+     * Exits from the intro of the game.
+     */
+    public function exit_intro():Void {
+        clear_intro_sprites();
+        FlxG.camera.flash(flixel.util.FlxColor.WHITE, 4);
+
+        // make stuff visible lol
+        gf.visible = title.visible = enter.visible = true;
+        in_intro = false;
     }
 }

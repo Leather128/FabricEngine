@@ -32,6 +32,16 @@
 	<assets path="commit.txt" embed="false" />
 	<assets path="build.txt" embed="false" />
 
+	<!-- _______________________________ Libraries ______________________________ -->
+
+	<!-- haxelib git flixel https://github.com/YoshiCrafter29/flixel.git btw -->
+	<haxelib name="flixel" />
+	<haxelib name="flixel-addons" />
+	<haxelib name="flixel-ui" />
+
+	<haxelib name="hscript-improved" />
+	<haxelib name="hxCodec" if="VIDEOS_ALLOWED" />
+
 	<!-- ______________________________ Haxedefines _____________________________ -->
 
 	<!--Optimise inputs, be careful you will get null errors if you don't use conditionals in your game-->
@@ -57,16 +67,6 @@
 
 	<!-- Show debug traces for hxCodec -->
 	<haxedef name="HXC_DEBUG_TRACE" if="debug" />
-
-	<!-- _______________________________ Libraries ______________________________ -->
-
-	<!-- haxelib git flixel https://github.com/YoshiCrafter29/flixel.git btw -->
-	<haxelib name="flixel" />
-	<haxelib name="flixel-addons" />
-	<haxelib name="flixel-ui" />
-
-	<haxelib name="hscript-improved" />
-	<haxelib name="hxCodec" if="VIDEOS_ALLOWED" />
 
 	<!-- _________________________________ Custom _______________________________ -->
 
