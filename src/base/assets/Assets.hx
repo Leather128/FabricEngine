@@ -96,7 +96,7 @@ class Assets {
     }
 
     /**
-     * Load and return image from the specified `path`
+     * Load and return image from the specified `path`.
      * (starts in `assets` folder)
      * 
      * @param path Path to the image.
@@ -104,7 +104,7 @@ class Assets {
      * @author Leather128
      */
     public static function image(path:String):flixel.system.FlxAssets.FlxGraphicAsset {
-        // Automatically add image extension if not specified
+        // Automatically add image extension if not specified.
         if (!path.endsWith(IMAGE_EXT)) path += IMAGE_EXT;
         // If the image isn't already cached, load and cache it.
         if (!cache.exists(path)) cache.set(path, flixel.graphics.FlxGraphic.fromBitmapData(BitmapData.fromFile(asset(path)), false, null, false));
@@ -113,7 +113,7 @@ class Assets {
     }
 
     /**
-     * Load and return audio from the specified `path`
+     * Load and return audio from the specified `path`.
      * (starts in `assets` folder)
      * 
      * @param path Path to the audio.
@@ -121,11 +121,28 @@ class Assets {
      * @author Leather128
      */
     public static function audio(path:String):flixel.system.FlxAssets.FlxSoundAsset {
-        // Automatically add audio extension if not specified
+        // Automatically add audio extension if not specified.
         if (!path.endsWith(AUDIO_EXT)) path += AUDIO_EXT;
         // If the audio isn't already cached, load and cache it.
         if (!cache.exists(path)) cache.set(path, flash.media.Sound.fromFile(asset(path)));
 
         return cache.get(path); // Return audio from the cache.
+    }
+
+    /**
+     * Load and return the name of the font from the specified `path`.
+     * (starts in the `fonts` folder if not specified)
+     * 
+     * @param path Path to the font.
+     * @return String
+     * @author Leather128
+     */
+    public static function font(path:String):String {
+        // Automatically use the fonts folder if no other folder is specified.
+        if (!path.contains('/')) path = 'fonts/${path}';
+        // If the font's name isn't already cached, load the font and cache it's name.
+        if (!cache.exists(path)) cache.set(path, openfl.text.Font.fromFile(asset(path)).fontName);
+
+        return cache.get(path);
     }
 }

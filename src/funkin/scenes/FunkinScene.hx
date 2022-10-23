@@ -1,7 +1,5 @@
 package funkin.scenes;
 
-import flixel.addons.transition.FlxTransitionableState;
-
 /**
  * Base state class to use for all states in the `funkin` package.
  * @author Leather128
@@ -28,40 +26,38 @@ class FunkinScene extends flixel.addons.ui.FlxUIState {
     }
 
     override function create():Void {
-        // Automatically set the transitions //
-        transIn = FlxTransitionableState.defaultTransIn;
-        transOut = FlxTransitionableState.defaultTransOut;
-        
+        if (clear_cache) {
+            // Remove cached assets (prevents memory leaks that i can prevent)
+            
+            // Remove lingering sounds from the sound list
+            FlxG.sound.list.forEachAlive(function(sound:flixel.system.FlxSound) { FlxG.sound.list.remove(sound, true); sound.stop(); sound.kill(); sound.destroy(); });
+            FlxG.sound.list.clear();
+
+            // Clear cached assets from the asset cache.
+            Assets.clear_cache();
+
+            FlxG.bitmap.mapCacheAsDestroyable();
+            FlxG.bitmap.clearCache();
+
+            // Clear actual assets from OpenFL and Lime itself
+            var cache:openfl.utils.AssetCache = cast openfl.utils.Assets.cache;
+            var lime_cache:lime.utils.AssetCache = cast lime.utils.Assets.cache;
+
+            // this totally isn't copied from polymod/backends/OpenFLBackend.hx trust me
+            for (key in cache.bitmapData.keys()) cache.bitmapData.remove(key);
+            for (key in cache.font.keys()) cache.font.remove(key);
+            for (key in cache.sound.keys()) cache.sound.remove(key);
+
+            // this totally isn't copied from polymod/backends/LimeBackend.hx trust me
+            for (key in lime_cache.image.keys()) lime_cache.image.remove(key);
+            for (key in lime_cache.font.keys()) lime_cache.font.remove(key);
+            for (key in lime_cache.audio.keys()) lime_cache.audio.remove(key);
+            
+            // Run built-in garbage collector
+            openfl.system.System.gc();
+        }
+
         super.create();
-
-        // Remove cached assets (prevents memory leaks that i can prevent)
-        
-        // Remove lingering sounds from the sound list
-        FlxG.sound.list.forEachAlive(function(sound:flixel.system.FlxSound) { FlxG.sound.list.remove(sound, true); sound.stop(); sound.kill(); sound.destroy(); });
-        FlxG.sound.list.clear();
-
-        // Clear cached assets from the asset cache.
-        Assets.clear_cache();
-
-        FlxG.bitmap.mapCacheAsDestroyable();
-        FlxG.bitmap.clearCache();
-
-        // Clear actual assets from OpenFL and Lime itself
-        var cache:openfl.utils.AssetCache = cast openfl.utils.Assets.cache;
-        var lime_cache:lime.utils.AssetCache = cast lime.utils.Assets.cache;
-
-        // this totally isn't copied from polymod/backends/OpenFLBackend.hx trust me
-        for (key in cache.bitmapData.keys()) cache.bitmapData.remove(key);
-        for (key in cache.font.keys()) cache.font.remove(key);
-        for (key in cache.sound.keys()) cache.sound.remove(key);
-
-        // this totally isn't copied from polymod/backends/LimeBackend.hx trust me
-        for (key in lime_cache.image.keys()) lime_cache.image.remove(key);
-		for (key in lime_cache.font.keys()) lime_cache.font.remove(key);
-        for (key in lime_cache.audio.keys()) lime_cache.audio.remove(key);
-		
-        // Run built-in garbage collector
-        openfl.system.System.gc();
     }
 
     override function update(elapsed:Float):Void {

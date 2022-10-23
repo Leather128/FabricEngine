@@ -19,6 +19,11 @@ class Main extends openfl.display.Sprite {
 	 * Last commit of the game before this build was made.
 	 */
 	public static var commit_id:String = "";
+
+	/**
+	 * Current version of the game. (Grabs from the `Project.xml`)
+	 */
+	public static var version:String = 'unknown';
 	
 	public function new() {
 		super();
@@ -30,6 +35,9 @@ class Main extends openfl.display.Sprite {
 			commit_id = sys.io.File.getContent(sys.FileSystem.absolutePath('commit.txt')).trim();
 		}
 		#end
+
+		// Load the version
+		version = lime.app.Application.current.meta.get('version');
 
 		addChild(new flixel.FlxGame(0, 0, funkin.scenes.TitleScreen));
 

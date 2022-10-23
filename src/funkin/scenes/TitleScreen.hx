@@ -1,5 +1,8 @@
 package funkin.scenes;
 
+import flixel.util.FlxColor;
+import flixel.math.FlxRect;
+import flixel.math.FlxPoint;
 import flixel.addons.transition.TransitionData;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.group.FlxSpriteGroup;
@@ -100,10 +103,10 @@ class TitleScreen extends FunkinScene {
                 var diamond:flixel.graphics.FlxGraphic = flixel.graphics.FlxGraphic.fromClass(flixel.addons.transition.FlxTransitionSprite.GraphicTransTileDiamond);
                 diamond.persist = true;
 
-                FlxTransitionableState.defaultTransIn = new TransitionData(FADE, flixel.util.FlxColor.BLACK, 1, new flixel.math.FlxPoint(0, -1), {asset: diamond, width: 32, height: 32},
-                    new flixel.math.FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
-                FlxTransitionableState.defaultTransOut = new TransitionData(FADE, flixel.util.FlxColor.BLACK, 0.7, new flixel.math.FlxPoint(0, 1),
-                    {asset: diamond, width: 32, height: 32}, new flixel.math.FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
+                FlxTransitionableState.defaultTransIn = new TransitionData(FADE, FlxColor.BLACK, 1, new FlxPoint(0, -1), {asset: diamond, width: 32, height: 32},
+				    new FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
+			    FlxTransitionableState.defaultTransOut = new TransitionData(FADE, FlxColor.BLACK, 0.7, new FlxPoint(0, 1),
+				    {asset: diamond, width: 32, height: 32}, new FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
 
                 transIn = FlxTransitionableState.defaultTransIn;
                 transOut = FlxTransitionableState.defaultTransOut;
@@ -136,6 +139,8 @@ class TitleScreen extends FunkinScene {
             add(intro_lines);
 
             FlxG.mouse.visible = false;
+
+            if (!in_intro) exit_intro();
         });
 	}
 
@@ -169,6 +174,8 @@ class TitleScreen extends FunkinScene {
 
     override function on_beat():Void {
         super.on_beat();
+
+        if (title.animation.curAnim == null && gf.animation.curAnim == null) return;
 
         // funny animations
         title.play_animation('bump', true);
