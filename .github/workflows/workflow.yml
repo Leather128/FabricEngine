@@ -106,7 +106,7 @@ jobs:
           haxelib install hxcpp > /dev/null
           haxelib install lime
           haxelib install openfl
-          haxelib --never install flixel
+          haxelib git flixel https://github.com/YoshiCrafter29/flixel.git
           haxelib run lime setup flixel
           haxelib run lime setup
           haxelib install flixel-tools
