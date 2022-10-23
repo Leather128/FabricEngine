@@ -50,7 +50,7 @@ jobs:
         uses: actions/upload-artifact@v2.2.4
         with:
           name: linux
-          path: 'export/release/linux/bin' 
+          path: 'bin/release/linux/bin' 
 
   Windows:
     runs-on: windows-latest
@@ -88,7 +88,7 @@ jobs:
         uses: actions/upload-artifact@v2.2.4
         with:
           name: windows
-          path: export/release/windows/bin
+          path: bin/release/windows/bin
   Mac:
     runs-on: macos-latest
 
@@ -124,4 +124,4 @@ jobs:
         uses: actions/upload-artifact@v2.2.4
         with:
           name: mac
-          path: export/release/macos/bin
+          path: bin/release/macos/bin
