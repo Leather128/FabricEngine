@@ -42,6 +42,8 @@
 	<haxelib name="hscript-improved" />
 	<haxelib name="hxCodec" if="VIDEOS_ALLOWED" />
 
+	<haxelib name="hxcpp-debug-server" if="desktop debug" />
+
 	<!-- ______________________________ Haxedefines _____________________________ -->
 
 	<!--Optimise inputs, be careful you will get null errors if you don't use conditionals in your game-->
