@@ -30,7 +30,7 @@ class FunkinScene extends flixel.addons.ui.FlxUIState {
             // Remove cached assets (prevents memory leaks that i can prevent)
             
             // Remove lingering sounds from the sound list
-            FlxG.sound.list.forEachAlive(function(sound:flixel.system.FlxSound) { FlxG.sound.list.remove(sound, true); sound.stop(); sound.kill(); sound.destroy(); });
+            FlxG.sound.list.forEachAlive(function(sound:flixel.system.FlxSound):Void { FlxG.sound.list.remove(sound, true); sound.stop(); sound.kill(); sound.destroy(); });
             FlxG.sound.list.clear();
 
             // Clear cached assets from the asset cache.
