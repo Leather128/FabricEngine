@@ -51,12 +51,12 @@ jobs:
           haxelib install format
           haxelib list
       
-      - name: Output to pages folder
+      - name: Create Documentation Site
         run: |
             chmod +x docs/docs.sh
             docs/docs.sh
       
-      - name: github-actions
+      - name: github-actions deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: pages # The folder the action should deploy.
