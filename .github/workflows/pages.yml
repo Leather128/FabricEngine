@@ -55,7 +55,6 @@ jobs:
         run: |
             chmod +x docs/docs.sh
             docs/docs.sh
-            echo $(cat "pages/index.html")
       
       - name: github-actions
         uses: JamesIves/github-pages-deploy-action@v4
