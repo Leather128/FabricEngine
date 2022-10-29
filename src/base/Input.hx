@@ -26,7 +26,7 @@ class Input {
      * @param action Action to check (can be key name as well).
      * @param state State to check for (default is `JUST_PRESSED`).
      * @param exact Whether to be exact with the state detection (ex: if `false` a `PRESSED` check returns true if `JUST_PRESSED` is true).
-     * @return Bool
+     * @return Bool of whether or not `action` is `state`.
      * @author Leather128
      */
     public static function is(action:String, ?state:flixel.input.FlxInput.FlxInputState = JUST_PRESSED, ?exact:Bool = false):Bool {
@@ -46,7 +46,7 @@ class Input {
     /**
      * Gets and returns the value of `action`.
      * @param action 
-     * @return flixel.input.FlxInput.FlxInputState
+     * @return State of `action`.
      * @author Leather128
      */
     public static function get(action:String):flixel.input.FlxInput.FlxInputState {

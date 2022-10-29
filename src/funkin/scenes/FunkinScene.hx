@@ -20,6 +20,9 @@ class FunkinScene extends flixel.addons.ui.FlxUIState {
      */
     private var clear_cache:Bool = true;
 
+    /**
+     * @param clear_cache Whether or not to automatically clear the cache when transitioning into this scene.
+     */
     public function new(?clear_cache:Bool = true) {
         super();
         this.clear_cache = clear_cache;

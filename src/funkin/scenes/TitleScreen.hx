@@ -66,6 +66,8 @@ class TitleScreen extends FunkinScene {
 	override function create():Void {
 		super.create();
 
+        FlxG.autoPause = false;
+
         // we preload shit sometimes because performance?!?!?! //
 
         // how to preload audio part 1:

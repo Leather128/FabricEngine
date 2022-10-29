@@ -24,6 +24,11 @@ class Main extends openfl.display.Sprite {
 	 * Current version of the game. (Grabs from the `Project.xml`)
 	 */
 	public static var version:String = 'unknown';
+
+	/**
+	 * Whether or not this build is being tested and developed actively.
+	 */
+	public static var developer_build:Bool = false;
 	
 	public function new() {
 		super();
@@ -34,7 +39,13 @@ class Main extends openfl.display.Sprite {
 			build_number = Std.parseInt(sys.io.File.getContent(sys.FileSystem.absolutePath('build.txt')));
 			commit_id = sys.io.File.getContent(sys.FileSystem.absolutePath('commit.txt')).trim();
 		}
+
+		#if debug
+		if (Sys.args().contains('-livereload')) developer_build = true;
 		#end
+		#end
+
+		trace(developer_build);
 
 		// Load the version
 		version = lime.app.Application.current.meta.get('version');

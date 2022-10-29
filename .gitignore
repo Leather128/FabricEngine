@@ -1,2 +1,7 @@
+# misc
 bin/
 .vscode/
+
+# docs stuff
+pages/
+docs/doc.xml

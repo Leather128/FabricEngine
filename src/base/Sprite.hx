@@ -1,8 +1,5 @@
 package base;
 
-import flixel.graphics.FlxGraphic;
-import flixel.math.FlxPoint;
-
 /**
  * Simple extension to `flixel.FlxSprite` that is used for easier handling of
  * basic things that should be defaults.
@@ -21,13 +18,12 @@ class Sprite extends flixel.FlxSprite {
     }
 
     /**
-     * Loads the specified asset into this sprite and returns this sprite after for chaining.
+     * Loads the specified asset into this sprite.
      * 
      * @param path Path to asset (starts in folder already, ex: assets/images/ not needed).
      * @param type `base.assets.AssetType` to represent the type of asset to load.
      * @param options Map of options to use when loading the asset.
-     * @return Sprite
-     * @author Leather128
+     * @return `this` (chaining purposes).
      */
     public function load(path:String, ?type:base.assets.AssetType = IMAGE, ?options:Map<Dynamic, Dynamic> = null):Sprite {
         // Most of the time this is true, but adding extra checks would probably make the code worse anyways
@@ -52,15 +48,14 @@ class Sprite extends flixel.FlxSprite {
     }
 
     /**
-     * Adds animation to this sprite and returns this sprite after for chaining.
+     * Adds animation to this sprite.
      * 
      * @param name Name of the animation.
      * @param prefix Prefix of the animation in the spritesheet.
      * @param framerate Framerate of the animation (FPS).
      * @param looped Whether the animation is looped.
      * @param indices (Optional) List of ints corresponding to the frames to use.
-     * @return Sprite
-     * @author Leather128
+     * @return `this` (chaining purposes).
      */
     public function add_animation(name:String, prefix:String, ?framerate:Int = 24, ?looped:Bool = false, ?indices:Array<Int>, ?offset:Array<Float>):Sprite {
         // actual animation adding
@@ -73,11 +68,10 @@ class Sprite extends flixel.FlxSprite {
     }
 
     /**
-     * Play the specified animation using `animation.play()` and returns this sprite after for chaining.
+     * Play the specified animation using `animation.play()`.
      * @param name Name of the animation to play.
      * @param forced Whether or not to force it to play.
-     * @return Sprite
-     * @author Leather128
+     * @return `this` (chaining purposes).
      */
     public function play_animation(name:String, ?forced:Bool = false):Sprite {
         animation.play(name, forced);

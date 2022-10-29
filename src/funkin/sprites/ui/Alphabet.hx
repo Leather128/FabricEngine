@@ -50,7 +50,7 @@ class AlphabetChar extends Sprite {
      * @param y Y
      * @param character Character to display.
      * @param bold (Optional) Bold alphabet toggle.
-     * @author Leather128
+     * @param row (Optional) Row of the character (NON BOLD ONLY).
      */
     public function new(x:Float = 0.0, y:Float = 0.0, character:String, bold:Bool = true, row:Int = 0) {
         super(x, y);
@@ -82,8 +82,7 @@ class AlphabetChar extends Sprite {
     /**
      * Converts a character to the name in `alphabet.xml`.
      * @param raw_character Original text character to convert.
-     * @return String
-     * @author Leather128
+     * @return Converted String.
      */
     public static function convert(raw_character:String):String {
         switch (raw_character) {

@@ -10,8 +10,6 @@ class Utilities {
      * in an array formatted like this:
      * 
      * [`Format`, `Divisor`]
-     * 
-     * @author Leather128
      */
     public static var byte_formats:Array<Array<Dynamic>> = [
         ["$bytes b", 1.0],
@@ -35,8 +33,7 @@ class Utilities {
      * @param bytes Amount of bytes to format and return.
      * @param only_value (Optional, Default = `false`) Whether or not to only format the value of bytes (ex: `'1.5 mb' -> '1.5'`).
      * @param precision (Optional, Default = `2`) The precision of the decimal value of bytes. (ex: `1 -> 1.5, 2 -> 1.53, etc`).
-     * @return String
-     * @author Leather128
+     * @return Formatted byte string.
      */
     public static function format_bytes(bytes:Int, only_value:Bool = false, precision:Int = 2):String {
         var formatted_bytes:String = "?";

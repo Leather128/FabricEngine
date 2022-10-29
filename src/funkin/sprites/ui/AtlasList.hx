@@ -65,14 +65,13 @@ class AtlasList extends flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup<AtlasIte
     }
     
     /**
-     * Adds an item to this list and returns it for chaining purposes.
+     * Adds an item to this list.
      * 
      * @param x X position of the item.
      * @param y Y position of the item.
      * @param path Path to the item's atlas spritesheet.
      * @param animations Animation data for the item.
-     * @return AtlasItem
-     * @author Leather128
+     * @return `this` (chaining purposes).
      */
     public function add_item(x:Float = 0.0, y:Float = 0.0, path:String, animations:AtlasAnimations, call_instantly:Bool = false):AtlasItem {
         var item:AtlasItem = cast new AtlasItem(x, y, call_instantly).load(path, SPARROW);
@@ -92,7 +91,6 @@ class AtlasList extends flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup<AtlasIte
      * Changes the currently selected item index.
      * 
      * @param amount Amount to change by (positive is down, negative is up).
-     * @author Leather128
      */
     public function change_selection(amount:Int = 0):Void {
         selected_index += amount;
@@ -125,6 +123,9 @@ class AtlasItem extends Sprite {
      */
     public var on_selected:flixel.util.FlxSignal.FlxTypedSignal<AtlasItem->Void> = new flixel.util.FlxSignal.FlxTypedSignal<AtlasItem->Void>();
 
+    /**
+     * Whether or not to instantly call `on_selected` or wait till a selecting animation is done playing.
+     */
     public var call_instantly:Bool = false;
 
     public function new(x:Float = 0.0, y:Float = 0.0, call_instantly:Bool = false) {

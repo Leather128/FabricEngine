@@ -58,6 +58,8 @@ class Freeplay extends FunkinScene {
         background_color.interpolate(songs[index].color, 0.045);
         bg.color = FlxColor.fromRGBFloat(background_color.r, background_color.g, background_color.b);
 
+        if (Input.is('exit')) FlxG.switchState(new MainMenu());
+
         super.update(elapsed);
     }
 
@@ -73,16 +75,33 @@ class Freeplay extends FunkinScene {
             item.alpha = songs_group.members.indexOf(item) == index ? 1 : 0.6;
             item.index = songs_group.members.indexOf(item) - index;
         });
+
+        // smoothly loads audio
+        sys.thread.Thread.create(function():Void {
+            // fade out old music
+            if (FlxG.sound.music != null) FlxG.sound.music.fadeOut(0.2);
+
+            var cur_index:Int = index;
+            // load new music
+            var audio_data:flixel.system.FlxAssets.FlxSoundAsset = Assets.audio('songs/${songs[index].name.toLowerCase()}/Inst');
+
+            // make sure still selecting new music
+            if (cur_index == index) {
+                // play music when selected
+                FlxG.sound.playMusic(audio_data);
+                FlxG.sound.music.fadeIn();
+            }
+        });
     }
 
     /**
      * Adds song with specified parameters to the menu.
-     * @param name 
-     * @param icon 
-     * @param difficulties 
-     * @param color 
-     * @param bpm 
-     * @param icon_antialiased 
+     * @param name Song name.
+     * @param icon Song icon name.
+     * @param difficulties Song difficulties.
+     * @param color Song color.
+     * @param bpm Song BPM (Beats Per Minute).
+     * @param icon_antialiased Icon's antialiased setting.
      */
     public function add_song(name:String, icon:String, ?difficulties:Array<String>, ?color:FlxColor, ?bpm:Float, ?icon_antialiased:Bool):Void {
         var song_data:FreeplaySongData = { name: name, icon: icon, difficulties: difficulties, color: color, bpm: bpm, icon_antialiased: icon_antialiased };
@@ -107,7 +126,7 @@ class FreeplayBackgroundColor {
     public var g:Float = 1.0;
 
     /**
-     * Red Blue float value.
+     * Blue Color float value.
      */
     public var b:Float = 1.0;
 

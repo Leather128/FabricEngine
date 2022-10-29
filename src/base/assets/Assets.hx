@@ -32,44 +32,33 @@ class Assets {
      * Returns the absolute path from `rel_path` (`sys` only).
      * 
      * @param rel_path Path to make into an absolute path.
-     * @return String
-     * @author Leather128
+     * @return Absolute path to location at `rel_path`.
      */
-    public static function absolute_path(rel_path):String {
-        #if sys
+    public static function absolute_path(rel_path):String
         return sys.FileSystem.absolutePath(rel_path);
-        #else
-        return rel_path;
-        #end
-    }
 
     /**
-     * Returns whether or not a file exists from `path` (absolute path) (`sys` only).
+     * Returns whether or not a file exists from `path` (absolute path).
      * 
      * @param path Path to check on the file system (absolute).
-     * @return Bool
-     * @author Leather128
+     * @return Whether or not `path` exists.
      */
-    public static function exists(path:String):Bool {
-        #if sys
+    public static function exists(path:String):Bool
         return sys.FileSystem.exists(path);
-        #else
-        return openfl.Assets.exists(path);
-        #end
-    }
 
     /**
      * Returns the absolute path of `path` from the assets folder.
      * 
      * @param path Path to the asset.
-     * @return String
-     * @author Leather128
+     * @return Absolute path to `path` (in `assets/`).
      */
     public static function asset(path:String):String {
         if (preferred_mod != null && exists(absolute_path('assets/$preferred_mod/$path'))) // If the file exists in preferred_mod then return that.
             return absolute_path('assets/$preferred_mod/$path');
 
+        #if debug if (!Main.developer_build) { #end
         return absolute_path('assets/funkin/$path');
+        #if debug } else { return absolute_path('../../../../assets/funkin/$path'); } #end
     }
 
     /**
@@ -84,24 +73,17 @@ class Assets {
      * Loads and returns the text from the specified `path`.
      * 
      * @param path Path to the text file.
-     * @return String
-     * @author Leather128
+     * @return Content from `path`.
      */
-    public static function text(path:String):String {
-        #if sys
+    public static function text(path:String):String
         return sys.io.File.getContent(asset(path));
-        #else
-        return openfl.Assets.getText(asset(path));
-        #end
-    }
 
     /**
      * Load and return image from the specified `path`.
      * (starts in `assets` folder)
      * 
      * @param path Path to the image.
-     * @return flixel.system.FlxAssets.FlxGraphicAsset
-     * @author Leather128
+     * @return Image asset from `path`.
      */
     public static function image(path:String):flixel.system.FlxAssets.FlxGraphicAsset {
         // Automatically add image extension if not specified.
@@ -117,8 +99,7 @@ class Assets {
      * (starts in `assets` folder)
      * 
      * @param path Path to the audio.
-     * @return flixel.system.FlxAssets.FlxSoundAsset
-     * @author Leather128
+     * @return Audio asset from `path`.
      */
     public static function audio(path:String):flixel.system.FlxAssets.FlxSoundAsset {
         // Automatically add audio extension if not specified.
@@ -134,8 +115,7 @@ class Assets {
      * (starts in the `fonts` folder if not specified)
      * 
      * @param path Path to the font.
-     * @return String
-     * @author Leather128
+     * @return Font asset's name from `path`.
      */
     public static function font(path:String):String {
         // Automatically use the fonts folder if no other folder is specified.

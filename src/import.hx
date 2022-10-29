@@ -13,6 +13,8 @@ import funkin.Conductor;
 
 // Flixel Imports
 
+#if !macro
 import flixel.FlxG;
+#end
 
 using StringTools;
