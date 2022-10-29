@@ -53,3 +53,4 @@ jobs:
         run: |
             chmod +x docs/docs.sh
             docs/docs.sh
+            echo $(cat "pages/index.html")
