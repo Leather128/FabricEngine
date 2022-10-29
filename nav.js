@@ -1,0 +1,1 @@
+var navContent='<ul class="nav nav-list"></ul>';
