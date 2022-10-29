@@ -79,14 +79,6 @@ class FunkinScene extends flixel.addons.ui.FlxUIState {
         // Set old beat and step to the current ones after detecting changes
         last_beat = Conductor.beat; last_step = Conductor.step;
 
-        // Global controls //
-
-        if (Input.is('f11')) FlxG.fullscreen = !FlxG.fullscreen;
-        if (Input.is('f5')) FlxG.resetState();
-
-        // Miscellaneous //
-        FlxG.stage.frameRate = 1000;
-
         super.update(elapsed);
     }
 
@@ -101,4 +93,10 @@ class FunkinScene extends flixel.addons.ui.FlxUIState {
      * Function that gets called on every step (16th note) of the song.
      */
     public function on_step():Void {};
+
+    override function onFocus() {
+        super.onFocus();
+        // re set the framerate here because it gets turned back to 60 if we don't
+        FlxG.stage.frameRate = 1000;
+    }
 }

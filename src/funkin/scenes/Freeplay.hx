@@ -1,5 +1,6 @@
 package funkin.scenes;
 
+import flixel.math.FlxMath;
 import flixel.util.FlxColor;
 import funkin.sprites.ui.FreeplaySong;
 
@@ -12,6 +13,8 @@ class Freeplay extends FunkinScene {
     var songs:Array<FreeplaySongData> = [];
 
     var songs_group:flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup<FreeplaySong> = new flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup<FreeplaySong>();
+
+    var current_icon:funkin.sprites.ui.HealthIcon;
 
     /**
      * Current background color in freeplay.
@@ -47,7 +50,22 @@ class Freeplay extends FunkinScene {
         add_song('Satin Panties', 'mom', [ 'EASY', 'NORMAL', 'HARD' ], FlxColor.fromString('0xFFFC96D7'), 110.0, true);
         add_song('High', 'mom', [ 'EASY', 'NORMAL', 'HARD' ], FlxColor.fromString('0xFFFC96D7'), 125.0, true);
         add_song('M.I.L.F', 'mom', [ 'EASY', 'NORMAL', 'HARD' ], FlxColor.fromString('0xFFFC96D7'), 180.0, true);
+        // Week 5
+        add_song('Cocoa', 'parents', [ 'EASY', 'NORMAL', 'HARD' ], FlxColor.fromString('0xFFA0D1FF'), 100.0, true);
+        add_song('Eggnog', 'parents', [ 'EASY', 'NORMAL', 'HARD' ], FlxColor.fromString('0xFFA0D1FF'), 150.0, true);
+        add_song('Winter Horrorland', 'monster', [ 'EASY', 'NORMAL', 'HARD' ], FlxColor.fromString('0xFFA0D1FF'), 159.0, true);
+        // Week 6
+        add_song('Senpai', 'senpai', [ 'EASY', 'NORMAL', 'HARD' ], FlxColor.fromString('0xFFFF78BF'), 144.0, false);
+        add_song('Roses', 'senpai', [ 'EASY', 'NORMAL', 'HARD' ], FlxColor.fromString('0xFFFF78BF'), 120.0, false);
+        add_song('Thorns', 'spirit', [ 'EASY', 'NORMAL', 'HARD' ], FlxColor.fromString('0xFFFF78BF'), 190.0, false);
+        // Week 7
+        add_song('Ugh', 'tankman', [ 'EASY', 'NORMAL', 'HARD' ], FlxColor.fromString('0xFFF6B604'), 160.0, true);
+        add_song('Guns', 'tankman', [ 'EASY', 'NORMAL', 'HARD' ], FlxColor.fromString('0xFFF6B604'), 185.0, true);
+        add_song('Stress', 'tankman', [ 'EASY', 'NORMAL', 'HARD' ], FlxColor.fromString('0xFFF6B604'), 178.0, true);
+    }
 
+    override function create():Void {
+        super.create();
         change_selection();
     }
 
@@ -58,18 +76,40 @@ class Freeplay extends FunkinScene {
         background_color.interpolate(songs[index].color, 0.045);
         bg.color = FlxColor.fromRGBFloat(background_color.r, background_color.g, background_color.b);
 
+        if (FlxG.sound.music.active) {
+            Conductor.song_position_raw = FlxG.sound.music.time;
+            Conductor.song_position = Conductor.song_position_raw + Conductor.offset;
+        }
+
+        current_icon.scale.set(FlxMath.lerp(current_icon.scale.x, 1, elapsed * 9.0), FlxMath.lerp(current_icon.scale.y, 1, elapsed * 9.0));
+
         if (Input.is('exit')) FlxG.switchState(new MainMenu());
 
         super.update(elapsed);
     }
 
+    override function on_beat():Void {
+        super.on_beat();
+
+        current_icon.scale.set(current_icon.scale.x + 0.2, current_icon.scale.y + 0.2);
+    }
+
+    /**
+     * Changes selection by `amount`.
+     * @param amount 
+     */
     public function change_selection(amount:Int = 0):Void {
+        // just in case
+        if (current_icon != null) current_icon.scale.set(1, 1);
+
         index += amount;
 
         if (index < 0) index = songs.length - 1;
         else if (index > songs.length - 1) index = 0;
 
         FlxG.sound.play(Assets.audio('sfx/menus/scroll'));
+
+        current_icon = songs_group.members[index].icon;
 
         songs_group.forEach(function(item:FreeplaySong):Void {
             item.alpha = songs_group.members.indexOf(item) == index ? 1 : 0.6;
@@ -90,6 +130,8 @@ class Freeplay extends FunkinScene {
                 // play music when selected
                 FlxG.sound.playMusic(audio_data);
                 FlxG.sound.music.fadeIn();
+
+                Conductor.bpm = songs[index].bpm;
             }
         });
     }

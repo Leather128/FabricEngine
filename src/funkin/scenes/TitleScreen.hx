@@ -66,8 +66,6 @@ class TitleScreen extends FunkinScene {
 	override function create():Void {
 		super.create();
 
-        FlxG.autoPause = false;
-
         // we preload shit sometimes because performance?!?!?! //
 
         // how to preload audio part 1:
@@ -98,8 +96,13 @@ class TitleScreen extends FunkinScene {
         FlxG.fixedTimestep = false;
         persistentDraw = persistentUpdate = true;
         FlxG.sound.muteKeys = [ZERO];
+        FlxG.autoPause = false;
 
         new flixel.util.FlxTimer().start(1, function(_):Void {
+            Conductor.bpm = Std.parseFloat(data.att.bpm);
+            play_music('normal');
+            FlxG.sound.music.fadeIn(4, 0, 0.7);
+            
             if (!initialized) {
                 // copied from base game lmfao
                 var diamond:flixel.graphics.FlxGraphic = flixel.graphics.FlxGraphic.fromClass(flixel.addons.transition.FlxTransitionSprite.GraphicTransTileDiamond);
@@ -112,10 +115,6 @@ class TitleScreen extends FunkinScene {
 
                 transIn = FlxTransitionableState.defaultTransIn;
                 transOut = FlxTransitionableState.defaultTransOut;
-
-                Conductor.bpm = Std.parseFloat(data.att.bpm);
-                play_music('normal');
-                FlxG.sound.music.fadeIn(4, 0, 0.7);
 
                 initialized = true;
             }

@@ -21,6 +21,16 @@ class FreeplaySong extends flixel.group.FlxSpriteGroup {
      */
     public var index:Int = 0;
 
+    /**
+     * Current song alphabet in this freeplay song.
+     */
+    public var song:Alphabet;
+
+    /**
+     * Current health icon in this freeplay song.
+     */
+    public var icon:HealthIcon;
+
     public function new(x:Float = 0.0, y:Float = 0.0, song_info:FreeplaySongData, ?index:Int = 0) {
         super(x, y);
         this.index = index;
@@ -35,10 +45,10 @@ class FreeplaySong extends flixel.group.FlxSpriteGroup {
 
         // start spawning sprites
 
-        var song:Alphabet = new Alphabet(0, 0, song_name);
+        song = new Alphabet(0, 0, song_name);
         add(song);
 
-        var icon:HealthIcon = new HealthIcon(0, 0, song_icon, song_icon_antialiased);
+        icon = new HealthIcon(0, 0, song_icon, song_icon_antialiased);
         icon.tracked = song;
         add(icon);
     }

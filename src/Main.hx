@@ -54,5 +54,18 @@ class Main extends openfl.display.Sprite {
 		// Only add FPS Counter if on desktop OR you're using a debug build.
 		addChild(fps_counter);
 		#end
+		
+		FlxG.stage.addEventListener(openfl.events.KeyboardEvent.KEY_DOWN, key_down);
+	}
+
+	/**
+	 * Function that gets called everytime a key is detected as being pressed down.
+	 * @param evt OpenFL Event data.
+	 */
+	public static function key_down(evt:openfl.events.KeyboardEvent):Void {
+		switch (evt.keyCode) {
+			case openfl.ui.Keyboard.F5: FlxG.resetState();
+			case openfl.ui.Keyboard.F11: FlxG.fullscreen = !FlxG.fullscreen;
+		}
 	}
 }
