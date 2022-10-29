@@ -17,6 +17,8 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   build:
+    concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
+
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -49,8 +51,13 @@ jobs:
           haxelib install format
           haxelib list
       
-      - name: Output to pages
+      - name: Output to pages folder
         run: |
             chmod +x docs/docs.sh
             docs/docs.sh
             echo $(cat "pages/index.html")
+      
+      - name: github-actions
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: pages # The folder the action should deploy.
