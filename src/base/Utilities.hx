@@ -35,7 +35,7 @@ class Utilities {
      * @param precision (Optional, Default = `2`) The precision of the decimal value of bytes. (ex: `1 -> 1.5, 2 -> 1.53, etc`).
      * @return Formatted byte string.
      */
-    public static function format_bytes(bytes:Int, only_value:Bool = false, precision:Int = 2):String {
+    public static function format_bytes(bytes:Float, only_value:Bool = false, precision:Int = 2):String {
         var formatted_bytes:String = "?";
         
         for (i in 0...byte_formats.length) {

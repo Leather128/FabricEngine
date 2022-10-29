@@ -9,12 +9,16 @@ import funkin.sprites.ui.FreeplaySong;
  * @author Leather128
  */
 class Freeplay extends FunkinScene {
+    // private variables
     var bg:Sprite = new Sprite().load('menus/background_grayscale');
     var songs:Array<FreeplaySongData> = [];
 
     var songs_group:flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup<FreeplaySong> = new flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup<FreeplaySong>();
 
     var current_icon:funkin.sprites.ui.HealthIcon;
+
+    var song_thread:sys.thread.Thread;
+    var song_thread_active:Bool = true;
 
     /**
      * Current background color in freeplay.
@@ -24,7 +28,7 @@ class Freeplay extends FunkinScene {
     /**
      * Current index of the song selected.
      */
-    public static var index:Int = 0;
+    public static var index:Null<Int> = 0;
 
     public function new() {
         super();
@@ -76,14 +80,15 @@ class Freeplay extends FunkinScene {
         background_color.interpolate(songs[index].color, 0.045);
         bg.color = FlxColor.fromRGBFloat(background_color.r, background_color.g, background_color.b);
 
-        if (FlxG.sound.music.active) {
+        if (FlxG.sound.music.playing) {
             Conductor.song_position_raw = FlxG.sound.music.time;
             Conductor.song_position = Conductor.song_position_raw + Conductor.offset;
         }
 
-        current_icon.scale.set(FlxMath.lerp(current_icon.scale.x, 1, elapsed * 9.0), FlxMath.lerp(current_icon.scale.y, 1, elapsed * 9.0));
+        if (current_icon != null) current_icon.scale.set(FlxMath.lerp(current_icon.scale.x, 1, elapsed * 9.0), FlxMath.lerp(current_icon.scale.y, 1, elapsed * 9.0));
 
         if (Input.is('exit')) FlxG.switchState(new MainMenu());
+        if (Input.is('space')) play_song();
 
         super.update(elapsed);
     }
@@ -91,7 +96,7 @@ class Freeplay extends FunkinScene {
     override function on_beat():Void {
         super.on_beat();
 
-        current_icon.scale.set(current_icon.scale.x + 0.2, current_icon.scale.y + 0.2);
+        if (current_icon != null) current_icon.scale.set(current_icon.scale.x + 0.2, current_icon.scale.y + 0.2);
     }
 
     /**
@@ -99,9 +104,6 @@ class Freeplay extends FunkinScene {
      * @param amount 
      */
     public function change_selection(amount:Int = 0):Void {
-        // just in case
-        if (current_icon != null) current_icon.scale.set(1, 1);
-
         index += amount;
 
         if (index < 0) index = songs.length - 1;
@@ -109,30 +111,9 @@ class Freeplay extends FunkinScene {
 
         FlxG.sound.play(Assets.audio('sfx/menus/scroll'));
 
-        current_icon = songs_group.members[index].icon;
-
         songs_group.forEach(function(item:FreeplaySong):Void {
             item.alpha = songs_group.members.indexOf(item) == index ? 1 : 0.6;
             item.index = songs_group.members.indexOf(item) - index;
-        });
-
-        // smoothly loads audio
-        sys.thread.Thread.create(function():Void {
-            // fade out old music
-            if (FlxG.sound.music != null) FlxG.sound.music.fadeOut(0.2);
-
-            var cur_index:Int = index;
-            // load new music
-            var audio_data:flixel.system.FlxAssets.FlxSoundAsset = Assets.audio('songs/${songs[index].name.toLowerCase()}/Inst');
-
-            // make sure still selecting new music
-            if (cur_index == index) {
-                // play music when selected
-                FlxG.sound.playMusic(audio_data);
-                FlxG.sound.music.fadeIn();
-
-                Conductor.bpm = songs[index].bpm;
-            }
         });
     }
 
@@ -150,6 +131,45 @@ class Freeplay extends FunkinScene {
         songs.push(song_data);
 
         songs_group.add(new FreeplaySong(0, 0, song_data, songs.length));
+    }
+
+    /**
+     * Plays the current song selected.
+     */
+    public function play_song():Void {
+        if (song_thread == null) {
+            song_thread = sys.thread.Thread.create(function():Void {
+                while (true) {
+                    // no more memory leaks
+                    if ((!song_thread_active)) return;
+                    // dont run the rest of the shit but also dont close this loop :D
+                    if (sys.thread.Thread.readMessage(false) == null) continue;
+
+                    // smoothly load audio
+                    // fade out old music
+                    if (FlxG.sound.music != null) FlxG.sound.music.fadeOut(0.2);
+
+                    if (current_icon != null) current_icon.scale.set(1, 1);
+
+                    current_icon = songs_group.members[index].icon;
+
+                    // load new music
+                    var audio_data:flixel.system.FlxAssets.FlxSoundAsset = Assets.audio('songs/${songs[index].name.toLowerCase()}/Inst');
+
+                    // stop grrr memory leaks >:(
+                    FlxG.sound.music.stop();
+                    FlxG.sound.music.destroy();
+                    
+                    // play music when selected
+                    FlxG.sound.playMusic(audio_data);
+                    FlxG.sound.music.fadeIn();
+
+                    Conductor.bpm = songs[index].bpm;
+                }
+            });
+        }
+
+        song_thread.sendMessage(index);
     }
 }
 

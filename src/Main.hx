@@ -55,7 +55,10 @@ class Main extends openfl.display.Sprite {
 		addChild(fps_counter);
 		#end
 		
+		// inital settings
+		funkin.utils.Save.init();
 		FlxG.stage.addEventListener(openfl.events.KeyboardEvent.KEY_DOWN, key_down);
+		FlxG.stage.frameRate = 1000;
 	}
 
 	/**

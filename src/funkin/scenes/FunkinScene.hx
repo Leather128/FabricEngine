@@ -39,7 +39,7 @@ class FunkinScene extends flixel.addons.ui.FlxUIState {
             // Clear cached assets from the asset cache.
             Assets.clear_cache();
 
-            FlxG.bitmap.mapCacheAsDestroyable();
+            FlxG.bitmap.dumpCache();
             FlxG.bitmap.clearCache();
 
             // Clear actual assets from OpenFL and Lime itself

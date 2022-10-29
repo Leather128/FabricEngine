@@ -17,12 +17,12 @@ class Info extends openfl.text.TextField {
 	/**
 	 * Current memory usage of the program in megabytes.
 	 */
-	public var memory_usage:Float = 0;
+	public var memory_usage:Float = 0.0;
 
 	/**
 	 * The peak of the memory usage of the program in megabytes.
 	 */
-	public var memory_usage_peak:Float = 0;
+	public var memory_usage_peak:Float = 0.0;
 
 	/**
 	 * Current elapsed program time in milliseconds.
