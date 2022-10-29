@@ -40,12 +40,8 @@ class Main extends openfl.display.Sprite {
 			commit_id = sys.io.File.getContent(sys.FileSystem.absolutePath('commit.txt')).trim();
 		}
 
-		#if debug
-		if (Sys.args().contains('-livereload')) developer_build = true;
+		#if debug if (Sys.args().contains('-livereload')) developer_build = true; #end
 		#end
-		#end
-
-		trace(developer_build);
 
 		// Load the version
 		version = lime.app.Application.current.meta.get('version');

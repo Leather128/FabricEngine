@@ -51,7 +51,6 @@ class Info extends openfl.text.TextField {
 	 * Function that gets called every frame with the `deltaTime` to update the display's values.
 	 * 
 	 * @param deltaTime Time between now and the last frame (in milliseconds).
-	 * @author Leather128
 	 */
 	public override function __enterFrame(deltaTime:Float):Void {
 		// Frames per second calculations

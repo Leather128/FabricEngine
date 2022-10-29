@@ -57,7 +57,8 @@ class AlphabetChar extends Sprite {
         // shouldn't happen, but just in case
         if (character == ' ') return;
 
-        character = convert(character);
+        var raw_character:String = character;
+        character = convert(raw_character);
 
         load('ui/alphabet', SPARROW);
 
@@ -72,11 +73,7 @@ class AlphabetChar extends Sprite {
         play_animation('character', true);
         updateHitbox();
 
-        if (!bold) {
-            // TODO: add symbol / special character offsets
-            y = (110 - height);
-            y += row * 60;
-        }
+        set_offsets(raw_character, bold, row);
     }
 
     /**
@@ -87,6 +84,28 @@ class AlphabetChar extends Sprite {
     public static function convert(raw_character:String):String {
         switch (raw_character) {
             default: return raw_character;
+        }
+    }
+
+    /**
+     * Sets the offset of this character.
+     * @param raw_character Raw character string to use.
+     * @param bold (Optional) Bold alphabet toggle.
+     * @param row (Optional) Row of the character (NON BOLD ONLY).
+     */
+    public function set_offsets(raw_character:String, bold:Bool = true, row:Int = 0):Void {
+        if (!bold) {
+            // TODO: add symbol / special character offsets
+            y = (110 - height);
+            y += row * 60;
+
+            return;
+        }
+
+        switch (raw_character) {
+            case '.' | ',' | '_': y += height * 2.0;
+            case '-': y += height;
+            default: return;
         }
     }
 }

@@ -7,7 +7,6 @@ package base;
 class Input {
     /**
      * Map of `String`s to `flixel.input.keyboard.FlxKey`s with easier to understand and modify names.
-     * @author Leather128
      */
     public static var action_map:Map<String, flixel.input.keyboard.FlxKey> = [
         // Technically these should be redundant, but they are required for their alt versions to work, so yeah.
@@ -27,7 +26,6 @@ class Input {
      * @param state State to check for (default is `JUST_PRESSED`).
      * @param exact Whether to be exact with the state detection (ex: if `false` a `PRESSED` check returns true if `JUST_PRESSED` is true).
      * @return Bool of whether or not `action` is `state`.
-     * @author Leather128
      */
     public static function is(action:String, ?state:flixel.input.FlxInput.FlxInputState = JUST_PRESSED, ?exact:Bool = false):Bool {
         // exact checks
@@ -47,7 +45,6 @@ class Input {
      * Gets and returns the value of `action`.
      * @param action 
      * @return State of `action`.
-     * @author Leather128
      */
     public static function get(action:String):flixel.input.FlxInput.FlxInputState {
         // this shit dumb af but it works (for something that shouldn't be used often tbh)
