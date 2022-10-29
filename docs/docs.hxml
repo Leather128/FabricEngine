@@ -27,5 +27,5 @@
 
 -D doc-gen
 
--xml ../doc.xml
+-xml docs/doc.xml
 -neko dummy.n
