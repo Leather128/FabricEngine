@@ -99,7 +99,7 @@ class Freeplay extends FunkinScene {
     override function on_beat():Void {
         super.on_beat();
 
-        if (current_icon != null) current_icon.scale.set(current_icon.scale.x + 0.2, current_icon.scale.y + 0.2);
+        if (current_icon != null) current_icon.scale.add(0.2, 0.2);
     }
 
     /**
