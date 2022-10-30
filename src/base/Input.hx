@@ -43,7 +43,7 @@ class Input {
 
     /**
      * Gets and returns the value of `action`.
-     * @param action 
+     * @param action Action to check (can be key name as well).
      * @return State of `action`.
      */
     public static function get(action:String):flixel.input.FlxInput.FlxInputState {
