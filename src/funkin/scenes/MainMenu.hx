@@ -13,12 +13,12 @@ class MainMenu extends FunkinScene {
     /**
      * Object that the current camera follows.
      */
-    var cam_follow:flixel.FlxObject = new flixel.FlxObject(0, 0, 1, 1);
+    public var cam_follow:flixel.FlxObject = new flixel.FlxObject(0, 0, 1, 1);
 
     /**
      * `AtlasList` for all the items in this menu.
      */
-    var menu_list:AtlasList = new AtlasList();
+    public var menu_list:AtlasList = new AtlasList();
 
     override function create():Void {
         super.create();
@@ -84,6 +84,10 @@ class MainMenu extends FunkinScene {
         if (Input.is('exit')) FlxG.switchState(new TitleScreen());
     }
 
+    /**
+     * Switch game's scene.
+     * @param next_scene Scene to switch to.
+     */
     public function switch_scene(next_scene:FunkinScene):Void {
         menu_list.enabled = false;
         menu_list.forEach(function(item:AtlasItem) {
