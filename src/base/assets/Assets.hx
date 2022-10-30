@@ -66,7 +66,16 @@ class Assets {
      */
     public static function clear_cache():Void {
         // For now we literally just do this lmfao
-        cache.clear();
+        for (key in cache.keys()) {
+            if (Std.isOfType(cache.get(key), openfl.media.Sound)) {
+                var casted:openfl.media.Sound = cast cache.get(key);
+                casted.close();
+                casted = null;
+            }
+
+            cache.set(key, null);
+            cache.remove(key);
+        }
     }
 
     /**
@@ -105,7 +114,7 @@ class Assets {
         // Automatically add audio extension if not specified.
         if (!path.endsWith(AUDIO_EXT)) path += AUDIO_EXT;
         // If the audio isn't already cached, load and cache it.
-        if (!cache.exists(path)) cache.set(path, flash.media.Sound.fromFile(asset(path)));
+        if (!cache.exists(path)) cache.set(path, openfl.media.Sound.fromFile(asset(path)));
 
         return cache.get(path); // Return audio from the cache.
     }

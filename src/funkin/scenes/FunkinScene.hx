@@ -29,15 +29,15 @@ class FunkinScene extends flixel.addons.ui.FlxUIState {
     }
 
     override function create():Void {
+        // set framerate just in case
+        FlxG.stage.frameRate = 1000;
+
         if (clear_cache) {
             // Remove cached assets (prevents memory leaks that i can prevent)
             
             // Remove lingering sounds from the sound list
-            FlxG.sound.list.forEachAlive(function(sound:flixel.system.FlxSound):Void { FlxG.sound.list.remove(sound, true); sound.stop(); sound.kill(); sound.destroy(); });
+            FlxG.sound.list.forEachAlive(function(sound:flixel.system.FlxSound):Void { FlxG.sound.list.remove(sound, true); sound.stop(); sound.destroy(); });
             FlxG.sound.list.clear();
-
-            // Clear cached assets from the asset cache.
-            Assets.clear_cache();
 
             FlxG.bitmap.dumpCache();
             FlxG.bitmap.clearCache();
@@ -49,13 +49,17 @@ class FunkinScene extends flixel.addons.ui.FlxUIState {
             // this totally isn't copied from polymod/backends/OpenFLBackend.hx trust me
             for (key in cache.bitmapData.keys()) cache.bitmapData.remove(key);
             for (key in cache.font.keys()) cache.font.remove(key);
-            for (key in cache.sound.keys()) cache.sound.remove(key);
+            @:privateAccess
+            for (key in cache.sound.keys()) { cache.sound.get(key).close(); cache.sound.remove(key); }
 
             // this totally isn't copied from polymod/backends/LimeBackend.hx trust me
             for (key in lime_cache.image.keys()) lime_cache.image.remove(key);
             for (key in lime_cache.font.keys()) lime_cache.font.remove(key);
-            for (key in lime_cache.audio.keys()) lime_cache.audio.remove(key);
+            for (key in lime_cache.audio.keys()) { lime_cache.audio.get(key).dispose(); lime_cache.audio.remove(key); };
             
+            // Clear cached assets from the asset cache.
+            Assets.clear_cache();
+
             // Run built-in garbage collector
             openfl.system.System.gc();
         }
