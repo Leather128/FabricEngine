@@ -28,4 +28,4 @@
 -D doc-gen
 
 -xml docs/doc.xml
--neko dummy.n
+--cpp docs-bin/
