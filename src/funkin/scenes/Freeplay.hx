@@ -130,7 +130,7 @@ class Freeplay extends FunkinScene {
         var song_data:FreeplaySongData = { name: name, icon: icon, difficulties: difficulties, color: color, bpm: bpm, icon_antialiased: icon_antialiased };
         songs.push(song_data);
 
-        songs_group.add(new FreeplaySong(0, 0, song_data, songs.length));
+        songs_group.add(new FreeplaySong(0, (70.0 * (songs.length - 1)) + 30.0, song_data, songs.length));
     }
 
     /**
