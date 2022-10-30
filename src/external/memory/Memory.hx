@@ -11,8 +11,8 @@ package external.memory;
 extern class Memory {
 	/**
 	 * Returns the peak (maximum so far) resident set size (physical
-	 * memory use) measured in bytes, or zero if the value cannot be determined on this OS.
-	 * @author David Robert Nadeau
+	 * memory use) measured in bytes, or zero if the value cannot be
+	 * determined on this OS.
 	 */
 	@:native("getPeakRSS")
 	public static function getPeakUsage():Int;
@@ -20,7 +20,6 @@ extern class Memory {
 	/**
  	 * Returns the current resident set size (physical memory use) measured
  	 * in bytes, or zero if the value cannot be determined on this OS.
-	 * @author David Robert Nadeau
 	 */
 	@:native("getCurrentRSS")
 	public static function getCurrentUsage():Int;
@@ -33,14 +32,12 @@ extern class Memory {
 class Memory {
 	/**
 	 * (Non cpp platform)
-	 * 
 	 * Returns 0.
 	 */
 	public static function getPeakUsage():Int return 0;
 
 	/**
 	 * (Non cpp platform)
-	 * 
 	 * Returns 0.
 	 */
 	public static function getCurrentUsage():Int return 0;
