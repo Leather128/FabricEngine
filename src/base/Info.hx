@@ -66,9 +66,6 @@ class Info extends openfl.text.TextField {
 		memory_usage_peak = Std.parseFloat(Utilities.format_bytes(Memory.getPeakUsage(), true));
 
 		// Actual text
-		text = '${fps} fps
-		${Utilities.format_bytes(Memory.getCurrentUsage(), true)}/${Utilities.format_bytes(Memory.getPeakUsage())}
-		${#if debug 'debug-build-${Main.build_number} (${Main.commit_id})' #else '' #end}
-		';
+		text = '${fps} fps\n${Utilities.format_bytes(Memory.getCurrentUsage(), true)}/${Utilities.format_bytes(Memory.getPeakUsage())}\n${#if debug 'debug-build-${Main.build_number} (${Main.commit_id})' #else '' #end}';
 	}
 }
