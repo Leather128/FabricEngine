@@ -16,7 +16,7 @@ class Save {
     public static var save_path:String = 'leather128';
 
     /**
-     * Map of `String`s to `flixel.util.FlxSave`s to store multiple saves.
+     * Map of `String(s)` to `flixel.util.FlxSave(s)` to store multiple saves.
      */
     public static var saves:Map<String, flixel.util.FlxSave> = [];
     
