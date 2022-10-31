@@ -90,6 +90,12 @@ class Freeplay extends FunkinScene {
         if (current_icon != null) current_icon.scale.set(FlxMath.lerp(current_icon.scale.x, 1, elapsed * 9.0), FlxMath.lerp(current_icon.scale.y, 1, elapsed * 9.0));
 
         if (Input.is('exit')) { song_thread_active = false; FlxG.switchState(new MainMenu()); }
+        
+        if (Input.is('enter')) {
+            song_thread_active = false;
+            FlxG.switchState(new Gameplay());
+        }
+
         if (Input.is('space')) play_song();
         if (Input.is('f5')) song_thread_active = false;
 

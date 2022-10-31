@@ -67,7 +67,6 @@ class Main extends openfl.display.Sprite {
 	 */
 	public static function key_down(evt:openfl.events.KeyboardEvent):Void {
 		switch (evt.keyCode) {
-			case openfl.ui.Keyboard.F5: FlxG.resetState();
 			case openfl.ui.Keyboard.F11: FlxG.fullscreen = !FlxG.fullscreen;
 		}
 	}

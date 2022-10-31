@@ -83,6 +83,9 @@ class FunkinScene extends flixel.addons.ui.FlxUIState {
         // Set old beat and step to the current ones after detecting changes
         last_beat = Conductor.beat; last_step = Conductor.step;
 
+        // We reload state here instead of in the same place as fullscreen just to allow states to manually do things before the state gets reloaded (could be useful)
+        if (Input.is('f5')) FlxG.resetState();
+
         super.update(elapsed);
     }
 

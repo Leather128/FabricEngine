@@ -40,6 +40,8 @@
 	<haxelib name="hscript-improved" />
 	<haxelib name="hxCodec" if="VIDEOS_ALLOWED" />
 
+	<haxelib name="tjson" />
+
 	<haxelib name="hxcpp-debug-server" if="desktop debug" />
 
 	<!-- ______________________________ Haxedefines _____________________________ -->

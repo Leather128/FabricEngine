@@ -81,6 +81,8 @@ class Assets {
     /**
      * Loads and returns the text from the specified `path`.
      * 
+     * (starts in `assets` folder)
+     * 
      * @param path Path to the text file.
      * @return Content from `path`.
      */
@@ -89,6 +91,7 @@ class Assets {
 
     /**
      * Load and return image from the specified `path`.
+     * 
      * (starts in `assets` folder)
      * 
      * @param path Path to the image.
@@ -105,6 +108,7 @@ class Assets {
 
     /**
      * Load and return audio from the specified `path`.
+     * 
      * (starts in `assets` folder)
      * 
      * @param path Path to the audio.
@@ -121,7 +125,8 @@ class Assets {
 
     /**
      * Load and return the name of the font from the specified `path`.
-     * (starts in the `fonts` folder if not specified)
+     * 
+     * (starts in the `assets/fonts` folder if not specified)
      * 
      * @param path Path to the font.
      * @return Font asset's name from `path`.
