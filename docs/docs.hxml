@@ -5,11 +5,13 @@
 -D flixel-addons=2.11.0
 -D flixel-ui=2.4.0
 -D hscript-improved=2.4.0
+-D tjson=1.4.0
 
 -L lime
 -L openfl
 -L flixel
 -L hscript-improved
+-L tjson
 
 --macro lime._internal.macros.DefineMacro.run()
 --macro openfl.utils._internal.ExtraParamsMacro.include()
