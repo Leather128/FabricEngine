@@ -49,6 +49,7 @@ jobs:
           haxelib install hxcpp-debug-server
           haxelib install dox
           haxelib install format
+          haxelib install tjson
           haxelib list
       
       - name: Create Documentation Site
