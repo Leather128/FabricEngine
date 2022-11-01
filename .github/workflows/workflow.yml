@@ -41,6 +41,7 @@ jobs:
           haxelib install hxCodec
           haxelib git hscript-improved https://github.com/YoshiCrafter29/hscript-improved          
           haxelib install hxcpp-debug-server
+          haxelib install tjson
           haxelib list
       - name: Create Version Tag
         run: echo "${{github.run_id}}" > VERSION
@@ -78,6 +79,7 @@ jobs:
           haxelib install hxCodec
           haxelib git hscript-improved https://github.com/YoshiCrafter29/hscript-improved          
           haxelib install hxcpp-debug-server
+          haxelib install tjson
           haxelib list
         shell: cmd
       - name: Create Version Tag
@@ -115,6 +117,7 @@ jobs:
           haxelib install hxCodec
           haxelib git hscript-improved https://github.com/YoshiCrafter29/hscript-improved          
           haxelib install hxcpp-debug-server
+          haxelib install tjson
           haxelib list
       - name: Create Version Tag
         run: echo "${{github.run_id}}" > VERSION
