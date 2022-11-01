@@ -6,6 +6,7 @@ import base.Input;
 import base.Sprite;
 import base.Utilities;
 import base.assets.Assets;
+import base.Log.PrintType;
 
 // Funkin Imports
 

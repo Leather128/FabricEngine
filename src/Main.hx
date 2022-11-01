@@ -33,6 +33,10 @@ class Main extends openfl.display.Sprite {
 	public function new() {
 		super();
 
+		// New way of tracing (nicer to work with for errors and such)
+		base.Log.haxe_trace = haxe.Log.trace;
+		haxe.Log.trace = base.Log.haxe_print;
+
 		// Simple loading of the build number and commit id on startup.
 		#if sys
 		if (sys.FileSystem.exists(sys.FileSystem.absolutePath('build.txt')) && sys.FileSystem.exists(sys.FileSystem.absolutePath('commit.txt'))) {

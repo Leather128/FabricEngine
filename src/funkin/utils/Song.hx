@@ -101,7 +101,7 @@ class SongHelper {
         try {
             raw_data = Assets.text('songs/${path}').trim();
         } catch(e) {
-            trace('songs/${path} failed to load! Reloading into TitleScreen.hx as fallback!');
+            trace('songs/${path} failed to load! Reloading into TitleScreen.hx as fallback!', ERROR);
             FlxG.switchState(new funkin.scenes.TitleScreen());
 
             return null;

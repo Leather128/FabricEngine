@@ -194,20 +194,20 @@ class TitleScreen extends FunkinScene {
             switch (line.att.type) {
                 case 'line':
                     #if debug
-                    trace(line.att.value);
+                    trace(line.att.value, DEBUG);
                     #end
                     
                     // add text from all lines in the value property
                     add_text(line.att.value.split(','));
                 case 'clear':
                     #if debug
-                    trace('CLEARING STUFF');
+                    trace('CLEARING STUFF', DEBUG);
                     #end
 
                     clear_intro_sprites();
                 case 'sprite':
                     #if debug
-                    trace('SPAWNING SPRITE ${line.att.value}!');
+                    trace('SPAWNING SPRITE ${line.att.value}!', DEBUG);
                     #end
 
                     // load sprite
@@ -228,28 +228,28 @@ class TitleScreen extends FunkinScene {
                     intro_sprites.add(sprite);
                 case 'randomized':
                     #if debug
-                    trace('DISPLAYING RANDOMIZED ${line.att.value} (${randomized_lines.get(line.att.value)})!');
+                    trace('DISPLAYING RANDOMIZED ${line.att.value} (${randomized_lines.get(line.att.value)})!', DEBUG);
                     #end
 
                     // add randomized text from specified key (line.att.value is da key)
                     add_text([randomized_lines.get(line.att.value)]);
                 case 'event':
                     #if debug
-                    trace('RUNNING EVENT ${line.att.value}!');
+                    trace('RUNNING EVENT ${line.att.value}!', DEBUG);
                     #end
 
                     switch (line.att.value) {
                         case 'exit_intro':
                             #if debug
-                            trace('EXIT TO MAIN TITLE SCREEN');
+                            trace('EXIT TO MAIN TITLE SCREEN', DEBUG);
                             #end
 
                             exit_intro();
                         default:
-                            trace('${line.att.value} NOT IMPLEMENTED AS AN EVENT!');
+                            trace('${line.att.value} NOT IMPLEMENTED AS AN EVENT!', ERROR);
                     }
                 default:
-                    trace('${line.att.type} NOT IMPLEMENTED AS A LINE TYPE!');
+                    trace('${line.att.type} NOT IMPLEMENTED AS A LINE TYPE!', ERROR);
             }
         }
     }
