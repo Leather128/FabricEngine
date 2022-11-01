@@ -13,8 +13,25 @@ class Script implements flixel.util.FlxDestroyUtil.IFlxDestroyable {
         'templatescript'
     ];
 
+    /**
+     * Loads the script at `path`.
+     * @param path Path to script with (or without) file extension (starts in `assets/`).
+     * @return The Script.
+     */
+    public static function load(path:String):Script {
+        // HScript checks
+        for (ext in HScript.file_extensions) {
+            // with ext
+            if (Assets.exists(Assets.asset('${path}')) && path.endsWith('.${ext}')) return new HScript('${path.substring(0, path.length - 1 - ext.length)}');
+            // without ext
+            if (Assets.exists(Assets.asset('${path}.${ext}'))) return new HScript('${path}.${ext}');
+        }
+
+        return null;
+    }
+
     // blank constructor since this class doesn't actually do anything
-    public function new(?path:String) { call('create'); }
+    public function new(?path:String) {}
 
     /**
      * Gets `item` and returns it.

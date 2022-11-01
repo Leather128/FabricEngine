@@ -34,9 +34,15 @@ class Sprite extends flixel.FlxSprite {
         // Load different types of assets.
         switch (type) {
             case IMAGE:
-                loadGraphic(Assets.image('images/${path}'), options.get('animated'), options.get('width'), options.get('height'));
+                if (options.get('images_folder') != false) 
+                    loadGraphic(Assets.image('images/${path}'), options.get('animated'), options.get('width'), options.get('height'));
+                else
+                    loadGraphic(Assets.image('${path}'), options.get('animated'), options.get('width'), options.get('height'));
             case SPARROW:
-                frames = flixel.graphics.frames.FlxAtlasFrames.fromSparrow(Assets.image('images/${path}'), Assets.text('images/${path}.xml'));
+                if (options.get('images_folder') != false)
+                    frames = flixel.graphics.frames.FlxAtlasFrames.fromSparrow(Assets.image('images/${path}'), Assets.text('images/${path}.xml'));
+                else
+                    frames = flixel.graphics.frames.FlxAtlasFrames.fromSparrow(Assets.image('${path}'), Assets.text('${path}.xml'));
             default:
                 trace('${type} is unsupported to be loaded in a Sprite!', ERROR);
         }

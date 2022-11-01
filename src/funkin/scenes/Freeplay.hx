@@ -32,6 +32,11 @@ class Freeplay extends FunkinScene {
      */
     public static var index:Null<Int> = 0;
 
+    /**
+     * Current index of the difficutly selected.
+     */
+    public static var difficulty:Int = 1;
+
     public function new() {
         super();
 
@@ -93,6 +98,8 @@ class Freeplay extends FunkinScene {
         
         if (Input.is('enter')) {
             song_thread_active = false;
+            
+            Gameplay.song = funkin.utils.Song.SongHelper.load_song('${songs[index].name.toLowerCase()}/normal');
             FlxG.switchState(new Gameplay());
         }
 

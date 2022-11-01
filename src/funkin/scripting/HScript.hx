@@ -39,6 +39,12 @@ class HScript extends Script {
 
         // loop through extensions to make sure the path exists
         for (ext in file_extensions) {
+            // path with ext
+            if (Assets.exists(Assets.asset('${path}')) && path.endsWith('.${ext}')) {
+                raw_script = Assets.text('${path}');
+                break;
+            }
+            // path without ext
             if (Assets.exists(Assets.asset('${path}.${ext}'))) {
                 raw_script = Assets.text('${path}.${ext}');
                 break;
@@ -47,7 +53,7 @@ class HScript extends Script {
 
         // fallback
         if (raw_script == '') {
-            trace('Could not find ${path} as a valid HScript file, returning.', ERROR);
+            trace('Could not find ${path} (no extension) as a valid HScript file, returning.', ERROR);
             return;
         }
 

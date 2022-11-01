@@ -94,7 +94,7 @@ class SongHelper {
      * @param path Path of the song to load (ex: `tutorial/normal` or `tutorial/normal.json`).
      * @return The song at `path` (if it exists).
      */
-    public static function load_song(path:String):Null<Song> {
+    public static function load_song(path:String):Song {
         if (!path.endsWith('.json')) path += '.json';
         var raw_data:String;
 
@@ -107,6 +107,6 @@ class SongHelper {
             return null;
         }
 
-        return cast Json.parse(raw_data, '${path}');
+        return cast Json.parse(raw_data).song;
     }
 }
