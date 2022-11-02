@@ -1,7 +1,11 @@
 package funkin.sprites.gameplay;
 
-import funkin.scripting.*;
+import funkin.scripting.Script;
 
+/**
+ * A character in gameplay.
+ * @author Leather128
+ */
 class Character extends Sprite {
     public var character:String = 'bf';
     public var script:Script;
@@ -23,7 +27,7 @@ class Character extends Sprite {
         script = Script.load('characters/${character}/character');
 
         if (script == null) {
-            trace('${character} doesn\'t have a character script! This character will be broken.', ERROR);
+            trace('${character} doesn\'t have a character script (characters/${character}/character)! This character will be broken.', ERROR);
             script = new Script(); // everything here does nothing lmao
         }
 

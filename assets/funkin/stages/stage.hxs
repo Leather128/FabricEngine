@@ -1,0 +1,18 @@
+// init params
+var default_camera_zoom:Float = 0.9;
+
+function create() {
+    var back:Sprite = new Sprite(-600, -200).load(stage_asset('stageback'));
+    back.scrollFactor.set(0.9, 0.9);
+    add(back);
+
+    var front:Sprite = new Sprite(-650, 600).load(stage_asset('stagefront'));
+    front.scale.set(1.1, 1.1); front.updateHitbox();
+    front.scrollFactor.set(0.9, 0.9);
+    add(front);
+
+    var curtains:Sprite = new Sprite(-500, -300).load(stage_asset('stagecurtains'));
+    curtains.scale.set(0.9, 0.9); curtains.updateHitbox();
+    curtains.scrollFactor.set(1.3, 1.3);
+    add(curtains);
+}

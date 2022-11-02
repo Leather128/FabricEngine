@@ -7,8 +7,8 @@ package funkin.scripting;
 class HScript extends Script {
     // same docs as Script lmao
     public static var file_extensions:Array<String> = [
-        'hx',
         'hxs',
+        'hx',
         'hscript'
     ];
 
@@ -72,6 +72,14 @@ class HScript extends Script {
      */
     public override function get(item:String):Dynamic
         return interp.variables.get(item);
+
+    /**
+     * Returns whether or not `item` exists.
+     * @param item Item to check.
+     * @return Whether or not it exists.
+     */
+    public override function exists(item:String):Bool
+        return interp.variables.exists(item);
 
     /**
      * Sets `item` to `value`.

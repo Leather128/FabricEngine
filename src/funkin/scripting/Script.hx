@@ -41,6 +41,13 @@ class Script implements flixel.util.FlxDestroyUtil.IFlxDestroyable {
     public function get(item:String):Dynamic { return null; }
 
     /**
+     * Returns whether or not `item` exists.
+     * @param item Item to check.
+     * @return Whether or not it exists.
+     */
+    public function exists(item:String):Bool { return false; }
+
+    /**
      * Sets `item` to `value`.
      * @param item Item to set.
      * @param value Value to set `item` to.
