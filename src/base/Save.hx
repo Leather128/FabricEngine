@@ -1,4 +1,4 @@
-package funkin.utils;
+package base;
 
 /**
  * Class that provides a higher level way of accessing save data.

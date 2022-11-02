@@ -60,7 +60,7 @@ class Main extends openfl.display.Sprite {
 		#end
 		
 		// inital settings
-		funkin.utils.Save.init();
+		base.Save.init();
 		FlxG.stage.addEventListener(openfl.events.KeyboardEvent.KEY_DOWN, key_down);
 		FlxG.stage.frameRate = 1000;
 	}

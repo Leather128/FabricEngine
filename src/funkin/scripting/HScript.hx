@@ -118,7 +118,7 @@ class HScript extends Script {
         super.set_defaults();
 
         // import.hx
-        add_classes([Input, Sprite, Utilities, Assets, PrintType, Conductor, FlxG, StringTools]);
+        add_classes([Input, Sprite, Utilities, Assets, PrintType, Save, Conductor, FlxG, StringTools]);
         // actual custom imports
         add_classes([base.assets.AssetType, flixel.math.FlxMath, flixel.math.FlxPoint, flixel.math.FlxRect, flixel.system.FlxSound, Math, Std]);
         // custom class / abstract shits
