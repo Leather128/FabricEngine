@@ -6,4 +6,5 @@ function create() {
 
     character.dance_steps = ['danceLeft', 'danceRight'];
     character.dance();
+    character.health_color = FlxColor.fromString('#a5004d');
 }

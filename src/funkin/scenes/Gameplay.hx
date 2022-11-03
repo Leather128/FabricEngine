@@ -125,6 +125,9 @@ class Gameplay extends FunkinScene {
         add(dad);
         add(bf);
 
+        // for tutorial type shit
+        if (dad.character == gf.character) { remove(dad); dad.destroy(); dad = gf; }
+
         // load ui
         ui = new funkin.sprites.ui.GameplayUI(); ui.scrollFactor.set();
         ui.cameras = [hud_cam];
@@ -181,7 +184,7 @@ class Gameplay extends FunkinScene {
 
         // funny checks
         if (bf.animation.curAnim != null && !bf.animation.curAnim.name.startsWith('sing')) bf.dance();
-        if (dad.animation.curAnim != null && !dad.animation.curAnim.name.startsWith('sing')) dad.dance();
+        if (dad != gf && dad.animation.curAnim != null && !dad.animation.curAnim.name.startsWith('sing')) dad.dance();
         if (gf.animation.curAnim != null && !gf.animation.curAnim.name.startsWith('sing')) gf.dance();
 
         if (camera_bouncing && Conductor.beat % 4 == 0) { FlxG.camera.zoom += 0.015; hud_cam.zoom += 0.03; }

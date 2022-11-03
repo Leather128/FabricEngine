@@ -9,4 +9,5 @@ function create() {
     character.add_animation('singRIGHT', 'Dad Sing Note RIGHT');
 
     character.dance();
+    character.health_color = FlxColor.fromString('#af66ce');
 }

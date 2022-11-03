@@ -20,6 +20,7 @@ function create() {
     character.flipX = !character.flipX;
     character.load_offsets();
     character.dance();
+    character.health_color = FlxColor.BLACK;
 
     character.global_offset.set(0.0, 180.0);
 }

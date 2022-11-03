@@ -11,4 +11,5 @@ function create() {
     character.flipX = !character.flipX;
 
     character.dance();
+    character.health_color = FlxColor.fromString('#31b0d1');
 }
