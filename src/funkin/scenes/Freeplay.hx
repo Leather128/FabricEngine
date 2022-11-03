@@ -25,7 +25,7 @@ class Freeplay extends FunkinScene {
     // score stuff
     var score_bg:Sprite = new Sprite();
     var score_text:flixel.text.FlxText = new flixel.text.FlxText(FlxG.width * 0.7, 5, 0, '', 32);
-    var diff_text:flixel.text.FlxText = new flixel.text.FlxText(FlxG.width * 0.7, 42, 0, '', 24);
+    var diff_text:flixel.text.FlxText = new flixel.text.FlxText(FlxG.width * 0.7, 41, 0, '', 24);
 
     // this is a float cuz lerping scary!!!
     var score:Float = 0.0;
