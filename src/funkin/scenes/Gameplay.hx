@@ -164,9 +164,9 @@ class Gameplay extends FunkinScene {
         call_scripts('on_beat', [Conductor.beat, Conductor.beat_f]); call_scripts('beatHit', [Conductor.beat, Conductor.beat_f]);
 
         // funny checks
-        if (!bf.animation.curAnim.name.startsWith('sing')) bf.dance();
-        if (!dad.animation.curAnim.name.startsWith('sing')) dad.dance();
-        if (!gf.animation.curAnim.name.startsWith('sing')) gf.dance();
+        if (bf.animation.curAnim != null && !bf.animation.curAnim.name.startsWith('sing')) bf.dance();
+        if (dad.animation.curAnim != null && !dad.animation.curAnim.name.startsWith('sing')) dad.dance();
+        if (gf.animation.curAnim != null && !gf.animation.curAnim.name.startsWith('sing')) gf.dance();
 
         if (camera_bouncing && Conductor.beat % 4 == 0) { FlxG.camera.zoom += 0.015; hud_cam.zoom += 0.03; }
 
