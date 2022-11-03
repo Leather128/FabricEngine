@@ -13,14 +13,23 @@ class Freeplay extends FunkinScene {
     var bg:Sprite = new Sprite().load('menus/background_grayscale');
     var songs:Array<FreeplaySongData> = [];
 
+    // song list stuff
     var songs_group:flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup<FreeplaySong> = new flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup<FreeplaySong>();
-
     var current_icon:funkin.sprites.ui.HealthIcon;
 
+    // threads
     var song_thread:sys.thread.Thread;
     var song_thread_active:Bool = true;
-
     var mutex:sys.thread.Mutex = new sys.thread.Mutex();
+
+    // score stuff
+    var score_bg:Sprite = new Sprite();
+    var score_text:flixel.text.FlxText = new flixel.text.FlxText(FlxG.width * 0.7, 5, 0, '', 32);
+    var diff_text:flixel.text.FlxText = new flixel.text.FlxText(FlxG.width * 0.7, 42, 0, '', 24);
+
+    // this is a float cuz lerping scary!!!
+    var score:Float = 0.0;
+    var target_score:Int = 0;
 
     /**
      * Current background color in freeplay.
@@ -37,11 +46,9 @@ class Freeplay extends FunkinScene {
      */
     public static var difficulty:Int = 1;
 
+    // only init shit here
     public function new() {
         super();
-
-        add(bg);
-        add(songs_group);
 
         // Week 0
         add_song('Tutorial', 'gf', [ 'EASY', 'NORMAL', 'HARD' ], FlxColor.fromString('0xFF9271FD'), 100.0, true);
@@ -75,18 +82,40 @@ class Freeplay extends FunkinScene {
         add_song('Stress', 'tankman', [ 'EASY', 'NORMAL', 'HARD' ], FlxColor.fromString('0xFFF6B604'), 178.0, true);
     }
 
+    // add sprites here
     override function create():Void {
         super.create();
+
+        add(bg);
+        add(songs_group);
+
+        // score text stuffs
+        score_bg.makeGraphic(1, 66, 0xFF000000);
+        score_bg.x = score_text.x - 6; score_bg.alpha = 0.6;
+
+        score_text.setFormat(Assets.font('vcr.ttf'), 32, flixel.util.FlxColor.WHITE, RIGHT);
+        diff_text.setFormat(Assets.font('vcr.ttf'), 24, flixel.util.FlxColor.WHITE);
+
+        add(score_bg);
+        add(score_text);
+        add(diff_text);
+
         change_selection();
     }
 
     override function update(elapsed:Float):Void {
+        // arrow movement
         var vertical_axis:Int = (Input.is('down') ? 1 : 0) - (Input.is('up') ? 1 : 0);
         if (vertical_axis != 0) change_selection(vertical_axis);
 
+        var horizontal_axis:Int = (Input.is('right') ? 1 : 0) - (Input.is('left') ? 1 : 0);
+        if (horizontal_axis != 0) change_difficulty(horizontal_axis);
+
+        // colors
         background_color.interpolate(songs[index].color, 0.045);
         bg.color = FlxColor.fromRGBFloat(background_color.r, background_color.g, background_color.b);
 
+        // music
         if (FlxG.sound.music.playing) {
             Conductor.song_position_raw = FlxG.sound.music.time;
             Conductor.song_position = Conductor.song_position_raw + Conductor.offset;
@@ -94,17 +123,25 @@ class Freeplay extends FunkinScene {
 
         if (current_icon != null) current_icon.scale.set(FlxMath.lerp(current_icon.scale.x, 1, elapsed * 9.0), FlxMath.lerp(current_icon.scale.y, 1, elapsed * 9.0));
 
+        // other controls
         if (Input.is('exit')) { song_thread_active = false; FlxG.switchState(new MainMenu()); }
         
         if (Input.is('enter')) {
             song_thread_active = false;
             
-            Gameplay.song = funkin.utils.Song.SongHelper.load_song('${songs[index].name.toLowerCase()}/normal');
+            Gameplay.song = funkin.utils.Song.SongHelper.load_song('${songs[index].name.toLowerCase()}/${songs[index].difficulties[difficulty].toLowerCase()}');
             FlxG.switchState(new Gameplay());
         }
 
         if (Input.is('space')) play_song();
         if (Input.is('f5')) song_thread_active = false;
+
+        // score //
+        // equal to about 0.4 at 60 fps
+        score = flixel.math.FlxMath.lerp(score, target_score, elapsed * 24);
+
+        score_text.text = 'PERSONAL BEST: ${Math.floor(score)}';
+        position_score_info();
 
         super.update(elapsed);
     }
@@ -117,7 +154,7 @@ class Freeplay extends FunkinScene {
 
     /**
      * Changes selection by `amount`.
-     * @param amount 
+     * @param amount Amount to change by.
      */
     public function change_selection(amount:Int = 0):Void {
         index += amount;
@@ -131,6 +168,33 @@ class Freeplay extends FunkinScene {
             item.alpha = songs_group.members.indexOf(item) == index ? 1 : 0.6;
             item.index = songs_group.members.indexOf(item) - index;
         });
+
+        change_difficulty();
+    }
+
+    /**
+     * Changes the difficulty by `amount`.
+     * @param amount Amount to change by.
+     */
+    public function change_difficulty(amount:Int = 0):Void {
+        difficulty += amount;
+
+        if (difficulty < 0) difficulty = songs[index].difficulties.length - 1;
+        else if (difficulty > songs[index].difficulties.length - 1) difficulty = 0;
+
+        diff_text.text = '< ${songs[index].difficulties[difficulty].toUpperCase()} >';
+    }
+
+    /**
+     * Positions the score information on the screen.
+     */
+    public function position_score_info():Void {
+        // not copied from https://github.com/AngelDTF/FNF-NewgroundsPort/blob/remaster/source/FreeplayState.hx trust me
+        score_text.x = FlxG.width - score_text.width - 6.0;
+        score_bg.scale.x = FlxG.width - score_text.x + 6.0;
+		score_bg.x = FlxG.width - score_bg.scale.x / 2.0;
+		diff_text.x = score_bg.x + score_bg.width / 2.0;
+		diff_text.x -= diff_text.width / 2.0;
     }
 
     /**
