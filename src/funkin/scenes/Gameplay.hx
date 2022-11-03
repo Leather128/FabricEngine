@@ -159,18 +159,20 @@ class Gameplay extends FunkinScene {
         Conductor.song_position_raw += FlxG.elapsed * 1000.0;
         Conductor.song_position = Conductor.song_position_raw + Conductor.offset;
 
+        // syncing
         if (Math.abs(FlxG.sound.music.time - Conductor.song_position_raw) >= 25.0) {
             Conductor.song_position_raw = FlxG.sound.music.time;
             Conductor.song_position = Conductor.song_position_raw + Conductor.offset;
         }
 
+        // camera lerps
         if (camera_bouncing) {
             FlxG.camera.zoom = flixel.math.FlxMath.lerp(FlxG.camera.zoom, default_cam_zoom, elapsed * 3);
             hud_cam.zoom = flixel.math.FlxMath.lerp(hud_cam.zoom, default_hud_zoom, elapsed * 3);
         }
 
+        // other stuff
         if (Input.is('exit')) FlxG.switchState(new Freeplay());
-
         update_camera_position();
 
         super.update(elapsed);

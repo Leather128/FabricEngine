@@ -1,0 +1,19 @@
+<!DOCTYPE fabric-mod >
+<mod>
+    <meta>
+        <title>Friday Night Funkin'</title>
+        <description>The base game. That's basically it.</description>
+
+        <authors>
+            <author name='ninjamuffin99' role='Programmer' />
+            <author name='PhantomArcade3K' role='Art' />
+            <author name='evilsk8r' role='Art' />
+            <author name='KawaiSprite' role='Music' />
+        </authors>
+
+        <api_ver>0.1.0</api_ver>
+        <mod_ver>0.2.8</mod_ver>
+
+        <license>Apache-2.0</license>
+    </meta>
+</mod>

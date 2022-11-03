@@ -1,0 +1,16 @@
+<!DOCTYPE fabric-mod >
+<mod>
+    <meta>
+        <title>Test Mod</title>
+        <description>Mod used for testing purposes.</description>
+
+        <authors>
+            <author name='Leather128' role='Creator' />
+        </authors>
+
+        <api_ver>0.1.0</api_ver>
+        <mod_ver>0.1.0</mod_ver>
+
+        <license>GPL-3.0</license>
+    </meta>
+</mod>
