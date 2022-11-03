@@ -40,12 +40,12 @@ class HScript extends Script {
         // loop through extensions to make sure the path exists
         for (ext in file_extensions) {
             // path with ext
-            if (Assets.exists(Assets.asset('${path}')) && path.endsWith('.${ext}')) {
+            if (Assets.exists('${path}') && path.endsWith('.${ext}')) {
                 raw_script = Assets.text('${path}');
                 break;
             }
             // path without ext
-            if (Assets.exists(Assets.asset('${path}.${ext}'))) {
+            if (Assets.exists('${path}.${ext}')) {
                 raw_script = Assets.text('${path}.${ext}');
                 break;
             }

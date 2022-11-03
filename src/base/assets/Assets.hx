@@ -38,13 +38,13 @@ class Assets {
         return sys.FileSystem.absolutePath(rel_path);
 
     /**
-     * Returns whether or not a file exists from `path` (absolute path).
+     * Returns whether or not a file / directory exists from `path` (starts in `assets/`).
      * 
-     * @param path Path to check on the file system (absolute).
+     * @param path Path to check for.
      * @return Whether or not `path` exists.
      */
     public static function exists(path:String):Bool
-        return sys.FileSystem.exists(path);
+        return sys.FileSystem.exists(asset(path));
 
     /**
      * Returns the absolute path of `path` from the assets folder.

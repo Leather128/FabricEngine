@@ -17,7 +17,7 @@ class Stage extends flixel.group.FlxSpriteGroup {
         script = Script.load('stages/${stage}');
 
         if (script == null) {
-            trace('${stage} doesn\'t have a stage script (stages/${stage})! This stage will be broken.', ERROR);
+            trace('${stage} doesn\'t have a stage script (stages/${stage})! This stage will be broken.', WARNING);
             script = new Script(); // everything here does nothing lmao
         }
 

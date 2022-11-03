@@ -44,7 +44,7 @@ class Sprite extends flixel.FlxSprite {
                 else
                     frames = flixel.graphics.frames.FlxAtlasFrames.fromSparrow(Assets.image('${path}'), Assets.text('${path}.xml'));
             default:
-                trace('${type} is unsupported to be loaded in a Sprite!', ERROR);
+                trace('${type} is unsupported to be loaded in a Sprite!', WARNING);
         }
 
         // Update hitbox because yeah sometimes we need to ok?

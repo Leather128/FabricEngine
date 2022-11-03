@@ -246,10 +246,10 @@ class TitleScreen extends FunkinScene {
 
                             exit_intro();
                         default:
-                            trace('${line.att.value} NOT IMPLEMENTED AS AN EVENT!', ERROR);
+                            trace('${line.att.value} NOT IMPLEMENTED AS AN EVENT!', WARNING);
                     }
                 default:
-                    trace('${line.att.type} NOT IMPLEMENTED AS A LINE TYPE!', ERROR);
+                    trace('${line.att.type} NOT IMPLEMENTED AS A LINE TYPE!', WARNING);
             }
         }
     }

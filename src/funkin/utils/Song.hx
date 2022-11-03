@@ -44,6 +44,11 @@ package funkin.utils;
 	 * Whether or not to save the song's score to freeplay / story mode.
 	 */
 	var validScore:Bool;
+
+	/**
+	 * Song GF Character (Optional).
+	 */
+	var gf:Null<String>;
 }
 
 /**
@@ -107,6 +112,18 @@ class SongHelper {
             return null;
         }
 
-        return cast Json.parse(raw_data).song;
+        return set_defaults(cast Json.parse(raw_data).song);
     }
+
+	/**
+	 * Sets default values for `input` and returns the output.
+	 * @param input Input song data to set defaults of.
+	 * @return Outputted song data with all defaults filled.
+	 */
+	public static function set_defaults(input:Song):Song {
+		var output:Song = input;
+		if (output.gf == null) output.gf = 'gf';
+
+		return output;
+	}
 }

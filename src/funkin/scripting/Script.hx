@@ -22,9 +22,9 @@ class Script implements flixel.util.FlxDestroyUtil.IFlxDestroyable {
         // HScript checks
         for (ext in HScript.file_extensions) {
             // with ext
-            if (Assets.exists(Assets.asset('${path}')) && path.endsWith('.${ext}')) return new HScript('${path.substring(0, path.length - 1 - ext.length)}');
+            if (Assets.exists('${path}') && path.endsWith('.${ext}')) return new HScript('${path.substring(0, path.length - 1 - ext.length)}');
             // without ext
-            if (Assets.exists(Assets.asset('${path}.${ext}'))) return new HScript('${path}.${ext}');
+            if (Assets.exists('${path}.${ext}')) return new HScript('${path}.${ext}');
         }
 
         return null;

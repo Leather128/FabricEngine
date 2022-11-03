@@ -81,6 +81,11 @@ class Gameplay extends FunkinScene {
      */
     public var score:Int = 0;
 
+    /**
+     * `flixel.FlxObject` that the game camera tracks.
+     */
+    public var camera_tracker:flixel.FlxObject = new flixel.FlxObject();
+
     override function create():Void {
         // load song fallbacks
         if (song == null) song = SongHelper.load_song('tutorial/normal');
@@ -105,9 +110,14 @@ class Gameplay extends FunkinScene {
         default_cam_zoom = stage.default_camera_zoom;
         FlxG.camera.zoom = default_cam_zoom;
 
-        gf = new Character(400, 130, 'gf');
+        gf = new Character(400, 130, song.gf);
         dad = new Character(100, 100, song.player2);
         bf = new Character(770, 450, song.player1, true);
+
+        // global position offsets
+        gf.setPosition(gf.x + gf.global_offset.x, gf.y + gf.global_offset.y);
+        dad.setPosition(dad.x + dad.global_offset.x, dad.y + dad.global_offset.y);
+        bf.setPosition(bf.x + bf.global_offset.x, bf.y + bf.global_offset.y);
 
         add(stage);
 
@@ -135,12 +145,12 @@ class Gameplay extends FunkinScene {
 
         Conductor.bpm = song.bpm;
 
+        FlxG.camera.follow(camera_tracker, LOCKON, 0.04);
+
         call_scripts('create_post'); call_scripts('createPost');
     }
 
     override function update(elapsed:Float):Void {
-        super.update(elapsed);
-
         call_scripts('update', [elapsed]);
 
         Conductor.song_position_raw += FlxG.elapsed * 1000.0;
@@ -155,6 +165,12 @@ class Gameplay extends FunkinScene {
             FlxG.camera.zoom = flixel.math.FlxMath.lerp(FlxG.camera.zoom, default_cam_zoom, elapsed * 3);
             hud_cam.zoom = flixel.math.FlxMath.lerp(hud_cam.zoom, default_hud_zoom, elapsed * 3);
         }
+
+        if (Input.is('exit')) FlxG.switchState(new Freeplay());
+
+        update_camera_position();
+
+        super.update(elapsed);
 
         call_scripts('update_post', [elapsed]); call_scripts('updatePost', [elapsed]);
     }
@@ -209,6 +225,18 @@ class Gameplay extends FunkinScene {
             var script:Script = Script.load(dir);
             if (script != null) { scripts.push(script); script.call('create'); }
         }
+    }
+
+    /**
+     * Updates the camera position. Pretty simple.
+     */
+    public function update_camera_position():Void {
+        if (song.notes.length - 1 < Math.floor(Conductor.beat / 4)) return;
+
+        var must_hit_section:Bool = song.notes[Math.floor(Conductor.beat / 4)].mustHitSection;
+        var target:Character = must_hit_section ? bf : dad;
+
+        camera_tracker.setPosition(target.getMidpoint().x + target.camera_offset.x, target.getMidpoint().y + target.camera_offset.y);
     }
 
     /**

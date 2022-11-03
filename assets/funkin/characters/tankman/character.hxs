@@ -1,0 +1,25 @@
+function create() {
+    character.load('characters/' + character.character + '/sprites', AssetType.SPARROW, [ 'images_folder' => false ]);
+
+    character.add_animation('idle', 'Tankman Idle Dance');
+
+    if (character.is_player) {
+        character.add_animation('singLEFT', 'Tankman Note Left ');
+        character.add_animation('singRIGHT', 'Tankman Right Note ');
+    } else {
+        character.add_animation('singLEFT', 'Tankman Right Note ');
+        character.add_animation('singRIGHT', 'Tankman Note Left ');
+    }
+
+    character.add_animation('singDOWN', 'Tankman DOWN note ');
+    character.add_animation('singUP', 'Tankman UP note ');
+
+    character.add_animation('singDOWN-alt', 'PRETTY GOOD');
+    character.add_animation('singUP-alt', 'TANKMAN UGH');
+
+    character.flipX = !character.flipX;
+    character.load_offsets();
+    character.dance();
+
+    character.global_offset.set(0.0, 180.0);
+}
