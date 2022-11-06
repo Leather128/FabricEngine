@@ -64,9 +64,21 @@ class HScript extends Script {
             return;
         }
 
-        var program:hscript.Expr = parser.parseString(raw_script);
+        var program:hscript.Expr = null;
+
+        try {
+            program = parser.parseString(raw_script);
+        } catch (e) {
+            trace('Parsing ${hscript_path} failed! Details: ${e.details()}', ERROR);
+        }
+
         set_defaults();
-        interp.execute(program);
+
+        try {
+            interp.execute(program);
+        } catch (e) {
+            trace('Executing ${hscript_path} failed! Details: ${e.details()}', ERROR);
+        }
 
         // call this at the end cuz it calls the create function
         super(path);
@@ -112,7 +124,7 @@ class HScript extends Script {
             var return_value:Dynamic = Reflect.callMethod(null, real_func, args);
             return return_value;
         } catch (e) {
-            trace('error returning value of ${func} with ${args}! details: ${e.details()}', ERROR);
+            trace('Error returning value of ${func} with ${args}! Details: ${e.details()}', ERROR);
         }
 
         return null;
@@ -127,7 +139,7 @@ class HScript extends Script {
         // import.hx
         add_classes([Input, Sprite, Utilities, Assets, PrintType, Save, Conductor, FlxG, StringTools]);
         // actual custom imports
-        add_classes([base.assets.AssetType, flixel.math.FlxMath, flixel.math.FlxPoint, flixel.math.FlxRect, flixel.system.FlxSound, Math, Std]);
+        add_classes([base.assets.AssetType, flixel.math.FlxMath, flixel.math.FlxPoint, flixel.math.FlxRect, flixel.system.FlxSound, flixel.addons.display.FlxRuntimeShader, Math, Std]);
         // custom class / abstract shits
         set('Json', HScriptClasses.Json); set('FlxColor', HScriptClasses.FlxColor);
         // functions and other stuff

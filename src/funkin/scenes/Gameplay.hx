@@ -105,7 +105,7 @@ class Gameplay extends FunkinScene {
         load_song_scripts();
 
         // game shit lmao!!!
-        stage = new Stage();
+        stage = new Stage(song.stage);
         // default cam zoom shit
         default_cam_zoom = stage.default_camera_zoom;
         FlxG.camera.zoom = default_cam_zoom;
@@ -144,6 +144,7 @@ class Gameplay extends FunkinScene {
         // play
         FlxG.sound.playMusic(Assets.audio('songs/${song.song.toLowerCase()}/Inst'));
         FlxG.sound.music.play(true);
+        FlxG.sound.music.onComplete = function():Void FlxG.switchState(new Freeplay());
         vocals.play(true);
 
         Conductor.bpm = song.bpm;

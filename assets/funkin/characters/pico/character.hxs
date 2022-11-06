@@ -1,0 +1,17 @@
+function create() {
+    character.load('characters/' + character.character + '/sprites', AssetType.SPARROW, [ 'images_folder' => false ]);
+
+    character.add_animation('idle', 'Pico Idle Dance', 24, false, null, [0, 0]);
+
+    character.add_animation('singLEFT', 'Pico Note Right0', 24, false, null, [65, 9]);
+    character.add_animation('singDOWN', 'Pico Down Note0', 24, false, null, [200, -70]);
+    character.add_animation('singUP', 'pico Up note0', 24, false, null, [-29, 27]);
+    character.add_animation('singRIGHT', 'Pico NOTE LEFT0', 24, false, null, [-68, -7]);
+
+    character.flipX = !character.flipX;
+
+    character.dance();
+    character.health_color = FlxColor.fromString('#b7d855');
+
+    character.global_offset.set(0, 300);
+}

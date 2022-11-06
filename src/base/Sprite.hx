@@ -79,8 +79,8 @@ class Sprite extends flixel.FlxSprite {
      * @param forced Whether or not to force it to play.
      * @return `this` (chaining purposes).
      */
-    public function play_animation(name:String, ?forced:Bool = false):Sprite {
-        animation.play(name, forced);
+    public function play_animation(name:String, ?forced:Bool = false, ?reverse:Bool = false, ?frame:Int = 0):Sprite {
+        animation.play(name, forced, reverse, frame);
         // offsets
         if (offsets.exists(name)) offset.copyFrom(offsets.get(name));
 

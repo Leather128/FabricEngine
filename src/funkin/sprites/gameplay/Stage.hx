@@ -6,7 +6,7 @@ import funkin.scripting.Script;
  * A stage in gameplay.
  * @author Leather128
  */
-class Stage extends flixel.group.FlxSpriteGroup {
+class Stage extends flixel.group.FlxGroup.FlxTypedGroup<Sprite> {
     public var script:Script;
 
     public var default_camera_zoom:Float = 1.05;

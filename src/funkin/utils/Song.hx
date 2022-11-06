@@ -49,6 +49,11 @@ package funkin.utils;
 	 * Song GF Character (Optional).
 	 */
 	var gf:Null<String>;
+
+	/**
+	 * Song Stage (Optional).
+	 */
+	var stage:Null<String>;
 }
 
 /**
@@ -123,6 +128,7 @@ class SongHelper {
 	public static function set_defaults(input:Song):Song {
 		var output:Song = input;
 		if (output.gf == null) output.gf = 'gf';
+		if (output.stage == null) output.stage = 'stage';
 
 		return output;
 	}

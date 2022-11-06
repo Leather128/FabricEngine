@@ -62,6 +62,10 @@ class Conductor {
     // TODO: Implement this lmao
     //public static var bpm_changes:Array<BPMChange> = [];
 
+    public static var safe_frames:Int = 10;
+
+    public static var safe_zone_offset:Float = (safe_frames / 60.0) * 1000.0;
+
     /**
      * Changes the current bpm and recalculates values in relation to it.
      * 

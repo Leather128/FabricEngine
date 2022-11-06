@@ -19,7 +19,13 @@ class Input {
 
         "exit" => ESCAPE, "exit_alt" => BACKSPACE,
 
-        "mod_select" => GRAVEACCENT, "mod_select_alt" => SHIFT
+        "mod_select" => GRAVEACCENT, "mod_select_alt" => SHIFT,
+
+        // note keybinds
+        "keys-4-0" => LEFT, "keys-4-0_alt" => A,
+        "keys-4-1" => DOWN, "keys-4-1_alt" => S,
+        "keys-4-2" => UP, "keys-4-2_alt" => W,
+        "keys-4-3" => RIGHT, "keys-4-3_alt" => D,
     ];
 
     /**

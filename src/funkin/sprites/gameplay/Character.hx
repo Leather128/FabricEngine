@@ -57,6 +57,16 @@ class Character extends Sprite {
      */
     public var global_offset:flixel.math.FlxPoint = new flixel.math.FlxPoint();
 
+    /**
+     * Variable to count time for when to play an idle animation after singing.
+     */
+    public var sing_timer:Float = 0.0;
+
+    /**
+     * Duration of time in seconds this character will sing.
+     */
+    public var sing_duration:Float = 4.0;
+
     public function new(x:Float = 0.0, y:Float = 0.0, character:String = 'bf', ?is_player:Bool = false) {
         super(x, y);
 
@@ -80,6 +90,17 @@ class Character extends Sprite {
         script.call('create');
 
         if (is_player) flipX = !flipX;
+    }
+
+    override function update(elapsed:Float):Void {
+        if (animation.curAnim != null && animation.curAnim.name.startsWith('sing')) sing_timer += elapsed;
+
+        if (!is_player && sing_timer >= Conductor.time_between_steps * sing_duration * 0.001) {
+            dance();
+            sing_timer = 0.0;
+        }
+
+        super.update(elapsed);
     }
 
     /**

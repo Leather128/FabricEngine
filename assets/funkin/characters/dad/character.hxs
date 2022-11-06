@@ -1,13 +1,14 @@
 function create() {
     character.load('characters/' + character.character + '/sprites', AssetType.SPARROW, [ 'images_folder' => false ]);
 
-    character.add_animation('idle', 'Dad idle dance');
+    character.add_animation('idle', 'Dad idle dance', 24, false, null, [0, 0]);
 
-    character.add_animation('singLEFT', 'Dad Sing Note LEFT');
-    character.add_animation('singDOWN', 'Dad Sing Note DOWN');
-    character.add_animation('singUP', 'Dad Sing Note UP');
-    character.add_animation('singRIGHT', 'Dad Sing Note RIGHT');
+    character.add_animation('singLEFT', 'Dad Sing Note LEFT', 24, false, null, [-10, 10]);
+    character.add_animation('singDOWN', 'Dad Sing Note DOWN', 24, false, null, [0, -30]);
+    character.add_animation('singUP', 'Dad Sing Note UP', 24, false, null, [-6, 50]);
+    character.add_animation('singRIGHT', 'Dad Sing Note RIGHT', 24, false, null, [0, 27]);
 
     character.dance();
     character.health_color = FlxColor.fromString('#af66ce');
+    character.sing_duration = 6.1;
 }
