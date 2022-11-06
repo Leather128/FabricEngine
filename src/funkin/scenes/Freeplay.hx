@@ -50,36 +50,20 @@ class Freeplay extends FunkinScene {
     public function new() {
         super();
 
-        // Week 0
-        add_song('Tutorial', 'gf', [ 'EASY', 'NORMAL', 'HARD' ], FlxColor.fromString('0xFF9271FD'), 100.0, true);
-        // Week 1
-        add_song('Bopeebo', 'dad', [ 'EASY', 'NORMAL', 'HARD' ], FlxColor.fromString('0xFF9271FD'), 100.0, true);
-        add_song('Fresh', 'dad', [ 'EASY', 'NORMAL', 'HARD' ], FlxColor.fromString('0xFF9271FD'), 120.0, true);
-        add_song('Dad Battle', 'dad', [ 'EASY', 'NORMAL', 'HARD' ], FlxColor.fromString('0xFF9271FD'), 180.0, true);
-        // Week 2
-        add_song('Spookeez', 'spooky', [ 'EASY', 'NORMAL', 'HARD' ], FlxColor.fromString('0xFF223344'), 150.0, true);
-        add_song('South', 'spooky', [ 'EASY', 'NORMAL', 'HARD' ], FlxColor.fromString('0xFF223344'), 165.0, true);
-        add_song('Monster', 'monster', [ 'EASY', 'NORMAL', 'HARD' ], FlxColor.fromString('0xFF223344'), 95.0, true);
-        // Week 3
-        add_song('Pico', 'pico', [ 'EASY', 'NORMAL', 'HARD' ], FlxColor.fromString('0xFF941653'), 150.0, true);
-        add_song('Philly Nice', 'pico', [ 'EASY', 'NORMAL', 'HARD' ], FlxColor.fromString('0xFF941653'), 175.0, true);
-        add_song('Blammed', 'pico', [ 'EASY', 'NORMAL', 'HARD' ], FlxColor.fromString('0xFF941653'), 165.0, true);
-        // Week 4
-        add_song('Satin Panties', 'mom', [ 'EASY', 'NORMAL', 'HARD' ], FlxColor.fromString('0xFFFC96D7'), 110.0, true);
-        add_song('High', 'mom', [ 'EASY', 'NORMAL', 'HARD' ], FlxColor.fromString('0xFFFC96D7'), 125.0, true);
-        add_song('M.I.L.F', 'mom', [ 'EASY', 'NORMAL', 'HARD' ], FlxColor.fromString('0xFFFC96D7'), 180.0, true);
-        // Week 5
-        add_song('Cocoa', 'parents', [ 'EASY', 'NORMAL', 'HARD' ], FlxColor.fromString('0xFFA0D1FF'), 100.0, true);
-        add_song('Eggnog', 'parents', [ 'EASY', 'NORMAL', 'HARD' ], FlxColor.fromString('0xFFA0D1FF'), 150.0, true);
-        add_song('Winter Horrorland', 'monster', [ 'EASY', 'NORMAL', 'HARD' ], FlxColor.fromString('0xFFA0D1FF'), 159.0, true);
-        // Week 6
-        add_song('Senpai', 'senpai', [ 'EASY', 'NORMAL', 'HARD' ], FlxColor.fromString('0xFFFF78BF'), 144.0, false);
-        add_song('Roses', 'senpai', [ 'EASY', 'NORMAL', 'HARD' ], FlxColor.fromString('0xFFFF78BF'), 120.0, false);
-        add_song('Thorns', 'spirit', [ 'EASY', 'NORMAL', 'HARD' ], FlxColor.fromString('0xFFFF78BF'), 190.0, false);
-        // Week 7
-        add_song('Ugh', 'tankman', [ 'EASY', 'NORMAL', 'HARD' ], FlxColor.fromString('0xFFF6B604'), 160.0, true);
-        add_song('Guns', 'tankman', [ 'EASY', 'NORMAL', 'HARD' ], FlxColor.fromString('0xFFF6B604'), 185.0, true);
-        add_song('Stress', 'tankman', [ 'EASY', 'NORMAL', 'HARD' ], FlxColor.fromString('0xFFF6B604'), 178.0, true);
+        // xml data lol
+        var data:haxe.xml.Access = new haxe.xml.Access(Xml.parse(Assets.text('data/freeplay-songs.xml')).firstElement());
+
+        for (song in data.nodes.song) {
+            var name:String = song.att.name;
+            var icon:String = song.att.icon;
+            // adds diffs while trimming them all (allows things like 'EASY, NORMAL, HARD' to work properly in-game)
+            var diffs:Array<String> = []; for (diff in song.att.diffs.trim().split(',')) diffs.push(diff.trim());
+            var color:FlxColor = FlxColor.fromString(song.att.color);
+            var bpm:Float = Std.parseFloat(song.att.bpm);
+            var antialiasing:Bool = song.att.antialiasing.toLowerCase() != 'false';
+
+            add_song(name, icon, diffs, color, bpm, antialiasing);
+        }
     }
 
     // add sprites here
@@ -170,6 +154,9 @@ class Freeplay extends FunkinScene {
         });
 
         change_difficulty();
+
+        // TODO: Make this an option
+        play_song();
     }
 
     /**

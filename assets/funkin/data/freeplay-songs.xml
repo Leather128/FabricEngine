@@ -1,0 +1,39 @@
+<!DOCTYPE fabric-freeplay >
+<songs>
+    <song name='Tutorial' icon='gf' diffs='EASY,NORMAL,HARD' color='0xFF9271FD' bpm='100.0' antialiasing='true' />
+
+    <!-- Week 1 -->
+    <song name='Bopeebo' icon='dad' diffs='EASY,NORMAL,HARD' color='0xFF9271FD' bpm='100.0' antialiasing='true' />
+    <song name='Fresh' icon='dad' diffs='EASY,NORMAL,HARD' color='0xFF9271FD' bpm='120.0' antialiasing='true' />
+    <song name='Dad Battle' icon='dad' diffs='EASY,NORMAL,HARD' color='0xFF9271FD' bpm='180.0' antialiasing='true' />
+
+    <!-- Week 2 -->
+    <song name='Spookeez' icon='spooky' diffs='EASY,NORMAL,HARD' color='0xFF223344' bpm='150.0' antialiasing='true' />
+    <song name='South' icon='spooky' diffs='EASY,NORMAL,HARD' color='0xFF223344' bpm='165.0' antialiasing='true' />
+    <song name='Monster' icon='monster' diffs='EASY,NORMAL,HARD' color='0xFF223344' bpm='95.0' antialiasing='true' />
+
+    <!-- Week 3 -->
+    <song name='Pico' icon='pico' diffs='EASY,NORMAL,HARD' color='0xFF941653' bpm='150.0' antialiasing='true' />
+    <song name='Philly Nice' icon='pico' diffs='EASY,NORMAL,HARD' color='0xFF941653' bpm='175.0' antialiasing='true' />
+    <song name='Blammed' icon='pico' diffs='EASY,NORMAL,HARD' color='0xFF941653' bpm='165.0' antialiasing='true' />
+
+    <!-- Week 4 -->
+    <song name='Satin Panties' icon='mom' diffs='EASY,NORMAL,HARD' color='0xFFFC96D7' bpm='110.0' antialiasing='true' />
+    <song name='High' icon='mom' diffs='EASY,NORMAL,HARD' color='0xFFFC96D7' bpm='125.0' antialiasing='true' />
+    <song name='M.I.L.F' icon='mom' diffs='EASY,NORMAL,HARD' color='0xFFFC96D7' bpm='180.0' antialiasing='true' />
+
+    <!-- Week 5 -->
+    <song name='Cocoa' icon='parents' diffs='EASY,NORMAL,HARD' color='0xFFA0D1FF' bpm='100.0' antialiasing='true' />
+    <song name='Eggnog' icon='parents' diffs='EASY,NORMAL,HARD' color='0xFFA0D1FF' bpm='150.0' antialiasing='true' />
+    <song name='Winter Horrorland' icon='monster' diffs='EASY,NORMAL,HARD' color='0xFFA0D1FF' bpm='159.0' antialiasing='true' />
+
+    <!-- Week 6 -->
+    <song name='Senpai' icon='senpai' diffs='EASY,NORMAL,HARD' color='0xFFFF78BF' bpm='144.0' antialiasing='false' />
+    <song name='Roses' icon='senpai' diffs='EASY,NORMAL,HARD' color='0xFFFF78BF' bpm='120.0' antialiasing='false' />
+    <song name='Thorns' icon='spirit' diffs='EASY,NORMAL,HARD' color='0xFFFF78BF' bpm='190.0' antialiasing='false' />
+    
+    <!-- Week 7 -->
+    <song name='Ugh' icon='tankman' diffs='EASY,NORMAL,HARD' color='0xFFF6B604' bpm='160.0' antialiasing='true' />
+    <song name='Guns' icon='tankman' diffs='EASY,NORMAL,HARD' color='0xFFF6B604' bpm='185.0' antialiasing='true' />
+    <song name='Stress' icon='tankman' diffs='EASY,NORMAL,HARD' color='0xFFF6B604' bpm='178.0' antialiasing='true' />
+</songs>

@@ -153,6 +153,8 @@ class TitleScreen extends FunkinScene {
         // cleaner code lol!!!
         if (!initialized) return;
 
+        if (Input.is('mod_select')) openSubState(new funkin.scenes.subscenes.ModSelect());
+
         // song position
         Conductor.song_position_raw = FlxG.sound.music.time;
         Conductor.song_position = Conductor.song_position_raw + Conductor.offset;
@@ -211,7 +213,7 @@ class TitleScreen extends FunkinScene {
                     #end
 
                     // load sprite
-                    var sprite:Sprite = new Sprite(0, 0, line.att.antialiased == 'true').load('menus/title/sprites/${line.att.value}');
+                    var sprite:Sprite = new Sprite(0, 0, line.att.antialiased != 'false').load('menus/title/sprites/${line.att.value}');
 
                     // set scale
                     sprite.scale.set(Std.parseFloat(line.att.scale), Std.parseFloat(line.att.scale));

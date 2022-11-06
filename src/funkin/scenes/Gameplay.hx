@@ -160,9 +160,14 @@ class Gameplay extends FunkinScene {
         Conductor.song_position = Conductor.song_position_raw + Conductor.offset;
 
         // syncing
-        if (Math.abs(FlxG.sound.music.time - Conductor.song_position_raw) >= 25.0) {
+        if (Math.abs(FlxG.sound.music.time - Conductor.song_position_raw) >= 25.0 || (vocals.playing && Math.abs(vocals.time - Conductor.song_position_raw) >= 25.0)) {
             Conductor.song_position_raw = FlxG.sound.music.time;
             Conductor.song_position = Conductor.song_position_raw + Conductor.offset;
+
+            // resync vocals
+            vocals.pause();
+            vocals.time = FlxG.sound.music.time;
+            vocals.play();
         }
 
         // camera lerps

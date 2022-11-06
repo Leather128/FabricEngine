@@ -73,6 +73,8 @@
 	<!-- Goofy ahh memory stuff -->
 	<haxedef name="HXCPP_GC_BIG_BLOCKS" if="cpp" />
 
+	<define name="hscriptPos" />
+
 	<!-- _________________________________ Custom _______________________________ -->
 
 	<!-- i forgor :skull: -->

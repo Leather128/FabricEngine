@@ -29,6 +29,11 @@ class HScript extends Script {
     public var raw_script:String = '';
 
     /**
+     * Path to the hscript file that was loaded.
+     */
+    public var hscript_path:String = '';
+
+    /**
      * Creates and parses the HScript file at `path`.
      * @param path Path to the HScript file to use.
      */
@@ -40,12 +45,14 @@ class HScript extends Script {
         // loop through extensions to make sure the path exists
         for (ext in file_extensions) {
             // path with ext
-            if (Assets.exists('${path}') && path.endsWith('.${ext}')) {
-                raw_script = Assets.text('${path}');
+            if (Assets.exists(path) && path.endsWith('.${ext}')) {
+                hscript_path = path;
+                raw_script = Assets.text(path);
                 break;
             }
             // path without ext
             if (Assets.exists('${path}.${ext}')) {
+                hscript_path = '${path}.${ext}';
                 raw_script = Assets.text('${path}.${ext}');
                 break;
             }
@@ -125,6 +132,11 @@ class HScript extends Script {
         set('Json', HScriptClasses.Json); set('FlxColor', HScriptClasses.FlxColor);
         // functions and other stuff
         set('add', FlxG.state.add);
+        // trace dumb >_<
+        set('trace', function(value:Dynamic):Void {
+            // complicated shit (i would use actually haxe trace but this faster i think + that one doesn't get file path correct)
+            Sys.println('${hscript_path}:${interp.posInfos().lineNumber}: ${base.Log.ascii_colors['cyan']}[SCRIPT] ${base.Log.ascii_colors['default']}${value}');
+        });
     }
 
     /**

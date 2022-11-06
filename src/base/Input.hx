@@ -18,6 +18,8 @@ class Input {
         "accept" => ENTER, "accept_alt" => SPACE,
 
         "exit" => ESCAPE, "exit_alt" => BACKSPACE,
+
+        "mod_select" => GRAVEACCENT, "mod_select_alt" => SHIFT
     ];
 
     /**

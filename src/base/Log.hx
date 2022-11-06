@@ -50,13 +50,15 @@ class Log {
 		switch (type)
 		{
 			case LOG:
-				haxe_trace('${ascii_colors["default"]}[LOG] $message', pos_infos);
+				haxe_trace('${ascii_colors['default']}[LOG] $message', pos_infos);
 			case DEBUG:
-				haxe_trace('${ascii_colors["green"]}[DEBUG] ${ascii_colors["default"]}$message', pos_infos);
+				haxe_trace('${ascii_colors['green']}[DEBUG] ${ascii_colors['default']}$message', pos_infos);
 			case WARNING:
-				haxe_trace('${ascii_colors["yellow"]}[WARNING] ${ascii_colors["default"]}$message', pos_infos);
+				haxe_trace('${ascii_colors['yellow']}[WARNING] ${ascii_colors['default']}$message', pos_infos);
 			case ERROR:
-				haxe_trace('${ascii_colors["red"]}[ERROR] ${ascii_colors["default"]}$message', pos_infos);
+				haxe_trace('${ascii_colors['red']}[ERROR] ${ascii_colors['default']}$message', pos_infos);
+			case SCRIPT:
+				haxe_trace('${ascii_colors['cyan']}[SCRIPT] ${ascii_colors['default']}$message', pos_infos);
 			// if you really want null, then here have it >:(
 			default:
 				haxe_trace(message, pos_infos);
@@ -78,4 +80,5 @@ enum PrintType {
 	DEBUG;
 	WARNING;
 	ERROR;
+	SCRIPT;
 }
