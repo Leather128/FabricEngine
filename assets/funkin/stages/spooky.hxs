@@ -1,0 +1,28 @@
+var bg:Sprite;
+
+var lightning_beat:Int = 0;
+var lightning_offset:Int = 8;
+
+function create() {
+    bg = new Sprite(-200, -100).load(stage_asset('halloween_bg'), AssetType.SPARROW);
+    bg.add_animation('idle', 'halloweem bg0');
+    bg.add_animation('lightning', 'halloweem bg lightning strike');
+    bg.play_animation('idle');
+    add(bg);
+}
+
+function on_beat(beat:Int) {
+    if (FlxG.random.bool(10) && beat > lightning_beat + lightning_offset)
+		lighting_strike();
+}
+
+function lighting_strike() {
+    FlxG.sound.play(Assets.audio('images/' + stage_asset('thunder_' + FlxG.random.int(1, 2))));
+    bg.play_animation('lightning', true);
+
+    lightning_beat = Conductor.beat;
+    lightning_offset = FlxG.random.int(8, 24);
+
+    bf.play_animation('scared');
+    gf.play_animation('scared');
+}

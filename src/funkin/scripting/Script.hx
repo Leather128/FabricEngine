@@ -67,6 +67,12 @@ class Script implements flixel.util.FlxDestroyUtil.IFlxDestroyable {
      */
     public function set_defaults():Void {};
 
+    /**
+     * Sets the current script object to `obj`.
+     * @param obj Object to set it to.
+     */
+    public function set_script_object(obj:Dynamic):Void {};
+
     // just in case \_(:3)_/
     public function destroy():Void {};
 }

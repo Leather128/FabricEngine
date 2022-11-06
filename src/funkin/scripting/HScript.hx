@@ -74,6 +74,8 @@ class HScript extends Script {
 
         set_defaults();
 
+        if (funkin.scenes.Gameplay.instance != null) set_script_object(funkin.scenes.Gameplay.instance);
+
         try {
             interp.execute(program);
         } catch (e) {
@@ -169,6 +171,13 @@ class HScript extends Script {
      */
     public function add_classes(classes:Array<Dynamic>):Void
         for (class_to_add in classes) add_class(class_to_add);
+
+    /**
+     * Sets the current script object to `obj`.
+     * @param obj Object to set it to.
+     */
+    public override function set_script_object(obj:Dynamic):Void
+        interp.scriptObject = obj;
 
     /**
      * Destroys this script.

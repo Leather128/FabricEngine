@@ -9,6 +9,8 @@ function create() {
     character.add_animation('singUP', 'GF Up Note', 24, false, null, [0, 4]);
     character.add_animation('singRIGHT', 'GF Right Note', 24, false, null, [0, -20]);
 
+    character.add_animation('scared', 'GF FEAR', 24, true, null, [-2, -17]);
+
     character.dance_steps = ['danceLeft', 'danceRight'];
     character.dance();
     character.health_color = FlxColor.fromString('#a5004d');

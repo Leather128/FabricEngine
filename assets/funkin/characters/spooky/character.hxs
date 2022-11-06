@@ -1,0 +1,17 @@
+function create() {
+    character.load('characters/' + character.character + '/sprites', AssetType.SPARROW, [ 'images_folder' => false ]);
+
+    character.add_animation('danceLeft', 'spooky dance idle', 12, false, [0, 2, 6], [0, 0]);
+    character.add_animation('danceRight', 'spooky dance idle', 12, false, [8, 10, 12, 14], [0, 0]);
+
+    character.add_animation('singLEFT', 'note sing left', 24, false, null, [130, -10]);
+    character.add_animation('singDOWN', 'spooky DOWN note', 24, false, null, [-50, -130]);
+    character.add_animation('singUP', 'spooky UP NOTE', 24, false, null, [-20, 26]);
+    character.add_animation('singRIGHT', 'spooky sing right', 24, false, null, [-130, -14]);
+
+    character.dance_steps = ['danceLeft', 'danceRight'];
+    character.dance();
+    character.health_color = FlxColor.fromString('#d57e00');
+
+    character.global_offset.set(0, 200);
+}

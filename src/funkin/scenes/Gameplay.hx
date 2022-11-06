@@ -125,6 +125,8 @@ class Gameplay extends FunkinScene {
         add(dad);
         add(bf);
 
+        scripts.push(stage.script); scripts.push(gf.script); scripts.push(dad.script); scripts.push(bf.script);
+
         // for tutorial type shit
         if (dad.character == gf.character) { remove(dad); dad.destroy(); dad = gf; }
 
@@ -187,9 +189,6 @@ class Gameplay extends FunkinScene {
     }
 
     override function on_beat():Void {
-        // preferred function naming ig
-        call_scripts('on_beat', [Conductor.beat, Conductor.beat_f]); call_scripts('beatHit', [Conductor.beat, Conductor.beat_f]);
-
         // funny checks
         if (bf.animation.curAnim != null && !bf.animation.curAnim.name.startsWith('sing')) bf.dance();
         if (dad != gf && dad.animation.curAnim != null && !dad.animation.curAnim.name.startsWith('sing')) dad.dance();
@@ -198,6 +197,9 @@ class Gameplay extends FunkinScene {
         if (camera_bouncing && Conductor.beat % 4 == 0) { FlxG.camera.zoom += 0.015; hud_cam.zoom += 0.03; }
 
         ui.on_beat();
+
+        // preferred function naming ig
+        call_scripts('on_beat', [Conductor.beat, Conductor.beat_f]); call_scripts('beatHit', [Conductor.beat, Conductor.beat_f]);
 
         super.on_beat();
     }
@@ -218,13 +220,15 @@ class Gameplay extends FunkinScene {
      */
     public function call_scripts(func:String, ?args:Array<Dynamic>):Void {
         for (script in scripts) script.call(func, args);
+    }
 
-        // call it on funny objects lmao!!
-        stage.script.call(func, args);
-        // (use order as created cuz fuck you lol!)
-        gf.script.call(func, args);
-        dad.script.call(func, args);
-        bf.script.call(func, args);
+    /**
+     * Sets `item` to `value` on all scripts.
+     * @param item Item to set.
+     * @param value Value to set `item` to.
+     */
+    public function set_scripts(item:String, value:Dynamic):Void {
+        for (script in scripts) script.set(item, value);
     }
 
     /**

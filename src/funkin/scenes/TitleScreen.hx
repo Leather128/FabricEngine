@@ -153,7 +153,7 @@ class TitleScreen extends FunkinScene {
         // cleaner code lol!!!
         if (!initialized) return;
 
-        if (Input.is('mod_select')) openSubState(new funkin.scenes.subscenes.ModSelect());
+        if (!in_intro && Input.is('mod_select')) openSubState(new funkin.scenes.subscenes.ModSelect());
 
         // song position
         Conductor.song_position_raw = FlxG.sound.music.time;

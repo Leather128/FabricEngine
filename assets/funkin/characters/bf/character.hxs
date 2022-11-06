@@ -13,6 +13,8 @@ function create() {
     character.add_animation('singUPmiss', 'BF NOTE UP MISS', 24, false, null, [-29, 27]);
     character.add_animation('singRIGHTmiss', 'BF NOTE RIGHT MISS', 24, false, null, [-30, 21]);
 
+    character.add_animation('scared', 'BF idle shaking', 24, true, null, [-4, 0]);
+
     character.flipX = !character.flipX;
 
     character.dance();
