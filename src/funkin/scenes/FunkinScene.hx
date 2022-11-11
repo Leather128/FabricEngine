@@ -39,6 +39,7 @@ class FunkinScene extends flixel.addons.ui.FlxUIState {
             FlxG.sound.list.forEachAlive(function(sound:flixel.system.FlxSound):Void { FlxG.sound.list.remove(sound, true); sound.stop(); sound.destroy(); });
             FlxG.sound.list.clear();
 
+            FlxG.bitmap.mapCacheAsDestroyable();
             FlxG.bitmap.dumpCache();
             FlxG.bitmap.clearCache();
 

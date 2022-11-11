@@ -43,19 +43,18 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 	 */
 	public var opponent_notes:FlxTypedSpriteGroup<Note> = new FlxTypedSpriteGroup<Note>();
 
-	public var local_sections:Array<funkin.utils.Song.Section> = [];
+	/**
+	 * Array of notes that were preloaded that will be spawned into the song as they come in.
+	 */
+	public var preloaded_notes:Array<Note> = [];
 
 	public function new() {
 		super();
 
-		if (Gameplay.instance != null) {
+		if (Gameplay.instance != null)
 			health_bar = new HealthBar(FlxG.height * 0.9, Gameplay.instance.bf.icon, Gameplay.instance.dad.icon, Gameplay.instance.bf.health_color,
 				Gameplay.instance.dad.health_color);
-			
-			for (section in Gameplay.song.notes.copy()) {
-				local_sections.push({ sectionNotes: section.sectionNotes.copy(), lengthInSteps: section.lengthInSteps, mustHitSection: section.mustHitSection, altAnim: section.altAnim, bpm: section.bpm, changeBPM: section.changeBPM });
-			}
-		} else health_bar = new HealthBar(FlxG.height * 0.9);
+		else health_bar = new HealthBar(FlxG.height * 0.9);
 		add(health_bar);
 
 		add(strums);
@@ -67,6 +66,17 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 
 		generate_strums(0);
 		generate_strums(1);
+
+		if (Gameplay.instance == null) return;
+
+		for (section in Gameplay.song.notes) {
+			for (note in section.sectionNotes) {
+				// funny preloading go brrrr
+				preloaded_notes.push(spawn_note(section.mustHitSection ? note[1] < 4 : note[1] > 3, note[0], Std.int(note[1] % 4), note[2], false));
+			}
+		}
+
+		preloaded_notes.sort(function(a:Note, b:Note) return sort_notes(flixel.util.FlxSort.DESCENDING, a, b) );
 	}
 
 	override function update(elapsed:Float):Void {
@@ -111,20 +121,13 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 		// gameplay specific stuff
 		if (Gameplay.instance == null) return;
 
-		// performance basically
-		var break_section:Bool = false;
+		while (preloaded_notes.length > 0 && Conductor.song_position - preloaded_notes[0].strum_time <= 2500.0) {
+			var note:Note = preloaded_notes[0];
 
-		for (section in local_sections) {
-			for (note in section.sectionNotes) {
-				if (Conductor.song_position - note[0] <= 2500) {
-					spawn_note(section.mustHitSection ? note[1] < 4 : note[1] > 3, note[0], Std.int(note[1] % 4), note[2]);
-					section.sectionNotes.remove(note);
-				} else { break_section = true; break; }
-			}
+			if (note.is_player) player_notes.add(note); else opponent_notes.add(note);
+			notes.add(note);
 
-			if (section.sectionNotes.length == 0) local_sections.remove(section);
-
-			if (break_section) break;
+			preloaded_notes.shift();
 		}
 
 		notes.members.sort(function(a:Note, b:Note) return sort_notes(flixel.util.FlxSort.DESCENDING, a, b) );
@@ -172,11 +175,11 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 	 * @param sustain_length Time of the sustain for this note (0 for non-sustain notes).
 	 * @return The note that was spawned.
 	 */
-	public function spawn_note(is_player:Bool, strum_time:Float, id:Int, ?sustain_length:Float = 0.0):Note {
+	public function spawn_note(is_player:Bool, strum_time:Float, id:Int, ?sustain_length:Float = 0.0, ?add_to_notes:Bool = true):Note {
 		var note:Note = new Note(is_player, strum_time, id, sustain_length);
 
-		if (is_player) player_notes.add(note); else opponent_notes.add(note);
-		notes.add(note);
+		if (add_to_notes && is_player) player_notes.add(note); else opponent_notes.add(note);
+		if (add_to_notes) notes.add(note);
 
 		return note;
 	}
@@ -247,13 +250,40 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 	public function hit_note(note:Note):Void {
 		// TODO: ADD RATING SHIT TO HITTING NOTES LOL
 
-		if (Gameplay.instance != null) Gameplay.instance.bf.play_animation('sing${Note.NOTE_DIRECTIONS[4][note.id].toUpperCase()}', true);
-
 		player_strums.members[note.id].play_animation('confirm', true);
 
 		notes.remove(note, true);
 		player_notes.remove(note, true);
 		note.destroy();
+
+		if (Gameplay.instance == null) return;
+
+		Gameplay.instance.combo++;
+
+		// ms diff
+		var difference:Float = Math.abs(Conductor.song_position - note.strum_time);
+		var rating:String = 'sick';
+		var score:Int = 350;
+
+		// funny ratings
+		if (difference > Conductor.safe_zone_offset * 0.9) rating = 'shit';
+		else if (difference > Conductor.safe_zone_offset * 0.75) rating = 'bad';
+		else if (difference > Conductor.safe_zone_offset * 0.2) rating = 'good';
+
+		// rating info
+		switch (rating) {
+			case 'good': score = 200;
+			case 'bad': score = 100;
+			case 'shit': score = 50;
+		}
+		
+		var rating_info:RatingInfo = new RatingInfo(0.0, 0.0, { rating: rating, combo: Gameplay.instance.combo });
+		rating_info.screenCenter(); rating_info.x = FlxG.width * 0.55; rating_info.y -= 60;
+
+		Gameplay.instance.add(rating_info);
+		Gameplay.instance.score += score;
+
+		Gameplay.instance.bf.play_animation('sing${Note.NOTE_DIRECTIONS[4][note.id].toUpperCase()}', true);
 	}
 
 	/**

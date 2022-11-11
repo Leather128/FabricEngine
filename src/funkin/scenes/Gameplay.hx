@@ -82,6 +82,11 @@ class Gameplay extends FunkinScene {
     public var score:Int = 0;
 
     /**
+     * Current combo of notes in the song.
+     */
+    public var combo:Int = 0;
+
+    /**
      * `flixel.FlxObject` that the game camera tracks.
      */
     public var camera_tracker:flixel.FlxObject = new flixel.FlxObject();
