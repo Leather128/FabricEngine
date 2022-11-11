@@ -40,7 +40,6 @@ class FunkinScene extends flixel.addons.ui.FlxUIState {
             FlxG.sound.list.clear();
 
             FlxG.bitmap.mapCacheAsDestroyable();
-            FlxG.bitmap.dumpCache();
             FlxG.bitmap.clearCache();
 
             // Clear actual assets from OpenFL and Lime itself

@@ -53,8 +53,8 @@ class HealthBar extends flixel.group.FlxSpriteGroup {
 
 		if (health_value > 2) health_value = 2;
 
-        player_icon.play_animation(bar.percent > 20 ? 'alive' : 'dead');
-        opponent_icon.play_animation(bar.percent < 80 ? 'alive' : 'dead');
+        player_icon.play_animation(bar.percent > 20 ? 'alive' : 'dying');
+        opponent_icon.play_animation(bar.percent < 80 ? 'alive' : 'dying');
 
         if (funkin.scenes.Gameplay.instance != null) score_text.text = 'Score:${funkin.scenes.Gameplay.instance.score}';
         else score_text.text = 'Score:N/A';

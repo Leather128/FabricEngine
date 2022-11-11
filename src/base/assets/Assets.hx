@@ -67,10 +67,14 @@ class Assets {
     public static function clear_cache():Void {
         // For now we literally just do this lmfao
         for (key in cache.keys()) {
-            if (Std.isOfType(cache.get(key), openfl.media.Sound)) {
+            if (cache.get(key) is openfl.media.Sound) {
                 var casted:openfl.media.Sound = cast cache.get(key);
                 casted.close();
                 casted = null;
+            } else if (cache.get(key) is flixel.graphics.FlxGraphic) {
+                var casted:flixel.graphics.FlxGraphic = cast cache.get(key);
+                casted.persist = false;
+                casted.destroyOnNoUse = true;
             }
 
             cache.set(key, null);
@@ -95,13 +99,15 @@ class Assets {
      * (starts in `assets` folder)
      * 
      * @param path Path to the image.
+     * @param persist (Optional) Persist option for the graphic.
      * @return Image asset from `path`.
      */
-    public static function image(path:String):flixel.system.FlxAssets.FlxGraphicAsset {
+    public static function image(path:String, ?persist:Bool = false):flixel.system.FlxAssets.FlxGraphicAsset {
         // Automatically add image extension if not specified.
         if (!path.endsWith(IMAGE_EXT)) path += IMAGE_EXT;
         // If the image isn't already cached, load and cache it.
         if (!cache.exists(path)) cache.set(path, flixel.graphics.FlxGraphic.fromBitmapData(BitmapData.fromFile(asset(path)), false, null, false));
+        cache.get(path).persist = persist;
 
         return cache.get(path); // Return image from the cache.
     }

@@ -212,18 +212,23 @@ class Freeplay extends FunkinScene {
                     // dont run the rest of the shit but also dont close this loop :D
                     if (sys.thread.Thread.readMessage(false) == null) continue;
 
+                    var _index:Int = index;
+
                     // smoothly load audio
                     // fade out old music
                     if (FlxG.sound.music != null) FlxG.sound.music.fadeOut(0.2);
 
                     if (current_icon != null) current_icon.scale.set(1, 1);
 
-                    current_icon = songs_group.members[index].icon;
+                    current_icon = songs_group.members[_index].icon;
 
                     // load new music
                     mutex.acquire();
-                    var audio_data:flixel.system.FlxAssets.FlxSoundAsset = Assets.audio('songs/${songs[index].name.toLowerCase()}/Inst');
+                    var audio_data:flixel.system.FlxAssets.FlxSoundAsset = Assets.audio('songs/${songs[_index].name.toLowerCase()}/Inst');
                     mutex.release();
+
+                    // no crashes plz??????
+                    if (_index != index) continue;
 
                     // stop grrr memory leaks >:(
                     FlxG.sound.music.stop();
@@ -233,7 +238,7 @@ class Freeplay extends FunkinScene {
                     FlxG.sound.playMusic(audio_data);
                     FlxG.sound.music.fadeIn();
 
-                    Conductor.bpm = songs[index].bpm;
+                    Conductor.bpm = songs[_index].bpm;
                 }
             });
         }

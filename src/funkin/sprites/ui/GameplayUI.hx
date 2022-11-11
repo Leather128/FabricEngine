@@ -105,17 +105,7 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 			}
 
 			// note missing
-			if (note.is_player && note.strum_time < Conductor.song_position - Conductor.safe_zone_offset) {
-				// remove all references then destroy (TODO: MAKE THIS AN ACTUAL MISS LMAO)
-				notes.remove(note, true);
-				note_group.remove(note, true);
-				note.destroy();
-
-				if (Gameplay.instance != null) {
-					Gameplay.instance.bf.sing_timer = 0.0;
-					Gameplay.instance.bf.play_animation('sing${Note.NOTE_DIRECTIONS[4][note.id].toUpperCase()}miss', true);
-				}
-			}
+			if (note.is_player && note.strum_time < Conductor.song_position - Conductor.safe_zone_offset) note_miss(note);
 		});
 
 		// gameplay specific stuff
@@ -244,7 +234,7 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 	}
 
 	/**
-	 * Hits specified note.
+	 * Hits specified `note`.
 	 * @param note Note to hit.
 	 */
 	public function hit_note(note:Note):Void {
@@ -284,6 +274,33 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 		Gameplay.instance.score += score;
 
 		Gameplay.instance.bf.play_animation('sing${Note.NOTE_DIRECTIONS[4][note.id].toUpperCase()}', true);
+		// why are the fnf devs so damn specific
+		health_bar.health_value += 0.023;
+	}
+
+	/**
+	 * Misses specified `note`.
+	 * @param note Note to miss.
+	 */
+	public function note_miss(note:Note):Void {
+		var note_group:FlxTypedSpriteGroup<Note> = note.is_player ? player_notes : opponent_notes;
+
+		if (note.exists) {
+			notes.remove(note, true);
+			note_group.remove(note, true);
+			note.destroy();
+		}
+
+		if (Gameplay.instance == null) return;
+
+		Gameplay.instance.bf.sing_timer = 0.0;
+		Gameplay.instance.bf.play_animation('sing${Note.NOTE_DIRECTIONS[4][note.id].toUpperCase()}miss', true);
+
+		Gameplay.instance.score -= 10;
+		Gameplay.instance.combo = 0;
+
+		// bro why so specific lmao
+		health_bar.health_value -= 0.0475;
 	}
 
 	/**

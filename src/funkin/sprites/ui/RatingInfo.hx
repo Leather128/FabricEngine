@@ -25,7 +25,7 @@ class RatingInfo extends flixel.group.FlxSpriteGroup {
         
         this.data = data;
 
-        rating = new Sprite().load('gameplay/ui/ratings/${data.rating}');
+        rating = new Sprite().load('gameplay/ui/ratings/${data.rating}', IMAGE, [ 'persist' => true ]);
         rating.scale.set(0.7, 0.7); rating.updateHitbox();
 
         rating.acceleration.y = 550;
@@ -46,7 +46,7 @@ class RatingInfo extends flixel.group.FlxSpriteGroup {
 
             // og code: numScore.x = coolText.x + (43 * daLoop) - 90;
 
-            var num_spr:Sprite = new Sprite(43.0 * i).load('gameplay/ui/numbers/num${num}');
+            var num_spr:Sprite = new Sprite(43.0 * i).load('gameplay/ui/numbers/num${num}', IMAGE, [ 'persist' => true ]);
             num_spr.y += 80.0;
             num_spr.scale.set(0.5, 0.5); num_spr.updateHitbox();
 
