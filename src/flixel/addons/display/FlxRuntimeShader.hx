@@ -634,7 +634,7 @@ class FlxRuntimeShader extends FlxShader
 	public function getFloat(name:String):Null<Float>
 	{
 		var prop:ShaderParameter<Float> = Reflect.field(this.data, name);
-		if (prop == null || prop.value.length == 0)
+		if (prop == null || prop.value == null || prop.value.length == 0)
 		{
 			trace('[WARN] Shader float property ${name} not found.');
 			return null;
