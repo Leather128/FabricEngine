@@ -6,14 +6,6 @@ package funkin.scripting;
  */
 class HScriptClasses {
     /**
-     * Pointers to `Json.parse` & `Json.encode` basically.
-     */
-    public static var Json:Dynamic = {
-        'parse': tjson.TJSON.parse,
-        'encode': tjson.TJSON.encode
-    };
-
-    /**
      * Literally just all the static vars and functions from flixel.util.FlxColor.
      */
     public static var FlxColor:Dynamic = {

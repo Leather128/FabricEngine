@@ -5,6 +5,28 @@ package funkin.scripting;
  * @author Leather128
  */
 class HScript extends Script {
+    /**
+     * `Map` to store all the default imports (variables, enums, classes, etc) for HScript files.
+     */
+    public static var default_imports:haxe.ds.StringMap<Dynamic> = [
+        // abstracts //
+        'FlxColor' => HScriptClasses.FlxColor,
+
+        // PrintTypes //
+        'LOG' => PrintType.LOG, 'DEBUG' => PrintType.DEBUG, 'WARNING' => PrintType.WARNING, 'ERROR' => PrintType.ERROR, 'SCRIPT' => PrintType.SCRIPT,
+
+        // AssetTypes //
+        'IMAGE' => base.assets.AssetType.IMAGE, 'AUDIO' => base.assets.AssetType.AUDIO, 'SPARROW' => base.assets.AssetType.SPARROW,
+
+        // import.hx //
+        'Input' => Input, 'Sprite' => Sprite, 'Utilities' => Utilities, 'Assets' => Assets, 'PrintType' => PrintType, 'Save' => Save, 'Conductor' => Conductor,
+        'FlxG' => FlxG, 'StringTools' => StringTools, 'FlxTween' => FlxTween, 'FlxEase' => FlxEase, 'Json' => tjson.TJSON, 
+
+        // HScript specific //
+        'AssetType' => base.assets.AssetType, 'FlxMath' => flixel.math.FlxMath, 'FlxPoint' => flixel.math.FlxPoint, 'FlxRect' => flixel.math.FlxRect,
+        'FlxSound' => flixel.system.FlxSound, 'FlxRuntimeShader' => flixel.addons.display.FlxRuntimeShader, 'Math' => Math, 'Std' => Std,
+    ];
+
     // same docs as Script lmao
     public static var file_extensions:Array<String> = [
         'hxs',
@@ -138,12 +160,11 @@ class HScript extends Script {
     public override function set_defaults():Void {
         super.set_defaults();
 
-        // import.hx
-        add_classes([Input, Sprite, Utilities, Assets, PrintType, Save, Conductor, FlxG, StringTools]);
-        // actual custom imports
-        add_classes([base.assets.AssetType, flixel.math.FlxMath, flixel.math.FlxPoint, flixel.math.FlxRect, flixel.system.FlxSound, flixel.addons.display.FlxRuntimeShader, Math, Std]);
-        // custom class / abstract shits
-        set('Json', HScriptClasses.Json); set('FlxColor', HScriptClasses.FlxColor);
+        // basically sets all default imports lmao
+        for (key in default_imports.keys()) {
+            set(key, default_imports.get(key));
+        }
+
         // functions and other stuff
         set('add', FlxG.state.add);
         // trace dumb >_<

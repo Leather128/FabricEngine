@@ -80,9 +80,9 @@ class Sprite extends flixel.FlxSprite {
      * @return `this` (chaining purposes).
      */
     public function play_animation(name:String, ?forced:Bool = false, ?reverse:Bool = false, ?frame:Int = 0):Sprite {
-        animation.play(name, forced, reverse, frame);
+        if (animation.exists(name)) animation.play(name, forced, reverse, frame);
         // offsets
-        if (offsets.exists(name)) offset.copyFrom(offsets.get(name));
+        if (animation.exists(name) && offsets.exists(name)) offset.copyFrom(offsets.get(name));
 
         return this;
     }

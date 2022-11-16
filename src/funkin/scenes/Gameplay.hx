@@ -54,7 +54,7 @@ class Gameplay extends FunkinScene {
     /**
      * Toggle for whether or not the camera is bouncing and lerping mid-song.
      */
-    public var camera_bouncing:Bool = true;
+    public var camera_bouncing:Bool = false;
 
     /**
      * Default zoom value for the game camera.
@@ -91,6 +91,16 @@ class Gameplay extends FunkinScene {
      */
     public var camera_tracker:flixel.FlxObject = new flixel.FlxObject();
 
+    /**
+     * Whether or not the song has started yet.
+     */
+    public var song_started:Bool = false;
+
+    /**
+     * Whether or not the countdown has started yet.
+     */
+    public var started_countdown:Bool = false;
+
     override function create():Void {
         // load song fallbacks
         if (song == null) song = SongHelper.load_song('tutorial/normal');
@@ -101,6 +111,8 @@ class Gameplay extends FunkinScene {
         FlxG.cameras.reset();
         hud_cam.bgColor = flixel.util.FlxColor.TRANSPARENT;
         FlxG.cameras.add(hud_cam, false);
+
+        FlxG.sound.music.stop();
 
         super.create();
 
@@ -133,7 +145,7 @@ class Gameplay extends FunkinScene {
         scripts.push(stage.script); scripts.push(gf.script); scripts.push(dad.script); scripts.push(bf.script);
 
         // for tutorial type shit
-        if (dad.character == gf.character) { remove(dad); dad.destroy(); dad = gf; }
+        if (dad.character == gf.character) { scripts.remove(dad.script); remove(dad); dad.destroy(); dad = gf; }
 
         // load ui
         ui = new funkin.sprites.ui.GameplayUI(); ui.scrollFactor.set();
@@ -145,38 +157,26 @@ class Gameplay extends FunkinScene {
         Assets.audio('songs/${song.song.toLowerCase()}/Inst');
         Assets.audio('songs/${song.song.toLowerCase()}/Voices');
 
-        if (song.needsVoices != false) vocals = new FlxSound().loadEmbedded(Assets.audio('songs/${song.song.toLowerCase()}/Voices'));
-        else vocals = new FlxSound();
-        FlxG.sound.list.add(vocals);
-        // play
-        FlxG.sound.playMusic(Assets.audio('songs/${song.song.toLowerCase()}/Inst'));
-        FlxG.sound.music.play(true);
-        FlxG.sound.music.onComplete = function():Void FlxG.switchState(new Freeplay());
-        vocals.play(true);
-
         Conductor.bpm = song.bpm;
 
         FlxG.camera.follow(camera_tracker, LOCKON, 0.04);
 
         call_scripts('create_post'); call_scripts('createPost');
+
+        start_countdown();
     }
 
     override function update(elapsed:Float):Void {
         call_scripts('update', [elapsed]);
 
-        Conductor.song_position_raw += FlxG.elapsed * 1000.0;
+        Conductor.song_position_raw += elapsed * 1000.0;
         Conductor.song_position = Conductor.song_position_raw + Conductor.offset;
 
-        // syncing
-        if (Math.abs(FlxG.sound.music.time - Conductor.song_position_raw) >= 25.0 || (vocals.playing && Math.abs(vocals.time - Conductor.song_position_raw) >= 25.0)) {
-            Conductor.song_position_raw = FlxG.sound.music.time;
-            Conductor.song_position = Conductor.song_position_raw + Conductor.offset;
+        if (started_countdown && !song_started && Conductor.song_position >= 0.0) play_song();
 
-            // resync vocals
-            vocals.pause();
-            vocals.time = FlxG.sound.music.time;
-            vocals.play();
-        }
+        // syncing
+        if (song_started && (Math.abs(FlxG.sound.music.time - Conductor.song_position_raw) >= 25.0 || (vocals.playing && Math.abs(vocals.time - Conductor.song_position_raw) >= 25.0)))
+            resync_song();
 
         // camera lerps
         if (camera_bouncing) {
@@ -242,21 +242,84 @@ class Gameplay extends FunkinScene {
     public function load_song_scripts():Void {
         // load song specific scripts
         for (dir in sys.FileSystem.readDirectory(Assets.asset('songs/${song.song.toLowerCase()}'))) {
-            var script:Script = Script.load(dir);
+            var script:Script = Script.load('songs/${song.song.toLowerCase()}/${dir}');
             if (script != null) { scripts.push(script); script.call('create'); }
         }
     }
 
     /**
-     * Updates the camera position. Pretty simple.
+     * Updates the camera position to the current target. Pretty simple.
      */
     public function update_camera_position():Void {
+        if (Conductor.beat < 0) return;
         if (song.notes.length - 1 < Math.floor(Conductor.beat / 4)) return;
 
         var must_hit_section:Bool = song.notes[Math.floor(Conductor.beat / 4)].mustHitSection;
         var target:Character = must_hit_section ? bf : dad;
 
         camera_tracker.setPosition(target.getMidpoint().x + target.camera_offset.x, target.getMidpoint().y + target.camera_offset.y);
+    }
+
+    /**
+     * Starts the in-game countdown.
+     */
+    public function start_countdown():Void {
+        call_scripts('start_countdown'); call_scripts('startCountdown');
+
+        started_countdown = true;
+        ui.start_countdown();
+
+        Conductor.song_position_raw = -(Conductor.time_between_beats * 5.0);
+        Conductor.song_position = Conductor.song_position_raw + Conductor.offset;
+    }
+
+    /**
+     * Plays the loaded song.
+     */
+    public function play_song():Void {
+        call_scripts('on_play'); call_scripts('play_song'); call_scripts('playSong');
+
+        // loading vocals
+        if (song.needsVoices != false) vocals = new FlxSound().loadEmbedded(Assets.audio('songs/${song.song.toLowerCase()}/Voices'));
+        else { vocals = new FlxSound(); vocals.volume = 0.0; }
+
+        FlxG.sound.list.add(vocals);
+
+        // loading and playing inst
+        FlxG.sound.playMusic(Assets.audio('songs/${song.song.toLowerCase()}/Inst'));
+        FlxG.sound.music.play(true);
+        FlxG.sound.music.onComplete = end_song;
+
+        // play vocals
+        vocals.play(true);
+
+        song_started = true;
+    }
+
+    /**
+     * Ends the loaded song and transitions to the next scene.
+     */
+    public function end_song():Void {
+        call_scripts('on_end'); call_scripts('end_song'); call_scripts('endSong');
+
+        // TODO: implement this properly lol
+        FlxG.switchState(new Freeplay());
+    }
+
+    public function resync_song():Void {
+        call_scripts('on_resync'); call_scripts('resync_song'); call_scripts('resyncSong');
+
+        Conductor.song_position_raw = FlxG.sound.music.time;
+        Conductor.song_position = Conductor.song_position_raw + Conductor.offset;
+
+        // resync vocals
+        if (vocals == null) return;
+
+        vocals.pause();
+        vocals.time = FlxG.sound.music.time;
+        vocals.play();
+
+        call_scripts('on_resync_post'); call_scripts('resync_song_post'); call_scripts('resyncSongPost');
     }
 
     /**

@@ -228,7 +228,7 @@ class Freeplay extends FunkinScene {
                     mutex.release();
 
                     // no crashes plz??????
-                    if (_index != index) continue;
+                    if (_index != index || audio_data == null) continue;
 
                     // stop grrr memory leaks >:(
                     FlxG.sound.music.stop();

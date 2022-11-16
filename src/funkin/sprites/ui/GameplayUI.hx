@@ -48,6 +48,11 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 	 */
 	public var preloaded_notes:Array<Note> = [];
 
+	/**
+	 * Timer used for the countdown on songs.
+	 */
+	public var countdown_timer:flixel.util.FlxTimer = new flixel.util.FlxTimer();
+
 	public function new() {
 		super();
 
@@ -82,7 +87,7 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 	override function update(elapsed:Float):Void {
 		super.update(elapsed);
 
-		notes.forEachAlive(function(note:Note):Void {
+		for (note in notes.members) {
 			var strum_group:FlxTypedSpriteGroup<Strum> = note.is_player ? player_strums : opponent_strums;
 			var note_group:FlxTypedSpriteGroup<Note> = note.is_player ? player_notes : opponent_notes;
 			var strum:Strum = strum_group.members[note.id];
@@ -98,15 +103,26 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 				note.destroy();
 
 				if (Gameplay.instance != null) {
+					// funny script calls
+					Gameplay.instance.call_scripts('on_sing', [note, Gameplay.instance.dad]);
+					Gameplay.instance.call_scripts('note_hit', [note, Gameplay.instance.dad]);
+					Gameplay.instance.call_scripts('noteHit', [note, Gameplay.instance.dad]);
+
 					Gameplay.instance.dad.sing_timer = 0.0;
 					Gameplay.instance.dad.play_animation('sing${Note.NOTE_DIRECTIONS[4][note.id].toUpperCase()}', true);
 					opponent_strums.members[note.id].play_animation('confirm');
+
+					Gameplay.instance.camera_bouncing = true;
+
+					Gameplay.instance.call_scripts('on_sing_post', [note, Gameplay.instance.dad]);
+					Gameplay.instance.call_scripts('note_hit_post', [note, Gameplay.instance.dad]);
+					Gameplay.instance.call_scripts('noteHitPost', [note, Gameplay.instance.dad]);
 				}
 			}
 
 			// note missing
 			if (note.is_player && note.strum_time < Conductor.song_position - Conductor.safe_zone_offset) note_miss(note);
-		});
+		}
 
 		// gameplay specific stuff
 		if (Gameplay.instance == null) return;
@@ -193,7 +209,7 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 			player_notes.forEachAlive(function(note:Note):Void {
 				for (possible_note in possible_notes) {
 					// get rid of any possible duplicate notes
-					if (Math.abs(possible_note.strum_time - note.strum_time) < 5) {
+					if (possible_note.id == note.id && Math.abs(possible_note.strum_time - note.strum_time) < 5) {
 						notes.remove(note, true);
 						player_notes.remove(note, true);
 						note.destroy();
@@ -238,8 +254,6 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 	 * @param note Note to hit.
 	 */
 	public function hit_note(note:Note):Void {
-		// TODO: ADD RATING SHIT TO HITTING NOTES LOL
-
 		player_strums.members[note.id].play_animation('confirm', true);
 
 		notes.remove(note, true);
@@ -247,6 +261,10 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 		note.destroy();
 
 		if (Gameplay.instance == null) return;
+
+		Gameplay.instance.call_scripts('on_sing', [note, Gameplay.instance.bf]);
+		Gameplay.instance.call_scripts('note_hit', [note, Gameplay.instance.bf]);
+		Gameplay.instance.call_scripts('noteHit', [note, Gameplay.instance.bf]);
 
 		Gameplay.instance.combo++;
 
@@ -276,6 +294,10 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 		Gameplay.instance.bf.play_animation('sing${Note.NOTE_DIRECTIONS[4][note.id].toUpperCase()}', true);
 		// why are the fnf devs so damn specific
 		health_bar.health_value += 0.023;
+
+		Gameplay.instance.call_scripts('on_sing_post', [note, Gameplay.instance.bf]);
+		Gameplay.instance.call_scripts('note_hit_post', [note, Gameplay.instance.bf]);
+		Gameplay.instance.call_scripts('noteHitPost', [note, Gameplay.instance.bf]);
 	}
 
 	/**
@@ -293,14 +315,60 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 
 		if (Gameplay.instance == null) return;
 
+		Gameplay.instance.call_scripts('on_miss', [note, Gameplay.instance.bf]);
+		Gameplay.instance.call_scripts('note_miss', [note, Gameplay.instance.bf]);
+		Gameplay.instance.call_scripts('noteMiss', [note, Gameplay.instance.bf]);
+
 		Gameplay.instance.bf.sing_timer = 0.0;
 		Gameplay.instance.bf.play_animation('sing${Note.NOTE_DIRECTIONS[4][note.id].toUpperCase()}miss', true);
 
 		Gameplay.instance.score -= 10;
+
 		Gameplay.instance.combo = 0;
 
 		// bro why so specific lmao
 		health_bar.health_value -= 0.0475;
+
+		Gameplay.instance.call_scripts('on_miss_post', [note, Gameplay.instance.bf]);
+		Gameplay.instance.call_scripts('note_miss_post', [note, Gameplay.instance.bf]);
+		Gameplay.instance.call_scripts('noteMissPost', [note, Gameplay.instance.bf]);
+	}
+
+	/**
+	 * Starts the countdown.
+	 */
+	public function start_countdown():Void {
+		var countdown_info:Array<CountdownInfo> = [
+			{graphic: '', sound: '3'},
+			{graphic: 'ready', sound: '2'},
+			{graphic: 'set', sound: '1'},
+			{graphic: 'go', sound: 'go'}
+		];
+
+		// precache images
+		for (countdown in countdown_info) {
+			if (countdown.graphic.trim() != '') Assets.image('images/gameplay/ui/countdown/${countdown.graphic}-default');
+			if (countdown.sound.trim() != '') Assets.audio('sfx/gameplay/countdown/${countdown.sound}-default');
+		}
+
+		countdown_timer.start(Conductor.time_between_beats / 1000.0, function(timer:flixel.util.FlxTimer):Void {
+			// basically makes accessing this stuff easier
+			var countdown:CountdownInfo = countdown_info[timer.elapsedLoops - 1];
+			if (countdown == null) return;
+
+			if (countdown.graphic != '') {
+				// spawns countdown sprite and tweens it
+				var sprite:Sprite = cast(new Sprite().load('gameplay/ui/countdown/${countdown.graphic}-default').screenCenter(), Sprite);
+				FlxTween.tween(sprite, {y: sprite.y + 100, alpha: 0}, Conductor.time_between_beats / 1000.0, {
+					ease: FlxEase.cubeInOut,
+					onComplete: function(_):Void { sprite.destroy(); }
+				});
+				add(sprite);
+			}
+
+			// plays countdown sound
+			if (countdown.sound != '') FlxG.sound.play(Assets.audio('sfx/gameplay/countdown/${countdown.sound}-default'), 0.6);
+		}, 4);
 	}
 
 	/**
@@ -310,6 +378,26 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 	 * @param note_b 2nd Note.
 	 * @return Int
 	 */
-	function sort_notes(sort:Int = flixel.util.FlxSort.ASCENDING, note_a:Note, note_b:Note):Int
+	public static function sort_notes(sort:Int = flixel.util.FlxSort.ASCENDING, note_a:Note, note_b:Note):Int
 		return note_a.strum_time < note_b.strum_time ? sort : note_a.strum_time > note_b.strum_time ? -sort : 0;
+}
+
+/**
+ * Simple `typedef` for storing information about any given part of the countdown.
+ * @author Leather128
+ */
+typedef CountdownInfo = {
+	/**
+	 * Base name of graphic.
+	 * 
+	 * (Actual file is appended with `-{ui skin}`)
+	 */
+	var graphic:String;
+
+	/**
+	 * Base name of sound.
+	 * 
+	 * (Actual file is appended with `-{ui skin}`)
+	 */
+	var sound:String;
 }

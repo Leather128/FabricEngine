@@ -1,50 +1,53 @@
 import flixel.group.FlxTypedGroup;
 
-var phillyTrain:Sprite;
-var phillyCityLights:FlxTypedGroup = new FlxTypedGroup();
+var philly_train:Sprite;
+var philly_lights:FlxTypedGroup = new FlxTypedGroup();
+
+var train_sound:FlxSound;
 
 var cur_light:Int = 0;
 
+var light_fade_shader:FlxRuntimeShader;
+
 function create() {
-    var bg:Sprite = new Sprite(-100).load(stage_asset('sky'));
+    var bg:Sprite = new Sprite(-100.0, 0.0).load(stage_asset('sky'));
     bg.scrollFactor.set(0.1, 0.1);
     add(bg);
 
-    var city:Sprite = new Sprite(-10).load(stage_asset('city'));
+    var city:Sprite = new Sprite(-10.0, 0.0).load(stage_asset('city'));
     city.scrollFactor.set(0.3, 0.3);
-    city.setGraphicSize(Std.int(city.width * 0.85));
-    city.updateHitbox();
+    city.scale.set(0.85, 0.85); city.updateHitbox();
     add(city);
 
-    add(phillyCityLights);
+    add(philly_lights);
 
-    for (i in 0...5)
-    {
+    // load lights shader
+    light_fade_shader = new FlxRuntimeShader(Assets.text('stages/philly-lights.frag'), Assets.text('stages/philly-lights.vert'));
+
+    for (i in 0...5) {
         var light:Sprite = new Sprite(city.x).load(stage_asset('win' + i));
-        light.scrollFactor.set(0.3, 0.3);
-        light.visible = false;
-        light.setGraphicSize(Std.int(light.width * 0.85));
-        light.updateHitbox();
+        light.scrollFactor.set(0.3, 0.3); light.visible = false;
+        light.scale.set(0.85, 0.85); light.updateHitbox();
+
         light.shader = light_fade_shader;
-        phillyCityLights.add(light);
+        philly_lights.add(light);
     }
 
-    var streetBehind:Sprite = new Sprite(-40, 50).load(stage_asset('behindTrain'));
-    add(streetBehind);
+    var street_behind:Sprite = new Sprite(-40.0, 50.0).load(stage_asset('behindTrain'));
+    add(street_behind);
 
-    phillyTrain = new Sprite(2000, 360).load(stage_asset('train'));
-    add(phillyTrain);
+    philly_train = new Sprite(2000.0, 360.0).load(stage_asset('train'));
+    add(philly_train);
 
-    trainSound = new FlxSound().loadEmbedded(Assets.audio('images/' + stage_asset('train_passes')));
-    FlxG.sound.list.add(trainSound);
+    train_sound = new FlxSound().loadEmbedded(Assets.audio('images/' + stage_asset('train_passes')));
+    FlxG.sound.list.add(train_sound);
 
-    var street:Sprite = new Sprite(-40, streetBehind.y).load(stage_asset('street'));
-    add(street);
+    add(new Sprite(-40.0, street_behind.y).load(stage_asset('street')));
 }
 
 function update(elapsed:Float) {
     // less errors hopefully
-    if (FlxG.sound.music.playing) light_fade_shader.setFloat('alphaShit', light_fade_shader.getFloat('alphaShit') + (1.5 * (Conductor.time_between_beats / 1000.0) * elapsed));
+    if (light_fade_shader != null && song_started) light_fade_shader.setFloat('alphaShit', light_fade_shader.getFloat('alphaShit') + (1.5 * (Conductor.time_between_beats / 1000.0) * elapsed));
 }
 
 function on_beat(beat:Int) {
@@ -52,12 +55,12 @@ function on_beat(beat:Int) {
 
     if (beat % 4 == 0) {
         // reset
-        light_fade_shader.setFloat('alphaShit', 0.0);
+        if (light_fade_shader != null) light_fade_shader.setFloat('alphaShit', 0.0);
 
-        phillyCityLights.forEach(function(light:FlxSprite) light.visible = false );
+        philly_lights.forEach(function(light:FlxSprite) light.visible = false );
 
-        cur_light = FlxG.random.int(0, phillyCityLights.length - 1);
-        phillyCityLights.members[cur_light].visible = true;
+        cur_light = FlxG.random.int(0, philly_lights.length - 1);
+        philly_lights.members[cur_light].visible = true;
     }
 
     /*if (beat % 8 == 4 && FlxG.random.bool(30) && !trainMoving && trainCooldown > 8)
@@ -66,105 +69,3 @@ function on_beat(beat:Int) {
         trainStart();
     }*/
 }
-
-var light_fade_shader:FlxRuntimeShader = new FlxRuntimeShader('
-    varying float openfl_Alphav;
-    varying vec4 openfl_ColorMultiplierv;
-    varying vec4 openfl_ColorOffsetv;
-    varying vec2 openfl_TextureCoordv;
-
-    uniform bool openfl_HasColorTransform;
-    uniform vec2 openfl_TextureSize;
-    uniform sampler2D bitmap;
-
-    uniform bool hasTransform;
-    uniform bool hasColorTransform;
-
-    vec4 flixel_texture2D(sampler2D bitmap, vec2 coord)
-    {
-        vec4 color = texture2D(bitmap, coord);
-        if (!hasTransform)
-        {
-            return color;
-        }
-
-        if (color.a == 0.0)
-        {
-            return vec4(0.0, 0.0, 0.0, 0.0);
-        }
-
-        if (!hasColorTransform)
-        {
-            return color * openfl_Alphav;
-        }
-
-        color = vec4(color.rgb / color.a, color.a);
-
-        mat4 colorMultiplier = mat4(0);
-        colorMultiplier[0][0] = openfl_ColorMultiplierv.x;
-        colorMultiplier[1][1] = openfl_ColorMultiplierv.y;
-        colorMultiplier[2][2] = openfl_ColorMultiplierv.z;
-        colorMultiplier[3][3] = openfl_ColorMultiplierv.w;
-
-        color = clamp(openfl_ColorOffsetv + (color * colorMultiplier), 0.0, 1.0);
-
-        if (color.a > 0.0)
-        {
-            return vec4(color.rgb * color.a * openfl_Alphav, color.a * openfl_Alphav);
-        }
-        return vec4(0.0, 0.0, 0.0, 0.0);
-    }
-
-    uniform float alphaShit;
-
-    void main()
-    {
-        vec4 color = flixel_texture2D(bitmap, openfl_TextureCoordv);
-
-        if (color.a > 0.0)
-            color -= alphaShit;
-        
-        gl_FragColor = color;
-    }',
-    '
-    attribute float openfl_Alpha;
-    attribute vec4 openfl_ColorMultiplier;
-    attribute vec4 openfl_ColorOffset;
-    attribute vec4 openfl_Position;
-    attribute vec2 openfl_TextureCoord;
-
-    varying float openfl_Alphav;
-    varying vec4 openfl_ColorMultiplierv;
-    varying vec4 openfl_ColorOffsetv;
-    varying vec2 openfl_TextureCoordv;
-
-    uniform mat4 openfl_Matrix;
-    uniform bool openfl_HasColorTransform;
-    uniform vec2 openfl_TextureSize;
-
-    attribute float alpha;
-    attribute vec4 colorMultiplier;
-    attribute vec4 colorOffset;
-    uniform bool hasColorTransform;
-
-    void main(void)
-    {
-        openfl_Alphav = openfl_Alpha;
-        openfl_TextureCoordv = openfl_TextureCoord;
-
-        if (openfl_HasColorTransform) {
-            openfl_ColorMultiplierv = openfl_ColorMultiplier;
-            openfl_ColorOffsetv = openfl_ColorOffset / 255.0;
-        }
-
-        gl_Position = openfl_Matrix * openfl_Position;
-        
-        openfl_Alphav = openfl_Alpha * alpha;
-        
-        if (hasColorTransform)
-        {
-            openfl_ColorOffsetv = colorOffset / 255.0;
-            openfl_ColorMultiplierv = colorMultiplier;
-        }
-    }
-');

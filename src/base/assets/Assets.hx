@@ -66,20 +66,26 @@ class Assets {
      */
     public static function clear_cache():Void {
         // For now we literally just do this lmfao
-        for (key in cache.keys()) {
-            if (cache.get(key) is openfl.media.Sound) {
-                var casted:openfl.media.Sound = cast cache.get(key);
-                casted.close();
-                casted = null;
-            } else if (cache.get(key) is flixel.graphics.FlxGraphic) {
-                var casted:flixel.graphics.FlxGraphic = cast cache.get(key);
-                casted.persist = false;
-                casted.destroyOnNoUse = true;
-            }
+        for (key in cache.keys()) remove(key);
+    }
 
-            cache.set(key, null);
-            cache.remove(key);
+    /**
+     * Removes asset from specified `key`.
+     * @param key Key to the asset to remove.
+     */
+    public static function remove(key:String):Void {
+        // special destroying for specific types
+        if (cache.get(key) is openfl.media.Sound) {
+            var casted:openfl.media.Sound = cast cache.get(key);
+            casted.close();
+        } else if (cache.get(key) is flixel.graphics.FlxGraphic) {
+            var casted:flixel.graphics.FlxGraphic = cast cache.get(key);
+            casted.persist = false;
+            casted.destroyOnNoUse = true;
         }
+
+        cache.set(key, null);
+        cache.remove(key);
     }
 
     /**

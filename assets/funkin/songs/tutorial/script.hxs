@@ -1,0 +1,6 @@
+function on_beat(beat:Int) {
+    if (beat % 16 != 15 || beat < 16 || beat > 48) return;
+
+    bf.play_animation('hey', true);
+    gf.play_animation('cheer', true);
+}

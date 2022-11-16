@@ -17,6 +17,12 @@ import funkin.Conductor;
 
 #if !macro
 import flixel.FlxG;
+import flixel.tweens.FlxTween;
+import flixel.tweens.FlxEase;
 #end
+
+// Misc Imports
+
+import tjson.TJSON as Json;
 
 using StringTools;
