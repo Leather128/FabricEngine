@@ -22,7 +22,7 @@ function create() {
     add(philly_lights);
 
     // load lights shader
-    light_fade_shader = new FlxRuntimeShader(Assets.text('stages/philly-lights.frag'), Assets.text('stages/philly-lights.vert'));
+    light_fade_shader = new FlxRuntimeShader(FlxRuntimeShader.BASE_FRAGMENT_HEADER + Assets.text('stages/philly-lights.frag'));
 
     for (i in 0...5) {
         var light:Sprite = new Sprite(city.x).load(stage_asset('win' + i));
