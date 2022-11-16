@@ -1,0 +1,27 @@
+<!DOCTYPE fabric-default-options>
+<options>
+    <save name='gameplay'>
+        <bool key='downscroll' value='false' />
+        <bool key='middlescroll' value='false' />
+
+        <bool key='use-scroll-speed' value='false' />
+        <float key='scroll-speed' value='1.0' />
+
+        <bool key='bot' value='false' />
+        <bool key='practice-mode' value='false' />
+    </save>
+
+    <save name='appearance'>
+        <bool key='antialiasing' value='true' />
+        <int key='fps-cap' value='120' min='10' max='1000' />
+        <bool key='fps-counter' value='true' />
+    </save>
+
+    <save name='misc'>
+        <bool key='play-freeplay-songs' value='true' />
+    </save>
+
+    <save name='engine'>
+        <string key='mod' value='funkin' />
+    </save>
+</options>

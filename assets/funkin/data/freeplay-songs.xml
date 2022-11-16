@@ -36,6 +36,4 @@
     <song name='Ugh' icon='tankman' diffs='EASY,NORMAL,HARD' color='0xFFF6B604' bpm='160.0' antialiasing='true' />
     <song name='Guns' icon='tankman' diffs='EASY,NORMAL,HARD' color='0xFFF6B604' bpm='185.0' antialiasing='true' />
     <song name='Stress' icon='tankman' diffs='EASY,NORMAL,HARD' color='0xFFF6B604' bpm='178.0' antialiasing='true' />
-
-    <song name='Test' icon='bf-pixel' diffs='NORMAL' color='0xFF9271FD' bpm='150.0' antialiasing='false' />
 </songs>

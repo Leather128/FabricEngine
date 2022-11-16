@@ -1,0 +1,4 @@
+<!DOCTYPE fabric-freeplay >
+<songs>
+    <song name='Test' icon='bf-pixel' diffs='NORMAL' color='0xFF9271FD' bpm='150.0' antialiasing='false' />
+</songs>

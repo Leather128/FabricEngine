@@ -35,14 +35,14 @@ class Sprite extends flixel.FlxSprite {
         switch (type) {
             case IMAGE:
                 if (options.get('images_folder') != false) 
-                    loadGraphic(Assets.image('images/${path}', options.get('persist')), options.get('animated'), options.get('width'), options.get('height'));
+                    loadGraphic(Assets.image('images/${path}', options['persist'], options['mod']), options['animated'], options['width'], options['height']);
                 else
-                    loadGraphic(Assets.image('${path}', options.get('persist')), options.get('animated'), options.get('width'), options.get('height'));
+                    loadGraphic(Assets.image('${path}', options['persist'], options['mod']), options['animated'], options['width'], options['height']);
             case SPARROW:
                 if (options.get('images_folder') != false)
-                    frames = flixel.graphics.frames.FlxAtlasFrames.fromSparrow(Assets.image('images/${path}', options.get('persist')), Assets.text('images/${path}.xml'));
+                    frames = flixel.graphics.frames.FlxAtlasFrames.fromSparrow(Assets.image('images/${path}', options['persist'], options['mod']), Assets.text('images/${path}.xml'));
                 else
-                    frames = flixel.graphics.frames.FlxAtlasFrames.fromSparrow(Assets.image('${path}', options.get('persist')), Assets.text('${path}.xml'));
+                    frames = flixel.graphics.frames.FlxAtlasFrames.fromSparrow(Assets.image('${path}', options['persist'], options['mod']), Assets.text('${path}.xml'));
             default:
                 trace('${type} is unsupported to be loaded in a Sprite!', WARNING);
         }

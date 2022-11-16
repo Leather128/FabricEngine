@@ -158,7 +158,9 @@ class Gameplay extends FunkinScene {
         Assets.audio('songs/${song.song.toLowerCase()}/Voices');
 
         Conductor.bpm = song.bpm;
-
+        Conductor.song_position = 0;
+        
+        update_camera_position();
         FlxG.camera.follow(camera_tracker, LOCKON, 0.04);
 
         call_scripts('create_post'); call_scripts('createPost');

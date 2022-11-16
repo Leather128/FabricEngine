@@ -1,5 +1,7 @@
 package funkin.scenes.subscenes;
 
+import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
+
 /**
  * Subscene to allow you to select a mod from anywhere supported.
  * @author Leather128
@@ -7,20 +9,12 @@ package funkin.scenes.subscenes;
 class ModSelect extends FunkinSubScene {
     var hud_camera:flixel.FlxCamera = new flixel.FlxCamera();
 
-    /**
-     * Icon `Sprite` for the selected mod.
-     */
-    public var mod_icon:Sprite = new Sprite();
+    public var mods:FlxTypedSpriteGroup<funkin.sprites.ui.MenuMod> = new FlxTypedSpriteGroup<funkin.sprites.ui.MenuMod>();
 
     /**
-     * Title text for the name of the mod.
+     * Current index of the mod selected.
      */
-    public var mod_title:flixel.text.FlxText = new flixel.text.FlxText();
-
-    /**
-     * Description text for the description of the mod.
-     */
-    public var mod_desc:flixel.text.FlxText = new flixel.text.FlxText();
+    public var index:Int = 0;
 
     public function new() {
         super();
@@ -33,17 +27,48 @@ class ModSelect extends FunkinSubScene {
         bg.cameras = [hud_camera];
         add(bg);
 
-        mod_title.setFormat(Assets.font('vcr.ttf'), 32, 0xFFFFFF, LEFT, OUTLINE, 0x000000);
-        mod_desc.setFormat(Assets.font('vcr.ttf'), 16, 0xFFFFFF, LEFT, OUTLINE, 0x000000);
+        mods.cameras = [hud_camera];
+        add(mods);
 
-        add(mod_icon);
-        add(mod_title);
-        add(mod_desc);
+        // reads all folders / files in the assets folder
+        for (dir in sys.FileSystem.readDirectory(Assets.absolute_path('assets'))) {
+            if (!sys.FileSystem.isDirectory(Assets.absolute_path('assets/${dir}'))) continue;
+
+            if (dir == Assets.preferred_mod) index = mods.length;
+
+            var mod:funkin.sprites.ui.MenuMod = new funkin.sprites.ui.MenuMod(0, (70.0 * (mods.length - 1)), dir, mods.length);
+            mods.add(mod);
+        }
+
+        change_selection();
     }
 
     override function update(elapsed:Float):Void {
         if (Input.is('exit')) { FlxG.cameras.remove(hud_camera); close(); }
+
+        if (Input.is('accept')) {
+            Assets.preferred_mod = mods.members[index].mod_name;
+            Save.set('mod', Assets.preferred_mod, 'engine');
+
+            FlxG.cameras.remove(hud_camera);
+            close();
+            FlxG.resetState();
+        }
+
+        var vertical_axis:Int = (Input.is('down') ? 1 : 0) - (Input.is('up') ? 1 : 0);
+        if (vertical_axis != 0) change_selection(vertical_axis);
         
         super.update(elapsed);
+    }
+
+    public function change_selection(amount:Int = 0):Void {
+        index = flixel.math.FlxMath.wrap(index + amount, 0, mods.length - 1);
+
+        FlxG.sound.play(Assets.audio('sfx/menus/scroll'));
+
+        mods.forEach(function(item:funkin.sprites.ui.MenuMod):Void {
+            item.alpha = mods.members.indexOf(item) == index ? 1 : 0.6;
+            item.index = mods.members.indexOf(item) - index;
+        });
     }
 }

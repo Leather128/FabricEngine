@@ -186,7 +186,7 @@ import lime.media.AudioSource;
 
 			var volume = SoundMixer.__soundTransform.volume * __soundTransform.volume;
 
-			if (__isValid)
+			if (__isValid && __source != null)
 			{
 				#if lime
 				__source.gain = volume;

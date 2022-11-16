@@ -66,6 +66,8 @@ class Main extends openfl.display.Sprite {
 		FlxG.stage.addEventListener(openfl.events.KeyboardEvent.KEY_DOWN, key_down);
 		FlxG.stage.frameRate = 1000;
 		FlxG.sound.volume = FlxG.save.data.volume;
+
+		flixel.graphics.FlxGraphic.defaultPersist = true;
 	}
 
 	/**

@@ -119,6 +119,7 @@ class Freeplay extends FunkinScene {
 
         if (Input.is('space')) play_song();
         if (Input.is('f5')) song_thread_active = false;
+        if (Input.is('mod_select')) openSubState(new funkin.scenes.subscenes.ModSelect());
 
         // score //
         // equal to about 0.4 at 60 fps
@@ -141,10 +142,7 @@ class Freeplay extends FunkinScene {
      * @param amount Amount to change by.
      */
     public function change_selection(amount:Int = 0):Void {
-        index += amount;
-
-        if (index < 0) index = songs.length - 1;
-        else if (index > songs.length - 1) index = 0;
+        index = flixel.math.FlxMath.wrap(index + amount, 0, songs.length - 1);
 
         FlxG.sound.play(Assets.audio('sfx/menus/scroll'));
 
@@ -155,8 +153,7 @@ class Freeplay extends FunkinScene {
 
         change_difficulty();
 
-        // TODO: Make this an option
-        play_song();
+        if (Save.get('play-freeplay-songs')) play_song();
     }
 
     /**

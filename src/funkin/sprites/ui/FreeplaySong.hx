@@ -3,7 +3,7 @@ package funkin.sprites.ui;
 import flixel.math.FlxMath;
 
 /**
- * UI Element to represent a song you can play in the freeplay menu.
+ * UI Element to represent a song you can play in the `Freeplay` menu.
  * @author Leather128
  */
 class FreeplaySong extends flixel.group.FlxSpriteGroup {

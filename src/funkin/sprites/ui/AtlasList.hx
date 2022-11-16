@@ -93,10 +93,7 @@ class AtlasList extends flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup<AtlasIte
      * @param amount Amount to change by (positive is down, negative is up).
      */
     public function change_selection(amount:Int = 0):Void {
-        selected_index += amount;
-
-        if (selected_index < 0) selected_index = length - 1;
-        else if (selected_index > length - 1) selected_index = 0;
+        selected_index = flixel.math.FlxMath.wrap(selected_index + amount, 0, length - 1);
 
         FlxG.sound.play(Assets.audio('sfx/menus/scroll'));
 

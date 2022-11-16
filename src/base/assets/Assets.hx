@@ -26,7 +26,7 @@ class Assets {
     /**
      * Current mod to prefer over others when checking for assets.
      */
-    public static var preferred_mod(default, null):String;
+    public static var preferred_mod:String = null;
 
     /**
      * Returns the absolute path from `rel_path` (`sys` only).
@@ -41,22 +41,28 @@ class Assets {
      * Returns whether or not a file / directory exists from `path` (starts in `assets/`).
      * 
      * @param path Path to check for.
+     * @param mod (Optional) Specific mod to check from first.
      * @return Whether or not `path` exists.
      */
-    public static function exists(path:String):Bool
-        return sys.FileSystem.exists(asset(path));
+    public static function exists(path:String, ?mod:String):Bool
+        return sys.FileSystem.exists(asset(path, mod));
 
     /**
      * Returns the absolute path of `path` from the assets folder.
      * 
      * @param path Path to the asset.
+     * @param mod (Optional) Specific mod to check from first.
+     * @param override_developer_mode (Optional) Overrides `debug` mode's `Main.developer_build` setting.
      * @return Absolute path to `path` (in `assets/`).
      */
-    public static function asset(path:String):String {
-        if (preferred_mod != null && exists(absolute_path('assets/$preferred_mod/$path'))) // If the file exists in preferred_mod then return that.
+    public static function asset(path:String, ?mod:String, ?override_developer_mode:Bool = false):String {
+        if (mod != null && sys.FileSystem.exists(absolute_path('assets/$mod/$path'))) // If the file exists in mod then return that.
+            return absolute_path('assets/$mod/$path');
+
+        if (preferred_mod != null && preferred_mod != 'funkin' && sys.FileSystem.exists(absolute_path('assets/$preferred_mod/$path'))) // If the file exists in preferred_mod then return that.
             return absolute_path('assets/$preferred_mod/$path');
 
-        #if debug if (!Main.developer_build) { #end
+        #if debug if (!Main.developer_build || override_developer_mode) { #end
         return absolute_path('assets/funkin/$path');
         #if debug } else { return absolute_path('../../../../assets/funkin/$path'); } #end
     }
@@ -94,10 +100,11 @@ class Assets {
      * (starts in `assets` folder)
      * 
      * @param path Path to the text file.
+     * @param mod (Optional) Specific mod to get asset from.
      * @return Content from `path`.
      */
-    public static function text(path:String):String
-        return sys.io.File.getContent(asset(path));
+    public static function text(path:String, ?mod:String):String
+        return sys.io.File.getContent(asset(path, mod));
 
     /**
      * Load and return image from the specified `path`.
@@ -106,16 +113,20 @@ class Assets {
      * 
      * @param path Path to the image.
      * @param persist (Optional) Persist option for the graphic.
+     * @param mod (Optional) Specific mod to get asset from.
      * @return Image asset from `path`.
      */
-    public static function image(path:String, ?persist:Bool = false):flixel.system.FlxAssets.FlxGraphicAsset {
+    public static function image(path:String, ?persist:Bool = true, ?mod:String):flixel.system.FlxAssets.FlxGraphicAsset {
+        var suffix:String = '';
+        if (mod != null) suffix = '-${mod}';
+
         // Automatically add image extension if not specified.
         if (!path.endsWith(IMAGE_EXT)) path += IMAGE_EXT;
         // If the image isn't already cached, load and cache it.
-        if (!cache.exists(path)) cache.set(path, flixel.graphics.FlxGraphic.fromBitmapData(BitmapData.fromFile(asset(path)), false, null, false));
-        cache.get(path).persist = persist;
+        if (!cache.exists(path + suffix)) cache.set(path + suffix, flixel.graphics.FlxGraphic.fromBitmapData(BitmapData.fromFile(asset(path, mod)), false, null, false));
+        if (cache.get(path + suffix) != null) cache.get(path + suffix).persist = persist;
 
-        return cache.get(path); // Return image from the cache.
+        return cache.get(path + suffix); // Return image from the cache.
     }
 
     /**
@@ -124,15 +135,19 @@ class Assets {
      * (starts in `assets` folder)
      * 
      * @param path Path to the audio.
+     * @param mod (Optional) Specific mod to get asset from.
      * @return Audio asset from `path`.
      */
-    public static function audio(path:String):flixel.system.FlxAssets.FlxSoundAsset {
+    public static function audio(path:String, ?mod:String):flixel.system.FlxAssets.FlxSoundAsset {
+        var suffix:String = '';
+        if (mod != null) suffix = '-${mod}';
+
         // Automatically add audio extension if not specified.
         if (!path.endsWith(AUDIO_EXT)) path += AUDIO_EXT;
         // If the audio isn't already cached, load and cache it.
-        if (!cache.exists(path)) cache.set(path, openfl.media.Sound.fromFile(asset(path)));
+        if (!cache.exists(path + suffix)) cache.set(path + suffix, openfl.media.Sound.fromFile(asset(path, mod)));
 
-        return cache.get(path); // Return audio from the cache.
+        return cache.get(path + suffix); // Return audio from the cache.
     }
 
     /**
@@ -141,14 +156,18 @@ class Assets {
      * (starts in the `assets/fonts` folder if not specified)
      * 
      * @param path Path to the font.
+     * @param mod (Optional) Specific mod to get asset from.
      * @return Font asset's name from `path`.
      */
-    public static function font(path:String):String {
+    public static function font(path:String, ?mod:String):String {
+        var suffix:String = '';
+        if (mod != null) suffix = '-${mod}';
+
         // Automatically use the fonts folder if no other folder is specified.
         if (!path.contains('/')) path = 'fonts/${path}';
         // If the font's name isn't already cached, load the font and cache it's name.
-        if (!cache.exists(path)) cache.set(path, openfl.text.Font.fromFile(asset(path)).fontName);
+        if (!cache.exists(path + suffix)) cache.set(path + suffix, openfl.text.Font.fromFile(asset(path, mod)).fontName);
 
-        return cache.get(path);
+        return cache.get(path + suffix);
     }
 }
