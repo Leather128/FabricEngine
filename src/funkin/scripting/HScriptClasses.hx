@@ -6,6 +6,16 @@ package funkin.scripting;
  */
 class HScriptClasses {
     /**
+     * Just an enum value pretty much.
+     */
+    public static var FlxInputState:Dynamic = {
+        'JUST_RELEASED': -1,
+        'RELEASED': 0,
+        'PRESSED': 1,
+        'JUST_PRESSED': 2
+    };
+
+    /**
      * Literally just all the static vars and functions from flixel.util.FlxColor.
      */
     public static var FlxColor:Dynamic = {

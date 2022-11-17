@@ -10,7 +10,7 @@ class HScript extends Script {
      */
     public static var default_imports:haxe.ds.StringMap<Dynamic> = [
         // abstracts //
-        'FlxColor' => HScriptClasses.FlxColor,
+        'FlxColor' => HScriptClasses.FlxColor, 'FlxInputState' => HScriptClasses.FlxInputState,
 
         // PrintTypes //
         'LOG' => PrintType.LOG, 'DEBUG' => PrintType.DEBUG, 'WARNING' => PrintType.WARNING, 'ERROR' => PrintType.ERROR, 'SCRIPT' => PrintType.SCRIPT,
@@ -18,13 +18,17 @@ class HScript extends Script {
         // AssetTypes //
         'IMAGE' => base.assets.AssetType.IMAGE, 'AUDIO' => base.assets.AssetType.AUDIO, 'SPARROW' => base.assets.AssetType.SPARROW,
 
+        // flixel.input.FlxInput.FlxInputStates //
+        'JUST_RELEASED' => -1, 'RELEASED' => 0, 'PRESSED' => 1, 'JUST_PRESSED' => 2,
+
         // import.hx //
         'Input' => Input, 'Sprite' => Sprite, 'Utilities' => Utilities, 'Assets' => Assets, 'PrintType' => PrintType, 'Save' => Save, 'Conductor' => Conductor,
         'FlxG' => FlxG, 'StringTools' => StringTools, 'FlxTween' => FlxTween, 'FlxEase' => FlxEase, 'Json' => tjson.TJSON, 
 
         // HScript specific //
         'AssetType' => base.assets.AssetType, 'FlxMath' => flixel.math.FlxMath, 'FlxPoint' => flixel.math.FlxPoint, 'FlxRect' => flixel.math.FlxRect,
-        'FlxSound' => flixel.system.FlxSound, 'FlxRuntimeShader' => flixel.addons.display.FlxRuntimeShader, 'Math' => Math, 'Std' => Std,
+        'FlxSound' => flixel.system.FlxSound, 'FlxRuntimeShader' => flixel.addons.display.FlxRuntimeShader, 'ScriptedScene' => funkin.scenes.ScriptedScene,
+        'ScriptedSubScene' => funkin.scenes.subscenes.ScriptedSubScene, 'Math' => Math, 'Std' => Std,
     ];
 
     // same docs as Script lmao

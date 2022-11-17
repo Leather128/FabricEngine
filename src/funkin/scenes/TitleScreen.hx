@@ -92,12 +92,6 @@ class TitleScreen extends FunkinScene {
             }
         }
 
-        // global vars
-        FlxG.fixedTimestep = false;
-        persistentDraw = persistentUpdate = true;
-        FlxG.sound.muteKeys = [ZERO];
-        FlxG.autoPause = false;
-
         new flixel.util.FlxTimer().start(1, function(_):Void {
             Conductor.bpm = Std.parseFloat(data.att.bpm);
             play_music('normal');
