@@ -34,8 +34,8 @@
 
 	<!-- _______________________________ Libraries ______________________________ -->
 
-	<!-- haxelib git flixel https://github.com/Leather128/flixel.git btw -->
-	<haxelib name="flixel" />
+	<!-- haxelib git flixel-leather https://github.com/Leather128/flixel.git btw -->
+	<haxelib name="flixel-leather" rename="flixel" />
 
 	<haxelib name="hscript-improved" />
 	<haxelib name="hxCodec" if="VIDEOS_ALLOWED" />
