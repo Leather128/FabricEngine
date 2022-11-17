@@ -46,9 +46,9 @@ class Freeplay extends FunkinScene {
      */
     public static var difficulty:Int = 1;
 
-    // only init shit here
-    public function new() {
-        super();
+    // add sprites here
+    override function create():Void {
+        super.create();
 
         // xml data lol
         var data:haxe.xml.Access = new haxe.xml.Access(Xml.parse(Assets.text('data/freeplay-songs.xml')).firstElement());
@@ -64,11 +64,6 @@ class Freeplay extends FunkinScene {
 
             add_song(name, icon, diffs, color, bpm, antialiasing);
         }
-    }
-
-    // add sprites here
-    override function create():Void {
-        super.create();
 
         add(bg);
         add(songs_group);

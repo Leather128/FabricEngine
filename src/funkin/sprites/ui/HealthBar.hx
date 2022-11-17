@@ -51,7 +51,7 @@ class HealthBar extends flixel.group.FlxSpriteGroup {
 		player_icon.x = bar.x + (bar.width * (flixel.math.FlxMath.remapToRange(bar.percent, 0, 100, 100, 0) * 0.01) - ICON_OFFSET);
 		opponent_icon.x = bar.x + (bar.width * (flixel.math.FlxMath.remapToRange(bar.percent, 0, 100, 100, 0) * 0.01)) - (opponent_icon.width - ICON_OFFSET);
 
-		if (health_value > 2) health_value = 2;
+        health_value = flixel.math.FlxMath.bound(health_value, 0.0, 2.0);
 
         player_icon.play_animation(bar.percent > 20 ? 'alive' : 'dying');
         opponent_icon.play_animation(bar.percent < 80 ? 'alive' : 'dying');

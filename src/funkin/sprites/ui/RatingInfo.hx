@@ -41,13 +41,16 @@ class RatingInfo extends flixel.group.FlxSpriteGroup {
 
         var string_combo:String = Std.string(data.combo);
 
+        if (string_combo.length < 3)
+            while (string_combo.length < 3) string_combo = '0' + string_combo;
+
         for (i in 0...string_combo.length) {
             var num:String = string_combo.charAt(i);
 
             // og code: numScore.x = coolText.x + (43 * daLoop) - 90;
 
-            var num_spr:Sprite = new Sprite(43.0 * i).load('gameplay/ui/numbers/num${num}', IMAGE, [ 'persist' => true ]);
-            num_spr.y += 80.0;
+            var num_spr:Sprite = new Sprite(43.0 * (i - 1)).load('gameplay/ui/numbers/num${num}', IMAGE, [ 'persist' => true ]);
+            num_spr.y += 100.0;
             num_spr.scale.set(0.5, 0.5); num_spr.updateHitbox();
 
 			num_spr.acceleration.y = FlxG.random.int(200, 300);
