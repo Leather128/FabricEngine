@@ -1,5 +1,6 @@
 -D openfl=9.2.0
--D flixel=5.0.0
+-D flixel=4.11.0
+-D flixel-leather=5.0.0
 -D lime=8.0.0
 -D hscript=2.5.0
 -D flixel-addons=2.11.0
@@ -10,6 +11,7 @@
 -L lime
 -L openfl
 -L flixel
+-L flixel-leather
 -L hscript-improved
 -L tjson
 
