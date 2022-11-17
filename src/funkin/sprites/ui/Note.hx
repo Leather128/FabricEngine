@@ -37,6 +37,16 @@ class Note extends Sprite {
      */
     public var is_player:Bool = false;
 
+    /**
+     * Raw note data.
+     */
+    public var raw_data:Array<Dynamic>;
+
+    /**
+     * Current type of this note.
+     */
+    public var type:String = 'default';
+
     public function new(is_player:Bool, strum_time:Float, id:Int, ?sustain_length:Float = 0.0, ?texture:String = 'default', ?antialiased:Bool = true) {
         super(antialiased);
 

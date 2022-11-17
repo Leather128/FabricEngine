@@ -11,6 +11,11 @@ class Strum extends Sprite {
     public var id:Int = -1;
 
     /**
+     * Default position for this strum (used for easier modcharting).
+     */
+    public var default_position:flixel.math.FlxPoint = new flixel.math.FlxPoint();
+
+    /**
      * Creates new `Strum` with specified parameters.
      * @param x X
      * @param y Y

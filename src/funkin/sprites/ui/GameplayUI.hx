@@ -76,8 +76,16 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 
 		for (section in Gameplay.song.notes) {
 			for (note in section.sectionNotes) {
+				var note_spr:Note = spawn_note(section.mustHitSection ? note[1] < 4 : note[1] > 3, note[0], Std.int(note[1] % 4), note[2], false);
+				note_spr.raw_data = note;
+
 				// funny preloading go brrrr
-				preloaded_notes.push(spawn_note(section.mustHitSection ? note[1] < 4 : note[1] > 3, note[0], Std.int(note[1] % 4), note[2], false));
+				preloaded_notes.push(note_spr);
+
+				if (Gameplay.instance != null) {
+					Gameplay.instance.call_scripts('on_note', [note_spr]);
+					Gameplay.instance.call_scripts('note_spawn', [note_spr]); Gameplay.instance.call_scripts('noteSpawn', [note_spr]);
+				}
 			}
 		}
 
@@ -170,6 +178,8 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 			else player_strums.add(strum);
 
 			x_pos += Note.DEFAULT_WIDTH;
+
+			strum.default_position.set(strum.x, strum.y);
 		}
 	}
 
