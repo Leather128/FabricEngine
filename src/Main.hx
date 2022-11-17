@@ -64,11 +64,6 @@ class Main extends openfl.display.Sprite {
 		
 		// default flixel type beats
 		FlxG.stage.addEventListener(openfl.events.KeyboardEvent.KEY_DOWN, key_down);
-		FlxG.stage.frameRate = 1000;
-		FlxG.sound.volume = FlxG.save.data.volume;
-		FlxG.fixedTimestep = false;
-        FlxG.sound.muteKeys = [ZERO];
-        FlxG.autoPause = false;
 
 		flixel.graphics.FlxGraphic.defaultPersist = true;
 	}

@@ -30,11 +30,13 @@ class FunkinScene extends flixel.addons.ui.FlxUIState {
 
     override function create():Void {
         // set framerate just in case
-        FlxG.stage.frameRate = 1000;
+        FlxG.stage.frameRate = Save.get('fps-cap');
+		FlxG.sound.volume = FlxG.save.data.volume;
+		FlxG.fixedTimestep = false;
+        FlxG.sound.muteKeys = [ZERO];
+        FlxG.autoPause = Save.get('auto-pause');
 
-        if (clear_cache) {
-            clear_memory();
-        }
+        if (clear_cache) clear_memory();
 
         super.create();
     }
@@ -77,7 +79,7 @@ class FunkinScene extends flixel.addons.ui.FlxUIState {
     override function onFocus() {
         super.onFocus();
         // re set the framerate here because it gets turned back to 60 if we don't
-        FlxG.stage.frameRate = 1000;
+        FlxG.stage.frameRate = Save.get('fps-cap');
     }
 
     override function openSubState(sub_state:flixel.FlxSubState):Void {

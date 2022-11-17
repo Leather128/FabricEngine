@@ -92,6 +92,9 @@ class TitleScreen extends FunkinScene {
             }
         }
 
+        // so both are true
+        persistentUpdate = persistentDraw;
+
         new flixel.util.FlxTimer().start(1, function(_):Void {
             Conductor.bpm = Std.parseFloat(data.att.bpm);
             play_music('normal');
