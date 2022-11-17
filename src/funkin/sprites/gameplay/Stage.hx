@@ -26,7 +26,7 @@ class Stage extends flixel.group.FlxGroup.FlxTypedGroup<Sprite> {
         // just in case you're crazy af
         script.set('_add', FlxG.state.add);
         // simple helper function
-        script.set('stage_asset', function(input_path:String):String { return 'gameplay/stages/${stage}/${input_path}'; });
+        script.set('stage_asset', function(input_path:String, ?custom_stage:String):String { return 'gameplay/stages/${custom_stage != null ? custom_stage : stage}/${input_path}'; });
 
         script.call('create');
 

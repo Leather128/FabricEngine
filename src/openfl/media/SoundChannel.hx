@@ -194,7 +194,9 @@ import lime.media.AudioSource;
 				var position = __source.position;
 				position.x = pan;
 				position.z = -1 * Math.sqrt(1 - Math.pow(pan, 2));
-				__source.position = position;
+				@:privateAccess
+				if (__source.__backend != null && __source.__backend.position != null)
+					__source.position = position;
 
 				return value;
 				#end

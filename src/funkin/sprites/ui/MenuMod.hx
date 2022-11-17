@@ -29,14 +29,21 @@ class MenuMod extends flixel.group.FlxSpriteGroup {
      */
     public var icon:funkin.sprites.TrackingSprite;
 
+    /**
+     * Current mod data.
+     */
+    public var mod_data:haxe.xml.Access;
+
     public function new(x:Float = 0.0, y:Float = 0.0, mod_name:String, ?index:Int = 0) {
         super(x, y);
         this.index = index;
         this.mod_name = mod_name;
 
+        mod_data = new haxe.xml.Access(Xml.parse(Assets.text('mod.xml', mod_name)).firstElement().elementsNamed('meta').next());
+
         // start spawning sprites
 
-        mod = new Alphabet(0, 0, mod_name);
+        mod = new Alphabet(0, 0, mod_data.node.title.innerData);
         add(mod);
 
         icon = new funkin.sprites.TrackingSprite();

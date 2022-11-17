@@ -1,5 +1,5 @@
 function create() {
-    character.load('characters/' + character.character + '/sprites', AssetType.SPARROW, [ 'images_folder' => false ]);
+    character.load('characters/' + character.character + '/sprites', SPARROW, [ 'images_folder' => false ]);
 
     character.add_animation('idle', 'Tankman Idle Dance');
 

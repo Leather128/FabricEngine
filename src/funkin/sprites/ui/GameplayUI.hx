@@ -81,7 +81,7 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 			}
 		}
 
-		preloaded_notes.sort(function(a:Note, b:Note) return sort_notes(flixel.util.FlxSort.DESCENDING, a, b) );
+		preloaded_notes.sort(function(a:Note, b:Note) return flixel.util.FlxSort.byValues(flixel.util.FlxSort.ASCENDING, a.strum_time, b.strum_time));
 	}
 
 	override function update(elapsed:Float):Void {
@@ -127,7 +127,7 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 		// gameplay specific stuff
 		if (Gameplay.instance == null) return;
 
-		while (preloaded_notes.length > 0 && Conductor.song_position - preloaded_notes[0].strum_time <= 2500.0) {
+		while (preloaded_notes.length > 0 && preloaded_notes[0].strum_time - Conductor.song_position < 1500.0) {
 			var note:Note = preloaded_notes[0];
 
 			if (note.is_player) player_notes.add(note); else opponent_notes.add(note);
@@ -183,6 +183,7 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 	 */
 	public function spawn_note(is_player:Bool, strum_time:Float, id:Int, ?sustain_length:Float = 0.0, ?add_to_notes:Bool = true):Note {
 		var note:Note = new Note(is_player, strum_time, id, sustain_length);
+		note.x = -10000; note.y = -10000;
 
 		if (add_to_notes && is_player) player_notes.add(note); else opponent_notes.add(note);
 		if (add_to_notes) notes.add(note);

@@ -148,7 +148,7 @@ class HScript extends Script {
             var return_value:Dynamic = Reflect.callMethod(null, real_func, args);
             return return_value;
         } catch (e) {
-            trace('Error returning value of ${func} with ${args}! Details: ${e.details()}', ERROR);
+            trace('Error calling ${func} with ${args}! Details: ${e.details()}', ERROR);
         }
 
         return null;
