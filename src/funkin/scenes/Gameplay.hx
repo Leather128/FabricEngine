@@ -149,10 +149,6 @@ class Gameplay extends FunkinScene {
         super.create();
 
         // load ui
-        ui = new funkin.sprites.ui.GameplayUI(); ui.scrollFactor.set();
-        ui.cameras = [hud_cam];
-        note_input = ui.note_input;
-
         instance = this;
 
         // song script inits
@@ -183,6 +179,11 @@ class Gameplay extends FunkinScene {
         if (dad.character == gf.character) { scripts.remove(dad.script); remove(dad); dad.destroy(); dad = gf; }
 
         // add ui to screen
+        ui = new funkin.sprites.ui.GameplayUI(); ui.scrollFactor.set();
+        ui.cameras = [hud_cam];
+        if (note_input == null) note_input = ui.note_input;
+        else note_input = note_input; // this sets ui.note_input to note_input
+
         add(ui);
 
         // load music
