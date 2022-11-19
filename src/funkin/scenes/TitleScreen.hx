@@ -145,12 +145,16 @@ class TitleScreen extends FunkinScene {
     override function update(elapsed:Float):Void {
         super.update(elapsed);
 
-        if (Input.is('exit')) openfl.system.System.exit(0);
-
         // cleaner code lol!!!
         if (!initialized) return;
 
         if (!in_intro && Input.is('mod_select')) openSubState(new funkin.scenes.subscenes.ModSelect());
+        if (Input.is('exit')) {
+            FlxG.sound.play(Assets.audio('sfx/menus/cancel'), 0.75).onComplete = function():Void {
+                trace('Exiting the game!', LOG);
+                openfl.system.System.exit(0);
+            };
+        }
 
         // song position
         Conductor.song_position_raw = FlxG.sound.music.time;
@@ -192,22 +196,15 @@ class TitleScreen extends FunkinScene {
             // giant switch case with all available line types
             switch (line.att.type) {
                 case 'line':
-                    #if debug
                     trace(line.att.value, DEBUG);
-                    #end
-                    
+
                     // add text from all lines in the value property
                     add_text(line.att.value.split(','));
                 case 'clear':
-                    #if debug
                     trace('CLEARING STUFF', DEBUG);
-                    #end
-
                     clear_intro_sprites();
                 case 'sprite':
-                    #if debug
                     trace('SPAWNING SPRITE ${line.att.value}!', DEBUG);
-                    #end
 
                     // load sprite
                     var sprite:Sprite = new Sprite(0, 0, line.att.antialiased != 'false').load('menus/title/sprites/${line.att.value}');
@@ -226,23 +223,16 @@ class TitleScreen extends FunkinScene {
                     // add to screen lol
                     intro_sprites.add(sprite);
                 case 'randomized':
-                    #if debug
                     trace('DISPLAYING RANDOMIZED ${line.att.value} (${randomized_lines.get(line.att.value)})!', DEBUG);
-                    #end
 
                     // add randomized text from specified key (line.att.value is da key)
                     add_text([randomized_lines.get(line.att.value)]);
                 case 'event':
-                    #if debug
                     trace('RUNNING EVENT ${line.att.value}!', DEBUG);
-                    #end
 
                     switch (line.att.value) {
                         case 'exit_intro':
-                            #if debug
                             trace('EXIT TO MAIN TITLE SCREEN', DEBUG);
-                            #end
-
                             exit_intro();
                         default:
                             trace('${line.att.value} NOT IMPLEMENTED AS AN EVENT!', WARNING);
