@@ -180,6 +180,7 @@ class Gameplay extends FunkinScene {
         
         update_camera_position();
         FlxG.camera.follow(camera_tracker, LOCKON, camera_speed / 100.0);
+        FlxG.camera.followActive = camera_moving; // just in case it's set beforehand
 
         call_scripts('create_post'); call_scripts('createPost');
 
