@@ -47,7 +47,12 @@ class Save {
             for (opt in save.nodes.string) set_default(opt.att.key, opt.att.value, key);
         }
 
+        // set parameters here
+        Main.fps_counter.visible = get('fps-counter', 'appearance');
         Assets.preferred_mod = get('mod', 'engine');
+        FlxG.sound.volume = get('volume', 'flixel');
+        FlxG.stage.frameRate = get('fps-cap', 'appearance');
+        FlxG.autoPause = get('auto-pause', 'misc');
     }
 
     /**
