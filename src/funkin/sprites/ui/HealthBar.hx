@@ -60,8 +60,7 @@ class HealthBar extends flixel.group.FlxSpriteGroup {
         else score_text.text = 'Score:N/A';
 
         player_icon.scale.set(flixel.math.FlxMath.lerp(player_icon.scale.x, 1.0, elapsed * 9.0), flixel.math.FlxMath.lerp(player_icon.scale.y, 1.0, elapsed * 9.0));
-        // lmao efficiency or something maybe? (prolly not but whatever)
-        opponent_icon.scale.copyFrom(player_icon.scale);
+        opponent_icon.scale.set(flixel.math.FlxMath.lerp(opponent_icon.scale.x, 1.0, elapsed * 9.0), flixel.math.FlxMath.lerp(opponent_icon.scale.y, 1.0, elapsed * 9.0));
 
         player_icon.updateHitbox(); opponent_icon.updateHitbox();
 
@@ -70,7 +69,7 @@ class HealthBar extends flixel.group.FlxSpriteGroup {
 
     public function on_beat():Void {
         player_icon.scale.add(0.2, 0.2);
-        opponent_icon.scale.copyFrom(player_icon.scale);
+        opponent_icon.scale.add(0.2, 0.2);
 
         player_icon.updateHitbox(); opponent_icon.updateHitbox();
     }

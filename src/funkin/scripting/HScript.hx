@@ -21,6 +21,9 @@ class HScript extends Script {
         // flixel.input.FlxInput.FlxInputStates //
         'JUST_RELEASED' => -1, 'RELEASED' => 0, 'PRESSED' => 1, 'JUST_PRESSED' => 2,
 
+        // flixel.util.FlxAxes //
+        'X' => flixel.util.FlxAxes.X, 'Y' => flixel.util.FlxAxes.Y, 'XY' => flixel.util.FlxAxes.XY,
+
         // import.hx //
         'Input' => Input, 'Sprite' => Sprite, 'Utilities' => Utilities, 'Assets' => Assets, 'PrintType' => PrintType, 'Save' => Save, 'Conductor' => Conductor,
         'FlxG' => FlxG, 'StringTools' => StringTools, 'FlxTween' => FlxTween, 'FlxEase' => FlxEase, 'Json' => tjson.TJSON, 
@@ -28,7 +31,7 @@ class HScript extends Script {
         // HScript specific //
         'AssetType' => base.assets.AssetType, 'FlxMath' => flixel.math.FlxMath, 'FlxPoint' => flixel.math.FlxPoint, 'FlxRect' => flixel.math.FlxRect,
         'FlxSound' => flixel.system.FlxSound, 'FlxRuntimeShader' => flixel.addons.display.FlxRuntimeShader, 'ScriptedScene' => funkin.scenes.ScriptedScene,
-        'ScriptedSubScene' => funkin.scenes.subscenes.ScriptedSubScene, 'Math' => Math, 'Std' => Std,
+        'ScriptedSubScene' => funkin.scenes.subscenes.ScriptedSubScene, 'FlxAxes' => flixel.util.FlxAxes, 'Math' => Math, 'Std' => Std,
     ];
 
     // same docs as Script lmao
