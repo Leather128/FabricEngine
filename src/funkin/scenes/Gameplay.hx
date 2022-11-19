@@ -182,9 +182,10 @@ class Gameplay extends FunkinScene {
         // add ui to screen
         ui = new funkin.sprites.ui.GameplayUI(); ui.scrollFactor.set();
         ui.cameras = [hud_cam];
-        if (note_input == null) note_input = ui.note_input;
-        else note_input = note_input; // this sets ui.note_input to note_input
+        default_input = ui.note_input;
 
+        if (note_input == null) note_input = default_input;
+        else note_input = note_input; // this sets ui.note_input to note_input
         add(ui);
 
         // load music
@@ -359,6 +360,8 @@ class Gameplay extends FunkinScene {
 
         call_scripts('on_resync_post'); call_scripts('resync_song_post'); call_scripts('resyncSongPost');
     }
+
+    public dynamic function default_input():Void { }
 
     /**
      * Override destroy function for some extra stuff.
