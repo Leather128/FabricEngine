@@ -111,6 +111,13 @@ class Gameplay extends FunkinScene {
      */
     public var started_countdown:Bool = false;
 
+    /**
+     * Field for the `haxe.Constraints.Function` in `ui.note_input`.
+     * 
+     * (Used for scripting)
+     */
+    public var note_input(default, set):haxe.Constraints.Function;
+
     private function set_camera_speed(value:Float):Float {
         FlxG.camera.followLerp = value / 100.0; camera_speed = value;
         return value;
@@ -118,6 +125,11 @@ class Gameplay extends FunkinScene {
 
     private function set_camera_moving(value:Bool):Bool {
         FlxG.camera.followActive = value; camera_moving = value;
+        return value;
+    }
+
+    private function set_note_input(value:haxe.Constraints.Function):haxe.Constraints.Function {
+        if (ui != null) ui.note_input = function():Void { Reflect.callMethod(null, value, [ ui ]); };
         return value;
     }
 
@@ -135,6 +147,11 @@ class Gameplay extends FunkinScene {
         FlxG.sound.music.stop();
 
         super.create();
+
+        // load ui
+        ui = new funkin.sprites.ui.GameplayUI(); ui.scrollFactor.set();
+        ui.cameras = [hud_cam];
+        note_input = ui.note_input;
 
         instance = this;
 
@@ -165,9 +182,7 @@ class Gameplay extends FunkinScene {
         // for tutorial type shit
         if (dad.character == gf.character) { scripts.remove(dad.script); remove(dad); dad.destroy(); dad = gf; }
 
-        // load ui
-        ui = new funkin.sprites.ui.GameplayUI(); ui.scrollFactor.set();
-        ui.cameras = [hud_cam];
+        // add ui to screen
         add(ui);
 
         // load music

@@ -204,7 +204,7 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 	/**
 	 * Checks your inputs and reacts appropriately.
 	 */
-	public function note_input():Void {
+	public dynamic function note_input():Void {
 		var note_states:Array<flixel.input.FlxInput.FlxInputState> = [Input.get('keys-4-0'), Input.get('keys-4-1'), Input.get('keys-4-2'), Input.get('keys-4-3')];
 
 		// TODO: add sustain note hitting
