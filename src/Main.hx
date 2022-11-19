@@ -54,6 +54,7 @@ class Main extends openfl.display.Sprite {
 
 		// Create FPS Counter even if it's not shown just in case.
 		fps_counter = new base.Info(10, 3, 0xFFFFFFFF);
+		fps_counter.visible = false;
 		#if (desktop || debug)
 		// Only add FPS Counter if on desktop OR you're using a debug build.
 		addChild(fps_counter);
@@ -64,7 +65,6 @@ class Main extends openfl.display.Sprite {
 		
 		// default flixel type beats
 		FlxG.stage.addEventListener(openfl.events.KeyboardEvent.KEY_DOWN, key_down);
-		FlxG.sound.volume = FlxG.save.data.volume;
 
 		flixel.graphics.FlxGraphic.defaultPersist = true;
 	}
