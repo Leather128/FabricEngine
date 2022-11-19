@@ -163,7 +163,6 @@ class TitleScreen extends FunkinScene {
         // go to main menu lol
         if (Input.is('accept') && !in_intro) {
             if (pressed_enter) return;
-
             pressed_enter = true;
 
             enter.play_animation('press', true);
@@ -172,8 +171,7 @@ class TitleScreen extends FunkinScene {
             FlxG.sound.play(Assets.audio('sfx/menus/confirm'), 0.7);
 
             FlxG.switchState(new MainMenu());
-        } else if (Input.is('accept'))
-            exit_intro();
+        } else if (Input.is('accept')) exit_intro();
     }
 
     override function on_beat():Void {

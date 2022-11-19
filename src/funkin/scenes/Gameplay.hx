@@ -112,12 +112,12 @@ class Gameplay extends FunkinScene {
     public var started_countdown:Bool = false;
 
     private function set_camera_speed(value:Float):Float {
-        FlxG.camera.followLerp = value / 100.0;
+        FlxG.camera.followLerp = value / 100.0; camera_speed = value;
         return value;
     }
 
     private function set_camera_moving(value:Bool):Bool {
-        FlxG.camera.followActive = value;
+        FlxG.camera.followActive = value; camera_moving = value;
         return value;
     }
 
