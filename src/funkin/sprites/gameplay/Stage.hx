@@ -7,9 +7,10 @@ import funkin.scripting.Script;
  * @author Leather128
  */
 class Stage extends flixel.group.FlxGroup.FlxTypedGroup<Sprite> {
+    /**
+     * Stage's current script.
+     */
     public var script:Script;
-
-    public var default_camera_zoom:Float = 1.05;
 
     public function new(stage:String = 'stage') {
         super();
@@ -29,8 +30,5 @@ class Stage extends flixel.group.FlxGroup.FlxTypedGroup<Sprite> {
         script.set('stage_asset', function(input_path:String, ?custom_stage:String):String { return 'gameplay/stages/${custom_stage != null ? custom_stage : stage}/${input_path}'; });
 
         script.call('create');
-
-        if (script.exists('default_camera_zoom')) default_camera_zoom = script.get('default_camera_zoom');
-        else if (script.exists('defaultCamZoom')) default_camera_zoom = script.get('defaultCamZoom');
     }
 }

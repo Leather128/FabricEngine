@@ -1,5 +1,5 @@
 // init params
-var default_camera_zoom:Float = 0.9;
+default_cam_zoom = 0.9;
 
 function create() {
     var back:Sprite = new Sprite(-600, -200).load(stage_asset('stageback'));

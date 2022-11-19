@@ -92,6 +92,16 @@ class Gameplay extends FunkinScene {
     public var camera_tracker:flixel.FlxObject = new flixel.FlxObject();
 
     /**
+     * Current 'speed' of the camera's movement (actual value is this divided by 100, ex: 12 = 0.12)
+     */
+    public var camera_speed(default, set):Float = 4.0;
+
+    /**
+     * Whether or not the camera is currently moving.
+     */
+    public var camera_moving(default, set):Bool = true;
+
+    /**
      * Whether or not the song has started yet.
      */
     public var song_started:Bool = false;
@@ -100,6 +110,16 @@ class Gameplay extends FunkinScene {
      * Whether or not the countdown has started yet.
      */
     public var started_countdown:Bool = false;
+
+    private function set_camera_speed(value:Float):Float {
+        FlxG.camera.followLerp = value / 100.0;
+        return value;
+    }
+
+    private function set_camera_moving(value:Bool):Bool {
+        FlxG.camera.followActive = value;
+        return value;
+    }
 
     override function create():Void {
         // load song fallbacks
@@ -123,8 +143,6 @@ class Gameplay extends FunkinScene {
 
         // game shit lmao!!!
         stage = new Stage(song.stage);
-        // default cam zoom shit
-        default_cam_zoom = stage.default_camera_zoom;
         FlxG.camera.zoom = default_cam_zoom;
 
         gf = new Character(400, 130, song.gf);
@@ -161,7 +179,7 @@ class Gameplay extends FunkinScene {
         Conductor.song_position = 0;
         
         update_camera_position();
-        FlxG.camera.follow(camera_tracker, LOCKON, 0.04);
+        FlxG.camera.follow(camera_tracker, LOCKON, camera_speed / 100.0);
 
         call_scripts('create_post'); call_scripts('createPost');
 
