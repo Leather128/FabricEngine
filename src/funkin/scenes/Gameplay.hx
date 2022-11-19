@@ -130,6 +130,7 @@ class Gameplay extends FunkinScene {
 
     private function set_note_input(value:haxe.Constraints.Function):haxe.Constraints.Function {
         if (ui != null) ui.note_input = function():Void { Reflect.callMethod(null, value, [ ui ]); };
+        note_input = value;
         return value;
     }
 
