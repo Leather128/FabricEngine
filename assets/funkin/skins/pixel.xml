@@ -1,0 +1,9 @@
+<!DOCTYPE fabric-skin >
+<skin>
+    <countdown skin='pixel' scale='6.0' antialiasing='false'>
+        <info graphic='' sound='3' volume='0.6' />
+        <info graphic='ready' sound='2' volume='0.6' />
+        <info graphic='set' sound='1' volume='0.6' />
+        <info graphic='go' sound='go' volume='0.6' />
+    </countdown>
+</skin>

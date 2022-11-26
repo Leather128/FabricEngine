@@ -179,6 +179,16 @@ class HScript extends Script {
             // complicated shit (i would use actually haxe trace but this faster i think + that one doesn't get file path correct)
             Sys.println('${hscript_path}:${interp.posInfos().lineNumber}: ${base.Log.ascii_colors['cyan']}[SCRIPT] ${base.Log.ascii_colors['default']}${value}');
         });
+        // load other scripts
+        set('load', function(path:String):Script {
+            var script:Script = Script.load(path);
+            if (script == null) return null;
+
+            if (funkin.scenes.Gameplay.instance != null) funkin.scenes.Gameplay.instance.scripts.push(script);
+            script.call('create');
+
+            return script;
+        });
     }
 
     /**

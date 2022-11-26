@@ -306,9 +306,10 @@ class Gameplay extends FunkinScene {
         call_scripts('start_countdown'); call_scripts('startCountdown');
 
         started_countdown = true;
+        ui.load_skin();
         ui.start_countdown();
 
-        Conductor.song_position_raw = -(Conductor.time_between_beats * 5.0);
+        Conductor.song_position_raw = -(Conductor.time_between_beats * (ui.countdown_info.length + 1.0));
         Conductor.song_position = Conductor.song_position_raw + Conductor.offset;
     }
 

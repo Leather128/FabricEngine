@@ -53,6 +53,26 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 	 */
 	public var countdown_timer:flixel.util.FlxTimer = new flixel.util.FlxTimer();
 
+	/**
+	 * Variable to store an `Array` of all the steps in the countdown.
+	 */
+	public var countdown_info:Array<CountdownInfo> = [ ];
+
+	/**
+	 * Current name of the skin to use for this instance.
+	 */
+	public var skin_name:String = 'default';
+
+	/**
+	 * Current skin for this instance.
+	 */
+	public var skin:haxe.xml.Access;
+
+	/**
+	 * Current `haxe.xml.Access` for the `countdown` node.
+	 */
+	public var countdown_skin:haxe.xml.Access;
+
 	public function new() {
 		super();
 
@@ -349,17 +369,23 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 	 * Starts the countdown.
 	 */
 	public function start_countdown():Void {
-		var countdown_info:Array<CountdownInfo> = [
-			{graphic: '', sound: '3'},
-			{graphic: 'ready', sound: '2'},
-			{graphic: 'set', sound: '1'},
-			{graphic: 'go', sound: 'go'}
-		];
-
 		// precache images
 		for (countdown in countdown_info) {
-			if (countdown.graphic.trim() != '') Assets.image('images/gameplay/ui/countdown/${countdown.graphic}-default');
-			if (countdown.sound.trim() != '') Assets.audio('sfx/gameplay/countdown/${countdown.sound}-default');
+			if (countdown.graphic.trim() != '') {
+				// replace the value in the cache with a default image if the file is not found
+				if (Assets.image('images/gameplay/ui/countdown/${countdown.graphic}-${countdown_skin.att.skin}') == null) {
+					Assets.cache.set('images/gameplay/ui/countdown/${countdown.graphic}-${countdown_skin.att.skin}${Assets.IMAGE_EXT}', 
+						Assets.image('images/gameplay/ui/countdown/${countdown.graphic}-default'));
+				}
+			}
+
+			if (countdown.sound.trim() != '') {
+				// replace the value in the cache with a default sound if the file is not found
+				if (Assets.audio('sfx/gameplay/countdown/${countdown.sound}-${countdown_skin.att.skin}') == null) {
+					Assets.cache.set('sfx/gameplay/countdown/${countdown.sound}-${countdown_skin.att.skin}${Assets.AUDIO_EXT}', 
+						Assets.audio('sfx/gameplay/countdown/${countdown.sound}-default'));
+				}
+			}
 		}
 
 		countdown_timer.start(Conductor.time_between_beats / 1000.0, function(timer:flixel.util.FlxTimer):Void {
@@ -369,16 +395,19 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 
 			if (countdown.graphic != '') {
 				// spawns countdown sprite and tweens it
-				var sprite:Sprite = cast(new Sprite().load('gameplay/ui/countdown/${countdown.graphic}-default').screenCenter(), Sprite);
-				FlxTween.tween(sprite, {y: sprite.y + 100, alpha: 0}, Conductor.time_between_beats / 1000.0, {
+				var sprite:Sprite = new Sprite(0.0, 0.0, countdown_skin.att.antialiasing != 'false').load('gameplay/ui/countdown/${countdown.graphic}-${countdown_skin.att.skin}');
+				sprite.scale.set(Std.parseFloat(countdown_skin.att.scale), Std.parseFloat(countdown_skin.att.scale)); sprite.updateHitbox();
+				sprite.screenCenter();
+				add(sprite);
+
+				FlxTween.tween(sprite, {alpha: 0}, Conductor.time_between_beats / 1000.0, {
 					ease: FlxEase.cubeInOut,
 					onComplete: function(_):Void { sprite.destroy(); }
 				});
-				add(sprite);
 			}
 
 			// plays countdown sound
-			if (countdown.sound != '') FlxG.sound.play(Assets.audio('sfx/gameplay/countdown/${countdown.sound}-default'), 0.6);
+			if (countdown.sound != '') FlxG.sound.play(Assets.audio('sfx/gameplay/countdown/${countdown.sound}-${countdown_skin.att.skin}'), Std.parseFloat(countdown.skin.att.volume));
 		}, 4);
 	}
 
@@ -391,6 +420,19 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 	 */
 	public static function sort_notes(sort:Int = flixel.util.FlxSort.ASCENDING, note_a:Note, note_b:Note):Int
 		return note_a.strum_time < note_b.strum_time ? sort : note_a.strum_time > note_b.strum_time ? -sort : 0;
+
+	/**
+	 * Loads the current skin from `skin_name`.
+	 */
+	public function load_skin():Void {
+		if (!Assets.exists('skins/${skin_name}.xml')) return;
+
+		skin = new haxe.xml.Access(Xml.parse(Assets.text('skins/${skin_name}.xml')).firstElement());
+		countdown_info = [ ];
+
+		countdown_skin = skin.node.countdown;
+		for (info in countdown_skin.nodes.info) countdown_info.push({ graphic: info.att.graphic, sound: info.att.sound, skin: info });
+	}
 }
 
 /**
@@ -411,4 +453,9 @@ typedef CountdownInfo = {
 	 * (Actual file is appended with `-{ui skin}`)
 	 */
 	var sound:String;
+
+	/**
+	 * `haxe.xml.Access` to represent the skin data for this countdown info.
+	 */
+	var skin:haxe.xml.Access;
 }

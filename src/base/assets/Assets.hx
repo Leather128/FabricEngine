@@ -35,7 +35,7 @@ class Assets {
      * @return Absolute path to location at `rel_path`.
      */
     public static function absolute_path(rel_path):String
-        return sys.FileSystem.absolutePath(rel_path);
+        return sys.FileSystem.fullPath(rel_path);
 
     /**
      * Returns whether or not a file / directory exists from `path` (starts in `assets/`).

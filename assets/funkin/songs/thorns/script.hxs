@@ -1,0 +1,1 @@
+function create() { load('scripts/week6'); }

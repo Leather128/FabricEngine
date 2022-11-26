@@ -39,9 +39,9 @@ class Main extends openfl.display.Sprite {
 
 		// Simple loading of the build number and commit id on startup.
 		#if sys
-		if (sys.FileSystem.exists(sys.FileSystem.absolutePath('build.txt')) && sys.FileSystem.exists(sys.FileSystem.absolutePath('commit.txt'))) {
-			build_number = Std.parseInt(sys.io.File.getContent(sys.FileSystem.absolutePath('build.txt')));
-			commit_id = sys.io.File.getContent(sys.FileSystem.absolutePath('commit.txt')).trim();
+		if (sys.FileSystem.exists(sys.FileSystem.fullPath('build.txt')) && sys.FileSystem.exists(sys.FileSystem.fullPath('commit.txt'))) {
+			build_number = Std.parseInt(sys.io.File.getContent(sys.FileSystem.fullPath('build.txt')));
+			commit_id = sys.io.File.getContent(sys.FileSystem.fullPath('commit.txt')).trim();
 		}
 
 		#if debug if (Sys.args().contains('-livereload')) developer_build = true; #end

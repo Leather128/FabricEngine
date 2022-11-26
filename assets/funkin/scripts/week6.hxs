@@ -1,0 +1,3 @@
+function create_post() {
+    ui.skin_name = 'pixel';
+}
