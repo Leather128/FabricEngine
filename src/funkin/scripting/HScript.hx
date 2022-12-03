@@ -111,6 +111,8 @@ class HScript extends Script {
             trace('Executing ${hscript_path} failed! Details: ${e.details()}', ERROR);
         }
 
+        call('new');
+
         // call this at the end cuz it calls the create function
         super(path);
     }
