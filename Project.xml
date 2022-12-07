@@ -32,19 +32,7 @@
 	<assets path="commit.txt" embed="false" />
 	<assets path="build.txt" embed="false" />
 
-	<!-- _______________________________ Libraries ______________________________ -->
-
-	<!-- haxelib git flixel-leather https://github.com/Leather128/flixel.git btw -->
-	<haxelib name="flixel-leather" rename="flixel" />
-
-	<haxelib name="hscript-improved" />
-	<haxelib name="hxCodec" if="VIDEOS_ALLOWED" />
-
-	<haxelib name="tjson" />
-
-	<haxelib name="hxcpp-debug-server" if="desktop debug" />
-
-	<!-- ______________________________ Haxedefines _____________________________ -->
+	<!-- ______________________________ Defines _____________________________ -->
 
 	<!--Optimise inputs, be careful you will get null errors if you don't use conditionals in your game-->
 	<haxedef name="FLX_NO_MOUSE" if="mobile" />
@@ -74,6 +62,18 @@
 	<haxedef name="HXCPP_GC_BIG_BLOCKS" if="cpp" />
 
 	<define name="hscriptPos" />
+
+	<!-- _______________________________ Libraries ______________________________ -->
+
+	<!-- haxelib git flixel-leather https://github.com/Leather128/flixel.git btw -->
+	<haxelib name="flixel-leather" rename="flixel" />
+
+	<haxelib name="hscript-improved" />
+	<haxelib name="hxCodec" if="VIDEOS_ALLOWED" />
+
+	<haxelib name="tjson" />
+
+	<haxelib name="hxcpp-debug-server" if="desktop debug" />
 
 	<!-- _________________________________ Custom _______________________________ -->
 

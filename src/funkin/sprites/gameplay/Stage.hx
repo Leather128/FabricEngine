@@ -12,6 +12,21 @@ class Stage extends flixel.group.FlxGroup.FlxTypedGroup<Sprite> {
      */
     public var script:Script;
 
+    /**
+     * Starting position of GF.
+     */
+    public var gf_position:flixel.math.FlxPoint = flixel.math.FlxPoint.get(400, 130);
+
+    /**
+     * Starting position of BF (Player One).
+     */
+    public var bf_position:flixel.math.FlxPoint = flixel.math.FlxPoint.get(770, 450);
+
+    /**
+     * Starting position of Dad (Player Two).
+     */
+    public var dad_position:flixel.math.FlxPoint = flixel.math.FlxPoint.get(100, 100);
+
     public function new(stage:String = 'stage') {
         super();
 

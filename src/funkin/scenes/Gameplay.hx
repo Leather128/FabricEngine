@@ -159,9 +159,9 @@ class Gameplay extends FunkinScene {
         stage = new Stage(song.stage);
         FlxG.camera.zoom = default_cam_zoom;
 
-        gf = new Character(400, 130, song.gf);
-        dad = new Character(100, 100, song.player2);
-        bf = new Character(770, 450, song.player1, true);
+        gf = new Character(stage.gf_position.x, stage.gf_position.y, song.gf);
+        dad = new Character(stage.dad_position.x, stage.dad_position.y, song.player2);
+        bf = new Character(stage.bf_position.x, stage.bf_position.y, song.player1, true);
 
         // global position offsets
         gf.setPosition(gf.x + gf.global_offset.x, gf.y + gf.global_offset.y);
