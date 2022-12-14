@@ -66,7 +66,7 @@ class HScript extends Script {
      * Creates and parses the HScript file at `path`.
      * @param path Path to the HScript file to use.
      */
-    public function new(path:String) {
+    public function new(path:String, ?call_new:Bool = true) {
         parser.allowTypes = true; // Allow typing of variables ex: 'var three:Int = 3;'.
         parser.allowJSON = true; // Allows 'JSON Compatibility' in HScript.
         parser.allowMetadata = true; // Allows Haxe Metadata declarations in HScript.
@@ -111,7 +111,7 @@ class HScript extends Script {
             trace('Executing ${hscript_path} failed! Details: ${e.details()}', ERROR);
         }
 
-        call('new');
+        if (call_new) call('new');
 
         // call this at the end cuz it calls the create function
         super(path);

@@ -14,7 +14,7 @@ class ScriptedScene extends FunkinScene {
 
     public function new(scene_path:String) {
         // loads da script
-        script = Script.load('scenes/${scene_path}');
+        script = Script.load('scenes/${scene_path}', false);
         // no nulls
         if (script == null) { trace('script property of ScriptedScene is ${script}! Fallbacking to TitleScreen.hx', ERROR); FlxG.switchState(new TitleScreen()); return; }
 
