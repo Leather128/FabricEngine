@@ -57,17 +57,18 @@ class Info extends openfl.text.TextField {
 		current_time += deltaTime;
 		times.push(current_time);
 
-		while (times[0] < current_time - 1000) times.shift();
+		while (times[0] < current_time - 1000)
+			times.shift();
 
 		fps = times.length;
 
 		// Memory calculations for the 5 people who will use it.
-		memory_usage = Std.parseFloat(Utilities.format_bytes(Memory.getCurrentUsage(), true));
-		memory_usage_peak = Std.parseFloat(Utilities.format_bytes(Memory.getPeakUsage(), true));
+		memory_usage = Std.parseFloat(StringUtils.format_bytes(Memory.getCurrentUsage(), true));
+		memory_usage_peak = Std.parseFloat(StringUtils.format_bytes(Memory.getPeakUsage(), true));
 
 		// Actual text
-		text = '${fps} fps\n' + 
-		'${Utilities.format_bytes(Memory.getCurrentUsage())}/${Utilities.format_bytes(Memory.getPeakUsage())}\n' + 
-		'${#if debug 'debug-build-${Main.build_number} (${Main.commit_id})' #else '' #end}\n';
+		text = '${fps} fps\n'
+			+ '${StringUtils.format_bytes(Memory.getCurrentUsage())}/${StringUtils.format_bytes(Memory.getPeakUsage())}\n'
+			+ '${#if debug 'debug-build-${Main.build_number} (${Main.commit_id})' #else '' #end}\n';
 	}
 }

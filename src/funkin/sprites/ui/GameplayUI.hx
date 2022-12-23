@@ -17,7 +17,7 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 	 * Group of all current strums (opponent, THEN player).
 	 */
 	public var strums:FlxTypedSpriteGroup<Strum> = new FlxTypedSpriteGroup<Strum>();
-	
+
 	/**
 	 * Group of all current player strums.
 	 */
@@ -36,7 +36,7 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 	/**
 	 * Group of all current player notes.
 	 */
-	 public var player_notes:FlxTypedSpriteGroup<Note> = new FlxTypedSpriteGroup<Note>();
+	public var player_notes:FlxTypedSpriteGroup<Note> = new FlxTypedSpriteGroup<Note>();
 
 	/**
 	 * Group of all current opponent notes.
@@ -56,7 +56,7 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 	/**
 	 * Variable to store an `Array` of all the steps in the countdown.
 	 */
-	public var countdown_info:Array<CountdownInfo> = [ ];
+	public var countdown_info:Array<CountdownInfo> = [];
 
 	/**
 	 * Current name of the skin to use for this instance.
@@ -79,7 +79,8 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 		if (Gameplay.instance != null)
 			health_bar = new HealthBar(FlxG.height * 0.9, Gameplay.instance.bf.icon, Gameplay.instance.dad.icon, Gameplay.instance.bf.health_color,
 				Gameplay.instance.dad.health_color);
-		else health_bar = new HealthBar(FlxG.height * 0.9);
+		else
+			health_bar = new HealthBar(FlxG.height * 0.9);
 		add(health_bar);
 
 		add(strums);
@@ -92,11 +93,12 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 		generate_strums(0);
 		generate_strums(1);
 
-		if (Gameplay.instance == null) return;
+		if (Gameplay.instance == null)
+			return;
 
 		for (section in Gameplay.song.notes) {
 			for (note in section.sectionNotes) {
-				var note_spr:Note = spawn_note(section.mustHitSection ? note[1] < 4 : note[1] > 3, note[0], Std.int(note[1] % 4), note[2], false);
+				var note_spr:Note = spawn_note(section.mustHitSection?note[1]<4:note[1]>3, note[0], Std.int(note[1] % 4), note[2], false);
 				note_spr.raw_data = note;
 
 				// funny preloading go brrrr
@@ -104,7 +106,8 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 
 				if (Gameplay.instance != null) {
 					Gameplay.instance.call_scripts('on_note', [note_spr]);
-					Gameplay.instance.call_scripts('note_spawn', [note_spr]); Gameplay.instance.call_scripts('noteSpawn', [note_spr]);
+					Gameplay.instance.call_scripts('note_spawn', [note_spr]);
+					Gameplay.instance.call_scripts('noteSpawn', [note_spr]);
 				}
 			}
 		}
@@ -149,22 +152,27 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 			}
 
 			// note missing
-			if (note.is_player && note.strum_time < Conductor.song_position - Conductor.safe_zone_offset) note_miss(note);
+			if (note.is_player && note.strum_time < Conductor.song_position - Conductor.safe_zone_offset)
+				note_miss(note);
 		}
 
 		// gameplay specific stuff
-		if (Gameplay.instance == null) return;
+		if (Gameplay.instance == null)
+			return;
 
 		while (preloaded_notes.length > 0 && preloaded_notes[0].strum_time - Conductor.song_position < 1500.0) {
 			var note:Note = preloaded_notes[0];
 
-			if (note.is_player) player_notes.add(note); else opponent_notes.add(note);
+			if (note.is_player)
+				player_notes.add(note);
+			else
+				opponent_notes.add(note);
 			notes.add(note);
 
 			preloaded_notes.shift();
 		}
 
-		notes.members.sort(function(a:Note, b:Note) return sort_notes(flixel.util.FlxSort.DESCENDING, a, b) );
+		notes.members.sort(function(a:Note, b:Note) return sort_notes(flixel.util.FlxSort.DESCENDING, a, b));
 
 		note_input();
 	}
@@ -192,10 +200,10 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 				opponent_strums.add(strum);
 
 				// funny confirm anim stuff
-				strum.animation.finishCallback = function(name:String):Void 
-					if (name == 'confirm') strum.play_animation('default');
-			}
-			else player_strums.add(strum);
+				strum.animation.finishCallback = function(name:String):Void if (name == 'confirm')
+					strum.play_animation('default');
+			} else
+				player_strums.add(strum);
 
 			x_pos += Note.DEFAULT_WIDTH;
 
@@ -213,10 +221,15 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 	 */
 	public function spawn_note(is_player:Bool, strum_time:Float, id:Int, ?sustain_length:Float = 0.0, ?add_to_notes:Bool = true):Note {
 		var note:Note = new Note(is_player, strum_time, id, sustain_length);
-		note.x = -10000; note.y = -10000;
+		note.x = -10000;
+		note.y = -10000;
 
-		if (add_to_notes && is_player) player_notes.add(note); else opponent_notes.add(note);
-		if (add_to_notes) notes.add(note);
+		if (add_to_notes && is_player)
+			player_notes.add(note);
+		else
+			opponent_notes.add(note);
+		if (add_to_notes)
+			notes.add(note);
 
 		return note;
 	}
@@ -225,12 +238,18 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 	 * Checks your inputs and reacts appropriately.
 	 */
 	public dynamic function note_input():Void {
-		var note_states:Array<flixel.input.FlxInput.FlxInputState> = [Input.get('keys-4-0'), Input.get('keys-4-1'), Input.get('keys-4-2'), Input.get('keys-4-3')];
+		var note_states:Array<flixel.input.FlxInput.FlxInputState> = [
+			Input.get('keys-4-0'),
+			Input.get('keys-4-1'),
+			Input.get('keys-4-2'),
+			Input.get('keys-4-3')
+		];
 
 		// TODO: add sustain note hitting
 
 		if (note_states.contains(JUST_PRESSED)) {
-			if (Gameplay.instance != null) Gameplay.instance.bf.sing_timer = 0.0;
+			if (Gameplay.instance != null)
+				Gameplay.instance.bf.sing_timer = 0.0;
 
 			// possible notes we can hit lol
 			var possible_notes:Array<Note> = [];
@@ -247,10 +266,11 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 					}
 				}
 
-				if (note.exists && note.strum_time < Conductor.song_position + Conductor.safe_zone_offset) possible_notes.push(note);
+				if (note.exists && note.strum_time < Conductor.song_position + Conductor.safe_zone_offset)
+					possible_notes.push(note);
 			});
 
-			possible_notes.sort(function(a:Note, b:Note):Int return Std.int(a.strum_time - b.strum_time) );
+			possible_notes.sort(function(a:Note, b:Note):Int return Std.int(a.strum_time - b.strum_time));
 
 			if (possible_notes.length != 0) {
 				for (note in possible_notes) {
@@ -266,18 +286,22 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 
 		// animation shit
 		player_strums.forEachAlive(function(strum:Strum):Void {
-			if (note_states[strum.id] == PRESSED && strum.animation.curAnim.name != 'confirm' && strum.animation.curAnim.name != 'press') strum.play_animation('press');
-			else if (note_states[strum.id] == RELEASED) strum.play_animation('default');
+			if (note_states[strum.id] == PRESSED && strum.animation.curAnim.name != 'confirm' && strum.animation.curAnim.name != 'press')
+				strum.play_animation('press');
+			else if (note_states[strum.id] == RELEASED)
+				strum.play_animation('default');
 		});
-		
+
 		// if not null, do this shit
-		if (Gameplay.instance == null) return;
+		if (Gameplay.instance == null)
+			return;
 
 		// code become less long.exe
 		var bf:funkin.sprites.gameplay.Character = Gameplay.instance.bf;
 
 		// basically do same shit that would normally happen in Character.hx anyways
-		if (!note_states.contains(PRESSED) && bf.sing_timer >= Conductor.time_between_steps * bf.sing_duration * 0.001) bf.dance();
+		if (!note_states.contains(PRESSED) && bf.sing_timer >= Conductor.time_between_steps * bf.sing_duration * 0.001)
+			bf.dance();
 	}
 
 	/**
@@ -291,7 +315,8 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 		player_notes.remove(note, true);
 		note.destroy();
 
-		if (Gameplay.instance == null) return;
+		if (Gameplay.instance == null)
+			return;
 
 		Gameplay.instance.call_scripts('on_sing', [note, Gameplay.instance.bf]);
 		Gameplay.instance.call_scripts('note_hit', [note, Gameplay.instance.bf]);
@@ -305,19 +330,27 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 		var score:Int = 350;
 
 		// funny ratings
-		if (difference > Conductor.safe_zone_offset * 0.9) rating = 'shit';
-		else if (difference > Conductor.safe_zone_offset * 0.75) rating = 'bad';
-		else if (difference > Conductor.safe_zone_offset * 0.2) rating = 'good';
+		if (difference > Conductor.safe_zone_offset * 0.9)
+			rating = 'shit';
+		else if (difference > Conductor.safe_zone_offset * 0.75)
+			rating = 'bad';
+		else if (difference > Conductor.safe_zone_offset * 0.2)
+			rating = 'good';
 
 		// rating info
 		switch (rating) {
-			case 'good': score = 200;
-			case 'bad': score = 100;
-			case 'shit': score = 50;
+			case 'good':
+				score = 200;
+			case 'bad':
+				score = 100;
+			case 'shit':
+				score = 50;
 		}
-		
-		var rating_info:RatingInfo = new RatingInfo(0.0, 0.0, { rating: rating, combo: Gameplay.instance.combo });
-		rating_info.screenCenter(); rating_info.x = FlxG.width * 0.55; rating_info.y -= 60;
+
+		var rating_info:RatingInfo = new RatingInfo(0.0, 0.0, {rating: rating, combo: Gameplay.instance.combo});
+		rating_info.screenCenter();
+		rating_info.x = FlxG.width * 0.55;
+		rating_info.y -= 60;
 
 		Gameplay.instance.add(rating_info);
 		Gameplay.instance.score += score;
@@ -344,7 +377,8 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 			note.destroy();
 		}
 
-		if (Gameplay.instance == null) return;
+		if (Gameplay.instance == null)
+			return;
 
 		Gameplay.instance.call_scripts('on_miss', [note, Gameplay.instance.bf]);
 		Gameplay.instance.call_scripts('note_miss', [note, Gameplay.instance.bf]);
@@ -374,7 +408,7 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 			if (countdown.graphic.trim() != '') {
 				// replace the value in the cache with a default image if the file is not found
 				if (Assets.image('images/gameplay/ui/countdown/${countdown.graphic}-${countdown_skin.att.skin}') == null) {
-					Assets.cache.set('images/gameplay/ui/countdown/${countdown.graphic}-${countdown_skin.att.skin}${Assets.IMAGE_EXT}', 
+					Assets.cache.set('images/gameplay/ui/countdown/${countdown.graphic}-${countdown_skin.att.skin}${Assets.IMAGE_EXT}',
 						Assets.image('images/gameplay/ui/countdown/${countdown.graphic}-default'));
 				}
 			}
@@ -382,7 +416,7 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 			if (countdown.sound.trim() != '') {
 				// replace the value in the cache with a default sound if the file is not found
 				if (Assets.audio('sfx/gameplay/countdown/${countdown.sound}-${countdown_skin.att.skin}') == null) {
-					Assets.cache.set('sfx/gameplay/countdown/${countdown.sound}-${countdown_skin.att.skin}${Assets.AUDIO_EXT}', 
+					Assets.cache.set('sfx/gameplay/countdown/${countdown.sound}-${countdown_skin.att.skin}${Assets.AUDIO_EXT}',
 						Assets.audio('sfx/gameplay/countdown/${countdown.sound}-default'));
 				}
 			}
@@ -391,23 +425,30 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 		countdown_timer.start(Conductor.time_between_beats / 1000.0, function(timer:flixel.util.FlxTimer):Void {
 			// basically makes accessing this stuff easier
 			var countdown:CountdownInfo = countdown_info[timer.elapsedLoops - 1];
-			if (countdown == null) return;
+			if (countdown == null)
+				return;
 
 			if (countdown.graphic != '') {
 				// spawns countdown sprite and tweens it
-				var sprite:Sprite = new Sprite(0.0, 0.0, countdown_skin.att.antialiasing != 'false').load('gameplay/ui/countdown/${countdown.graphic}-${countdown_skin.att.skin}');
-				sprite.scale.set(Std.parseFloat(countdown_skin.att.scale), Std.parseFloat(countdown_skin.att.scale)); sprite.updateHitbox();
+				var sprite:Sprite = new Sprite(0.0, 0.0,
+					countdown_skin.att.antialiasing != 'false').load('gameplay/ui/countdown/${countdown.graphic}-${countdown_skin.att.skin}');
+				sprite.scale.set(Std.parseFloat(countdown_skin.att.scale), Std.parseFloat(countdown_skin.att.scale));
+				sprite.updateHitbox();
 				sprite.screenCenter();
 				add(sprite);
 
 				FlxTween.tween(sprite, {alpha: 0}, Conductor.time_between_beats / 1000.0, {
 					ease: FlxEase.cubeInOut,
-					onComplete: function(_):Void { sprite.destroy(); }
+					onComplete: function(_):Void {
+						sprite.destroy();
+					}
 				});
 			}
 
 			// plays countdown sound
-			if (countdown.sound != '') FlxG.sound.play(Assets.audio('sfx/gameplay/countdown/${countdown.sound}-${countdown_skin.att.skin}'), Std.parseFloat(countdown.skin.att.volume));
+			if (countdown.sound != '')
+				FlxG.sound.play(Assets.audio('sfx/gameplay/countdown/${countdown.sound}-${countdown_skin.att.skin}'),
+					Std.parseFloat(countdown.skin.att.volume));
 		}, 4);
 	}
 
@@ -425,13 +466,15 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 	 * Loads the current skin from `skin_name`.
 	 */
 	public function load_skin():Void {
-		if (!Assets.exists('skins/${skin_name}.xml')) return;
+		if (!Assets.exists('skins/${skin_name}.xml'))
+			return;
 
 		skin = new haxe.xml.Access(Xml.parse(Assets.text('skins/${skin_name}.xml')).firstElement());
-		countdown_info = [ ];
+		countdown_info = [];
 
 		countdown_skin = skin.node.countdown;
-		for (info in countdown_skin.nodes.info) countdown_info.push({ graphic: info.att.graphic, sound: info.att.sound, skin: info });
+		for (info in countdown_skin.nodes.info)
+			countdown_info.push({graphic: info.att.graphic, sound: info.att.sound, skin: info});
 	}
 }
 

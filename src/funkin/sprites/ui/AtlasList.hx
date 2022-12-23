@@ -5,108 +5,111 @@ package funkin.sprites.ui;
  * @author Leather128
  */
 class AtlasList extends flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup<AtlasItem> {
-    /**
-     * Current index of the selected item.
-     */
-    public var selected_index:Int = 0;
+	/**
+	 * Current index of the selected item.
+	 */
+	public var selected_index:Int = 0;
 
-    /**
-     * Has the user selected an item yet?
-     */
-    public var has_selected:Bool = false;
+	/**
+	 * Has the user selected an item yet?
+	 */
+	public var has_selected:Bool = false;
 
-    /**
-     * Whether this `AtlasList` is currently active and able to be used.
-     */
-    public var enabled:Bool = true;
+	/**
+	 * Whether this `AtlasList` is currently active and able to be used.
+	 */
+	public var enabled:Bool = true;
 
-    /**
-     * Signal that gets called when any item is selected.
-     */
-    public var on_accept:flixel.util.FlxSignal.FlxTypedSignal<AtlasItem->Void> = new flixel.util.FlxSignal.FlxTypedSignal<AtlasItem->Void>();
+	/**
+	 * Signal that gets called when any item is selected.
+	 */
+	public var on_accept:flixel.util.FlxSignal.FlxTypedSignal<AtlasItem->Void> = new flixel.util.FlxSignal.FlxTypedSignal<AtlasItem->Void>();
 
-    /**
-     * Signal that gets called when an item is selected.
-     */
-    public var on_select:flixel.util.FlxSignal.FlxTypedSignal<AtlasItem->Void> = new flixel.util.FlxSignal.FlxTypedSignal<AtlasItem->Void>();
-    
-    public function new() { super(); }
+	/**
+	 * Signal that gets called when an item is selected.
+	 */
+	public var on_select:flixel.util.FlxSignal.FlxTypedSignal<AtlasItem->Void> = new flixel.util.FlxSignal.FlxTypedSignal<AtlasItem->Void>();
 
-    override function update(elapsed:Float):Void {
-        super.update(elapsed);
+	public function new() {
+		super();
+	}
 
-        if (has_selected || !enabled) return;
+	override function update(elapsed:Float):Void {
+		super.update(elapsed);
 
-        var vertical_axis:Int = (Input.is('down') ? 1 : 0) - (Input.is('up') ? 1 : 0);
-        if (vertical_axis != 0) change_selection(vertical_axis);
+		if (has_selected || !enabled)
+			return;
 
-        // When you press enter on an item
-        if (Input.is('accept')) {
-            var selected_item:AtlasItem = members[selected_index];
-            // Call the accept function for this list in general
-            on_accept.dispatch(selected_item);
+		var vertical_axis:Int = (Input.is('down') ? 1 : 0) - (Input.is('up') ? 1 : 0);
+		if (vertical_axis != 0)
+			change_selection(vertical_axis);
 
-            // Call the function for the item instantly if specified
-            if (selected_item.call_instantly) selected_item.on_selected.dispatch(selected_item);
-            else {
-                // Play a sound and flicker the item if not instantly
-                has_selected = true;
+		// When you press enter on an item
+		if (Input.is('accept')) {
+			var selected_item:AtlasItem = members[selected_index];
+			// Call the accept function for this list in general
+			on_accept.dispatch(selected_item);
 
-                FlxG.sound.play(Assets.audio('sfx/menus/confirm'));
+			// Call the function for the item instantly if specified
+			if (selected_item.call_instantly)
+				selected_item.on_selected.dispatch(selected_item);
+			else {
+				// Play a sound and flicker the item if not instantly
+				has_selected = true;
 
-                flixel.effects.FlxFlicker.flicker(selected_item, 1, 0.06, true, false, function(flicker):Void
-                {
-                    // And THEN call the function
-                    has_selected = false;
-                    selected_item.on_selected.dispatch(selected_item);
-                });
-            }
-        }
-    }
-    
-    /**
-     * Adds an item to this list.
-     * 
-     * @param x X position of the item.
-     * @param y Y position of the item.
-     * @param path Path to the item's atlas spritesheet.
-     * @param animations Animation data for the item.
-     * @return `this` (chaining purposes).
-     */
-    public function add_item(x:Float = 0.0, y:Float = 0.0, path:String, animations:AtlasAnimations, call_instantly:Bool = false):AtlasItem {
-        var item:AtlasItem = cast new AtlasItem(x, y, call_instantly).load(path, SPARROW);
-        item.add_animation('unselected', animations.unselected.name, animations.unselected.framerate, animations.unselected.looped);
-        item.add_animation('selected', animations.selected.name, animations.selected.framerate, animations.selected.looped);
+				FlxG.sound.play(Assets.audio('sfx/menus/confirm'));
 
-        item.play_animation('unselected', true);
-        item.updateHitbox();
+				flixel.effects.FlxFlicker.flicker(selected_item, 1, 0.06, true, false, function(flicker):Void {
+					// And THEN call the function
+					has_selected = false;
+					selected_item.on_selected.dispatch(selected_item);
+				});
+			}
+		}
+	}
 
-        item.ID = length;
-        add(item);
-        
-        return item;
-    }
+	/**
+	 * Adds an item to this list.
+	 * 
+	 * @param x X position of the item.
+	 * @param y Y position of the item.
+	 * @param path Path to the item's atlas spritesheet.
+	 * @param animations Animation data for the item.
+	 * @return `this` (chaining purposes).
+	 */
+	public function add_item(x:Float = 0.0, y:Float = 0.0, path:String, animations:AtlasAnimations, call_instantly:Bool = false):AtlasItem {
+		var item:AtlasItem = cast new AtlasItem(x, y, call_instantly).load(path, SPARROW);
+		item.add_animation('unselected', animations.unselected.name, animations.unselected.framerate, animations.unselected.looped);
+		item.add_animation('selected', animations.selected.name, animations.selected.framerate, animations.selected.looped);
 
-    /**
-     * Changes the currently selected item index.
-     * 
-     * @param amount Amount to change by (positive is down, negative is up).
-     */
-    public function change_selection(amount:Int = 0):Void {
-        selected_index = flixel.math.FlxMath.wrap(selected_index + amount, 0, length - 1);
+		item.play_animation('unselected', true);
+		item.updateHitbox();
 
-        FlxG.sound.play(Assets.audio('sfx/menus/scroll'));
+		item.ID = length;
+		add(item);
 
-        forEach(function(item:AtlasItem):Void {
-            item.play_animation(item.ID == selected_index ? 'selected' : 'unselected', true);
-            item.updateHitbox();
-            // offset stuff from week 7
-            item.origin.set(item.frameWidth * 0.5, item.frameHeight * 0.5);
-            item.offset.copyFrom(item.origin);
-        });
+		return item;
+	}
 
-        on_select.dispatch(members[selected_index]);
-    }
+	/**
+	 * Changes the currently selected item index.
+	 * 
+	 * @param amount Amount to change by (positive is down, negative is up).
+	 */
+	public function change_selection(amount:Int = 0):Void {
+		selected_index = flixel.math.FlxMath.wrap(selected_index + amount, 0, length - 1);
+		FlxG.sound.play(Assets.audio('sfx/menus/scroll'));
+
+		forEach(function(item:AtlasItem):Void {
+			item.play_animation(item.ID == selected_index ? 'selected' : 'unselected', true);
+			item.updateHitbox();
+			// offset stuff from week 7
+			item.origin.set(item.frameWidth * 0.5, item.frameHeight * 0.5);
+			item.offset.copyFrom(item.origin);
+		});
+
+		on_select.dispatch(members[selected_index]);
+	}
 }
 
 /**
@@ -115,20 +118,20 @@ class AtlasList extends flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup<AtlasIte
  * @author Leather128
  */
 class AtlasItem extends Sprite {
-    /**
-     * Signal that gets called when this sprite is selected.
-     */
-    public var on_selected:flixel.util.FlxSignal.FlxTypedSignal<AtlasItem->Void> = new flixel.util.FlxSignal.FlxTypedSignal<AtlasItem->Void>();
+	/**
+	 * Signal that gets called when this sprite is selected.
+	 */
+	public var on_selected:flixel.util.FlxSignal.FlxTypedSignal<AtlasItem->Void> = new flixel.util.FlxSignal.FlxTypedSignal<AtlasItem->Void>();
 
-    /**
-     * Whether or not to instantly call `on_selected` or wait till a selecting animation is done playing.
-     */
-    public var call_instantly:Bool = false;
+	/**
+	 * Whether or not to instantly call `on_selected` or wait till a selecting animation is done playing.
+	 */
+	public var call_instantly:Bool = false;
 
-    public function new(x:Float = 0.0, y:Float = 0.0, call_instantly:Bool = false) {
-        super(x, y);
-        this.call_instantly = call_instantly;
-    }
+	public function new(x:Float = 0.0, y:Float = 0.0, call_instantly:Bool = false) {
+		super(x, y);
+		this.call_instantly = call_instantly;
+	}
 }
 
 /**
@@ -136,15 +139,15 @@ class AtlasItem extends Sprite {
  * @author Leather128
  */
 typedef AtlasAnimations = {
-    /**
-     * `AtlasAnimation` to play when you select a different item.
-     */
-    public var unselected:AtlasAnimation;
+	/**
+	 * `AtlasAnimation` to play when you select a different item.
+	 */
+	public var unselected:AtlasAnimation;
 
-    /**
-     * `AtlasAnimation` to play when you select this item.
-     */
-    public var selected:AtlasAnimation;
+	/**
+	 * `AtlasAnimation` to play when you select this item.
+	 */
+	public var selected:AtlasAnimation;
 }
 
 /**
@@ -152,18 +155,18 @@ typedef AtlasAnimations = {
  * @author Leather128
  */
 typedef AtlasAnimation = {
-    /**
-     * The animation's name.
-     */
-    public var name:String;
+	/**
+	 * The animation's name.
+	 */
+	public var name:String;
 
-    /**
-     * The frames per second the animation runs at.
-     */
-    public var framerate:Int;
+	/**
+	 * The frames per second the animation runs at.
+	 */
+	public var framerate:Int;
 
-    /**
-     * Whether the animation loops forever or not.
-     */
-    public var looped:Bool;
+	/**
+	 * Whether the animation loops forever or not.
+	 */
+	public var looped:Bool;
 }

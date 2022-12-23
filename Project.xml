@@ -29,7 +29,6 @@
 	<source path="src" />
 	<assets path="assets" embed="false" />
 
-	<assets path="commit.txt" embed="false" />
 	<assets path="build.txt" embed="false" />
 
 	<!-- ______________________________ Defines _____________________________ -->

@@ -8,22 +8,27 @@ class Main extends openfl.display.Sprite {
 	/**
 		The current info display being used (only shown on desktop platforms or in debug mode).
 	**/
-	public static var fps_counter:base.Info;
+	public static var fps_counter:base.Info = new base.Info(10, 3, 0xFFFFFFFF);
 
 	/**
 	 * The build number of the game.
 	 */
-	public static var build_number:Int = 0;
+	public static var build_number(default, never):Int = funkin.macros.BuildInfoMacros.get_build_number();
 
 	/**
 	 * Last commit of the game before this build was made.
 	 */
-	public static var commit_id:String = "";
+	public static var commit_id(default, never):String = funkin.macros.BuildInfoMacros.get_build_commit_id();
 
 	/**
 	 * Current version of the game. (Grabs from the `Project.xml`)
+	 * (Read Only)
 	 */
-	public static var version:String = 'unknown';
+	@:keep
+	public static var version(get, never):String;
+
+	private static function get_version():String
+		return lime.app.Application.current.meta['version'];
 
 	/**
 	 * Whether or not this build is being tested and developed actively.
@@ -33,39 +38,23 @@ class Main extends openfl.display.Sprite {
 	public function new() {
 		super();
 
-		// New way of tracing (nicer to work with for errors and such)
+		// new way of tracing (nicer to work with for errors and such)
 		base.Log.haxe_trace = haxe.Log.trace;
 		haxe.Log.trace = base.Log.haxe_print;
 
-		// Simple loading of the build number and commit id on startup.
-		#if sys
-		if (sys.FileSystem.exists(sys.FileSystem.fullPath('build.txt')) && sys.FileSystem.exists(sys.FileSystem.fullPath('commit.txt'))) {
-			build_number = Std.parseInt(sys.io.File.getContent(sys.FileSystem.fullPath('build.txt')));
-			commit_id = sys.io.File.getContent(sys.FileSystem.fullPath('commit.txt')).trim();
-		}
-
-		#if debug if (Sys.args().contains('-livereload')) developer_build = true; #end
+		// simple loading of the build number and commit id on startup.
+		#if (sys && debug)
+		developer_build = Sys.args().contains('-livereload');
 		#end
-
-		// Load the version
-		version = lime.app.Application.current.meta.get('version');
 
 		addChild(new flixel.FlxGame(0, 0, funkin.scenes.TitleScreen));
-
-		// Create FPS Counter even if it's not shown just in case.
-		fps_counter = new base.Info(10, 3, 0xFFFFFFFF);
-		fps_counter.visible = false;
-		#if (desktop || debug)
-		// Only add FPS Counter if on desktop OR you're using a debug build.
+		// create fps counter even if it's not shown just in case.
 		addChild(fps_counter);
-		#end
+		fps_counter.visible = false;
 		
-		// inital settings
 		base.Save.init();
-		
 		// default flixel type beats
 		FlxG.stage.addEventListener(openfl.events.KeyboardEvent.KEY_DOWN, key_down);
-
 		flixel.graphics.FlxGraphic.defaultPersist = true;
 	}
 

@@ -7,70 +7,81 @@ import flixel.util.FlxColor;
  * @author Leather128
  */
 class HealthBar extends flixel.group.FlxSpriteGroup {
-    public static final ICON_OFFSET:Int = 26;
-    
-    public var health_value:Float = 1.0;
+	public static final ICON_OFFSET:Int = 26;
 
-    public var bar_bg:Sprite = new Sprite(0.0, 0.0).load('gameplay/ui/health_bar');
-    public var bar:flixel.ui.FlxBar;
+	public var health_value:Float = 1.0;
 
-    public var player_icon:HealthIcon;
-    public var opponent_icon:HealthIcon;
+	public var bar_bg:Sprite = new Sprite(0.0, 0.0).load('gameplay/ui/health_bar');
+	public var bar:flixel.ui.FlxBar;
 
-    public var score_text:flixel.text.FlxText = new flixel.text.FlxText();
+	public var player_icon:HealthIcon;
+	public var opponent_icon:HealthIcon;
 
-    public function new(y:Float = 0.0, player_icon:String = 'bf', opponent_icon:String = 'dad', player_color:FlxColor = FlxColor.LIME, opponent_color:FlxColor = FlxColor.RED) {
-        super(0.0, y);
+	public var score_text:flixel.text.FlxText = new flixel.text.FlxText();
 
-        // create health bar
-        bar = new flixel.ui.FlxBar(bar_bg.x + 4.0, bar_bg.y + 4.0, RIGHT_TO_LEFT, Std.int(bar_bg.width - 8), Std.int(bar_bg.height - 8), this,
-            'health_value', 0, 2);
-        bar.createFilledBar(opponent_color, player_color);
+	public function new(y:Float = 0.0, player_icon:String = 'bf', opponent_icon:String = 'dad', player_color:FlxColor = FlxColor.LIME,
+			opponent_color:FlxColor = FlxColor.RED) {
+		super(0.0, y);
 
-        // create score text
-        score_text.setPosition(bar_bg.x + bar_bg.width - 190.0, bar_bg.y + 30.0); score_text.antialiasing = true;
-        score_text.setFormat(Assets.font('vcr.ttf'), 16, flixel.util.FlxColor.WHITE, RIGHT, OUTLINE, flixel.util.FlxColor.BLACK);
+		// create health bar
+		bar = new flixel.ui.FlxBar(bar_bg.x + 4.0, bar_bg.y + 4.0, RIGHT_TO_LEFT, Std.int(bar_bg.width - 8), Std.int(bar_bg.height - 8), this, 'health_value',
+			0, 2);
+		bar.createFilledBar(opponent_color, player_color);
 
-        // create icons
-        this.player_icon = new HealthIcon(0.0, 0.0, player_icon); this.player_icon.flipX = true; this.player_icon.y = bar.y - (this.player_icon.height / 2.0);
-        this.opponent_icon = new HealthIcon(0.0, 0.0, opponent_icon); this.opponent_icon.y = bar.y - (this.opponent_icon.height / 2.0);
+		// create score text
+		score_text.setPosition(bar_bg.x + bar_bg.width - 190.0, bar_bg.y + 30.0);
+		score_text.antialiasing = true;
+		score_text.setFormat(Assets.font('vcr.ttf'), 16, flixel.util.FlxColor.WHITE, RIGHT, OUTLINE, flixel.util.FlxColor.BLACK);
 
-        // layering
-        add(bar_bg);
-        add(bar);
+		// create icons
+		this.player_icon = new HealthIcon(0.0, 0.0, player_icon);
+		this.player_icon.flipX = true;
+		this.player_icon.y = bar.y - (this.player_icon.height / 2.0);
+		this.opponent_icon = new HealthIcon(0.0, 0.0, opponent_icon);
+		this.opponent_icon.y = bar.y - (this.opponent_icon.height / 2.0);
 
-        add(this.player_icon);
-        add(this.opponent_icon);
+		// layering
+		add(bar_bg);
+		add(bar);
 
-        add(score_text);
+		add(this.player_icon);
+		add(this.opponent_icon);
 
-        screenCenter(X);
-    }
+		add(score_text);
 
-    override function update(elapsed:Float):Void {
+		screenCenter(X);
+	}
+
+	override function update(elapsed:Float):Void {
 		player_icon.x = bar.x + (bar.width * (flixel.math.FlxMath.remapToRange(bar.percent, 0, 100, 100, 0) * 0.01) - ICON_OFFSET);
 		opponent_icon.x = bar.x + (bar.width * (flixel.math.FlxMath.remapToRange(bar.percent, 0, 100, 100, 0) * 0.01)) - (opponent_icon.width - ICON_OFFSET);
 
-        health_value = flixel.math.FlxMath.bound(health_value, 0.0, 2.0);
+		health_value = flixel.math.FlxMath.bound(health_value, 0.0, 2.0);
 
-        player_icon.play_animation(bar.percent > 20 ? 'alive' : 'dying');
-        opponent_icon.play_animation(bar.percent < 80 ? 'alive' : 'dying');
+		player_icon.play_animation(bar.percent > 20 ? 'alive' : 'dying');
+		opponent_icon.play_animation(bar.percent < 80 ? 'alive' : 'dying');
 
-        if (funkin.scenes.Gameplay.instance != null) score_text.text = 'Score:${funkin.scenes.Gameplay.instance.score}';
-        else score_text.text = 'Score:N/A';
+		if (funkin.scenes.Gameplay.instance != null)
+			score_text.text = 'Score:${funkin.scenes.Gameplay.instance.score}';
+		else
+			score_text.text = 'Score:N/A';
 
-        player_icon.scale.set(flixel.math.FlxMath.lerp(player_icon.scale.x, 1.0, elapsed * 9.0), flixel.math.FlxMath.lerp(player_icon.scale.y, 1.0, elapsed * 9.0));
-        opponent_icon.scale.set(flixel.math.FlxMath.lerp(opponent_icon.scale.x, 1.0, elapsed * 9.0), flixel.math.FlxMath.lerp(opponent_icon.scale.y, 1.0, elapsed * 9.0));
+		player_icon.scale.set(flixel.math.FlxMath.lerp(player_icon.scale.x, 1.0, elapsed * 9.0),
+			flixel.math.FlxMath.lerp(player_icon.scale.y, 1.0, elapsed * 9.0));
+		opponent_icon.scale.set(flixel.math.FlxMath.lerp(opponent_icon.scale.x, 1.0, elapsed * 9.0),
+			flixel.math.FlxMath.lerp(opponent_icon.scale.y, 1.0, elapsed * 9.0));
 
-        player_icon.updateHitbox(); opponent_icon.updateHitbox();
+		player_icon.updateHitbox();
+		opponent_icon.updateHitbox();
 
-        super.update(elapsed);
-    }
+		super.update(elapsed);
+	}
 
-    public function on_beat():Void {
-        player_icon.scale.add(0.2, 0.2);
-        opponent_icon.scale.add(0.2, 0.2);
+	public function on_beat():Void {
+		player_icon.scale.add(0.2, 0.2);
+		opponent_icon.scale.add(0.2, 0.2);
 
-        player_icon.updateHitbox(); opponent_icon.updateHitbox();
-    }
+		player_icon.updateHitbox();
+		opponent_icon.updateHitbox();
+	}
 }

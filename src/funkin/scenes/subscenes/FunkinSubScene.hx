@@ -56,7 +56,7 @@ class FunkinSubScene extends flixel.addons.ui.FlxUISubState {
      */
     public function on_step():Void {};
 
-    override function onFocus() {
+    override function onFocus():Void {
         super.onFocus();
         // re set the framerate here because it gets turned back to 60 if we don't
         FlxG.stage.frameRate = 1000;

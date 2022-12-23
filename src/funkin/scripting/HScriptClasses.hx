@@ -16,7 +16,17 @@ class HScriptClasses {
     };
 
     /**
-     * Literally just all the static vars and functions from flixel.util.FlxColor.
+     * Once again an enum that technically has more functions but for now those are just not gonna be supported ig.
+     */
+    public static var FlxAxes:Dynamic = {
+        'X': 0x01,
+        'Y': 0x10,
+        'XY': 0x11,
+        'NONE': 0x00
+    };
+
+    /**
+     * Literally just all the static vars and functions from `flixel.util.FlxColor`.
      */
     public static var FlxColor:Dynamic = {
         // static vars

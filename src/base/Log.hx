@@ -5,7 +5,7 @@ package base;
  * @author Leather128
  */
 class Log {
-    /**
+	/**
 	 * Simple map that contains useful ascii color strings
 	 * that can be used when printing to console for nice colors.
 	 * @author martinwells (https://gist.github.com/martinwells/5980517)
@@ -48,13 +48,18 @@ class Log {
 	 */
 	public static function print(message:String, ?type:PrintType = DEBUG, ?pos_infos:haxe.PosInfos):Void {
 		switch (type) {
-			case LOG: haxe_trace('${ascii_colors['default']}[LOG] $message', pos_infos);
-			case DEBUG: #if debug haxe_trace('${ascii_colors['green']}[DEBUG] ${ascii_colors['default']}$message', pos_infos); #end
-			case WARNING: haxe_trace('${ascii_colors['yellow']}[WARNING] ${ascii_colors['default']}$message', pos_infos);
-			case ERROR: haxe_trace('${ascii_colors['red']}[ERROR] ${ascii_colors['default']}$message', pos_infos);
-			case SCRIPT: haxe_trace('${ascii_colors['cyan']}[SCRIPT] ${ascii_colors['default']}$message', pos_infos);
+			case LOG:
+				haxe_trace('${ascii_colors['default']}[   LOG   ] $message', pos_infos);
+			case DEBUG: #if debug haxe_trace('${ascii_colors['green']}[  DEBUG  ] ${ascii_colors['default']}$message', pos_infos); #end
+			case WARNING:
+				haxe_trace('${ascii_colors['yellow']}[ WARNING ] ${ascii_colors['default']}$message', pos_infos);
+			case ERROR:
+				haxe_trace('${ascii_colors['red']}[  ERROR  ] ${ascii_colors['default']}$message', pos_infos);
+			case SCRIPT:
+				haxe_trace('${ascii_colors['cyan']}[ SCRIPTS ] ${ascii_colors['default']}$message', pos_infos);
 			// if you really want null, then here have it >:(
-			default: haxe_trace(message, pos_infos);
+			default:
+				haxe_trace(message, pos_infos);
 		}
 	}
 
