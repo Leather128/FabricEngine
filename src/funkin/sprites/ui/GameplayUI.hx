@@ -98,7 +98,7 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 
 		for (section in Gameplay.song.notes) {
 			for (note in section.sectionNotes) {
-				var note_spr:Note = spawn_note(section.mustHitSection?note[1]<4:note[1]>3, note[0], Std.int(note[1] % 4), note[2], false);
+				var note_spr:Note = spawn_note(section.mustHitSection ? note[1] < 4 : note[1] > 3, note[0], Std.int(note[1] % 4), note[2], false);
 				note_spr.raw_data = note;
 
 				// funny preloading go brrrr
@@ -112,7 +112,7 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 			}
 		}
 
-		preloaded_notes.sort(function(a:Note, b:Note) return flixel.util.FlxSort.byValues(flixel.util.FlxSort.ASCENDING, a.strum_time, b.strum_time));
+		preloaded_notes.sort(function(a:Note, b:Note):Int return flixel.util.FlxSort.byValues(flixel.util.FlxSort.ASCENDING, a.strum_time, b.strum_time));
 	}
 
 	override function update(elapsed:Float):Void {
@@ -141,7 +141,7 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 
 					Gameplay.instance.dad.sing_timer = 0.0;
 					Gameplay.instance.dad.play_animation('sing${Note.NOTE_DIRECTIONS[4][note.id].toUpperCase()}', true);
-					opponent_strums.members[note.id].play_animation('confirm');
+					opponent_strums.members[note.id].play_animation('confirm', true);
 
 					Gameplay.instance.camera_bouncing = true;
 
