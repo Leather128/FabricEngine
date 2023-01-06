@@ -12,9 +12,9 @@ class Sprite extends flixel.FlxSprite {
 	public var offsets:Map<String, flixel.math.FlxPoint> = [];
 
 	// Literally the same as the normal new function but automatically sets antialiasing to true.
-	public function new(?x:Float = 0.0, ?y:Float = 0.0, ?antialiased:Bool = true) {
+	public function new(?x:Float = 0.0, ?y:Float = 0.0, ?antialiased:Null<Bool> = null) {
 		super(x, y);
-		antialiasing = antialiased;
+		if (antialiased != null) antialiasing = antialiased;
 	}
 
 	/**
