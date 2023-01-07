@@ -1,9 +1,5 @@
 package funkin.shaders;
 
-import flixel.system.FlxAssets.FlxShader;
-
-using StringTools;
-
 // goddamn prefix
 @:access(openfl.display3D.Context3D)
 @:access(openfl.display3D.Program3D)
@@ -12,13 +8,7 @@ using StringTools;
 /**
  * This shader was made by YoshiCrafter29
  */
-class FlxFixedShader extends FlxShader {
-	public var custom:Bool = false;
-
-	public override function new() {
-		super();
-	}
-
+class FlxFixedShader extends flixel.system.FlxAssets.FlxShader {
 	@:noCompletion private override function __initGL():Void {
 		if (__glSourceDirty || __paramBool == null) {
 			__glSourceDirty = false;
@@ -35,7 +25,7 @@ class FlxFixedShader extends FlxShader {
 		}
 
 		if (__context != null && program == null) {
-			var prefix = "#version 120\n";
+			var prefix:String = "#version 120\n";
 
 			var gl = __context.gl;
 
@@ -50,20 +40,19 @@ class FlxFixedShader extends FlxShader {
 				#endif
 				";
 
-			var vertex = prefix + glVertexSource;
-			var fragment = prefix + glFragmentSource;
+			var vertex:String = prefix + glVertexSource;
+			var fragment:String = prefix + glFragmentSource;
 
-			var id = vertex + fragment;
+			var id:String = vertex + fragment;
 
-			if (__context.__programs.exists(id)) {
+			if (__context.__programs.exists(id))
 				program = __context.__programs.get(id);
-			} else {
+			else {
 				program = __context.createProgram(GLSL);
 
 				// TODO
 				// program.uploadSources (vertex, fragment);
 				program.__glProgram = __createGLProgram(vertex, fragment);
-
 				__context.__programs.set(id, program);
 			}
 
@@ -74,11 +63,10 @@ class FlxFixedShader extends FlxShader {
 
 				for (_shit in _tempShit) {
 					for (shit in _shit) {
-						if (shit.__isUniform) {
+						if (shit.__isUniform)
 							shit.index = gl.getUniformLocation(glProgram, shit.name);
-						} else {
+						else
 							shit.index = gl.getAttribLocation(glProgram, shit.name);
-						}
 					}
 				}
 			}

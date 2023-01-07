@@ -225,7 +225,7 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 	 * @param x_multi (Optional) X position multiplier to use for position.
 	 */
 	public function generate_strums(player:Int, ?x_multi:Float):Void {
-		var x_pos:Float = 95.0;
+		var x_pos:Float = 100.0;
 
 		for (i in 0...4) {
 			var strum:Strum = new Strum(x_pos, 0.0, i);
