@@ -1,0 +1,7 @@
+function create_post() {
+    if (dad.character == 'bf-pixel') {
+        dad.camera_offset.set(0, -250);
+        dad.global_offset.set(0, 350);
+        dad.setPosition(dad.x + dad.global_offset.x, dad.y + dad.global_offset.y);
+    }
+}

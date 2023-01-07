@@ -17,7 +17,7 @@ class FunkinSubScene extends flixel.addons.ui.FlxUISubState {
 
     override function create():Void {
         // set framerate just in case
-        FlxG.stage.frameRate = 1000;
+		FlxG.stage.frameRate = Save.get('fps-cap');
 
         super.create();
     }
@@ -59,6 +59,6 @@ class FunkinSubScene extends flixel.addons.ui.FlxUISubState {
     override function onFocus():Void {
         super.onFocus();
         // re set the framerate here because it gets turned back to 60 if we don't
-        FlxG.stage.frameRate = 1000;
+        FlxG.stage.frameRate = Save.get('fps-cap');
     }
 }

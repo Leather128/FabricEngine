@@ -73,15 +73,16 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 	 */
 	public var countdown_skin:haxe.xml.Access;
 
+	/**
+	 * Current parent of this `GameplayUI` instance.
+	 * Should always equal `funkin.scenes.Gameplay.instance`.
+	 */
+	public var parent:funkin.scenes.Gameplay;
+
 	public function new() {
 		super();
 
-		if (Gameplay.instance != null)
-			health_bar = new HealthBar(FlxG.height * 0.9, Gameplay.instance.bf.icon, Gameplay.instance.dad.icon, Gameplay.instance.bf.health_color,
-				Gameplay.instance.dad.health_color);
-		else
-			health_bar = new HealthBar(FlxG.height * 0.9);
-		add(health_bar);
+		parent = funkin.scenes.Gameplay.instance;
 
 		add(strums);
 		add(notes);
@@ -93,7 +94,7 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 		generate_strums(0);
 		generate_strums(1);
 
-		if (Gameplay.instance == null)
+		if (parent == null)
 			return;
 
 		for (section in Gameplay.song.notes) {
@@ -119,30 +120,33 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 						// funny preloading go brrrr
 						preloaded_notes.push(note_sustain_sprite);
 
-						if (Gameplay.instance != null) {
-							Gameplay.instance.call_scripts('on_note', [note_sustain_sprite]);
-							Gameplay.instance.call_scripts('note_spawn', [note_sustain_sprite]);
-							Gameplay.instance.call_scripts('noteSpawn', [note_sustain_sprite]);
-						}
+						parent.call_scripts('on_note', [note_sustain_sprite]);
+						parent.call_scripts('note_spawn', [note_sustain_sprite]);
+						parent.call_scripts('noteSpawn', [note_sustain_sprite]);
 					}
 				}
 
 				// funny preloading go brrrr
 				preloaded_notes.push(note_sprite);
 
-				if (Gameplay.instance != null) {
-					Gameplay.instance.call_scripts('on_note', [note_sprite]);
-					Gameplay.instance.call_scripts('note_spawn', [note_sprite]);
-					Gameplay.instance.call_scripts('noteSpawn', [note_sprite]);
-				}
+				parent.call_scripts('on_note', [note_sprite]);
+				parent.call_scripts('note_spawn', [note_sprite]);
+				parent.call_scripts('noteSpawn', [note_sprite]);
 			}
 		}
 
 		preloaded_notes.sort(function(a:Note, b:Note):Int return flixel.util.FlxSort.byValues(flixel.util.FlxSort.ASCENDING, a.strum_time, b.strum_time));
+
+		health_bar = new HealthBar(FlxG.height * 0.9, parent.bf.icon, parent.dad.icon, parent.bf.health_color,
+			parent.dad.health_color);
+		add(health_bar);
 	}
 
 	override function update(elapsed:Float):Void {
 		super.update(elapsed);
+
+		if (parent == null)
+			return;
 
 		for (note in notes.members) {
 			var strum_group:FlxTypedSpriteGroup<Strum> = note.is_player ? player_strums : opponent_strums;
@@ -160,22 +164,20 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 				note_group.remove(note, true);
 				note.destroy();
 
-				if (Gameplay.instance != null) {
-					// funny script calls
-					Gameplay.instance.call_scripts('on_sing', [note, Gameplay.instance.dad]);
-					Gameplay.instance.call_scripts('note_hit', [note, Gameplay.instance.dad]);
-					Gameplay.instance.call_scripts('noteHit', [note, Gameplay.instance.dad]);
+				// funny script calls
+				parent.call_scripts('on_sing', [note, parent.dad]);
+				parent.call_scripts('note_hit', [note, parent.dad]);
+				parent.call_scripts('noteHit', [note, parent.dad]);
 
-					Gameplay.instance.dad.sing_timer = 0.0;
-					Gameplay.instance.dad.play_animation('sing${Note.NOTE_DIRECTIONS[4][note.id].toUpperCase()}', true);
-					opponent_strums.members[note.id].play_animation('confirm', true);
+				parent.dad.sing_timer = 0.0;
+				parent.dad.play_animation('sing${Note.NOTE_DIRECTIONS[4][note.id].toUpperCase()}', true);
+				opponent_strums.members[note.id].play_animation('confirm', true);
 
-					Gameplay.instance.camera_bouncing = true;
+				parent.camera_bouncing = true;
 
-					Gameplay.instance.call_scripts('on_sing_post', [note, Gameplay.instance.dad]);
-					Gameplay.instance.call_scripts('note_hit_post', [note, Gameplay.instance.dad]);
-					Gameplay.instance.call_scripts('noteHitPost', [note, Gameplay.instance.dad]);
-				}
+				parent.call_scripts('on_sing_post', [note, parent.dad]);
+				parent.call_scripts('note_hit_post', [note, parent.dad]);
+				parent.call_scripts('noteHitPost', [note, parent.dad]);
 			}
 
 			// note missing
@@ -192,10 +194,6 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 				}
 			}
 		}
-
-		// gameplay specific stuff
-		if (Gameplay.instance == null)
-			return;
 
 		while (preloaded_notes.length > 0 && preloaded_notes[0].strum_time - Conductor.song_position < 1500.0) {
 			var note:Note = preloaded_notes[0];
@@ -284,8 +282,11 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 			Input.get('keys-4-3')
 		];
 
+		// code become less long.exe
+		var bf:funkin.sprites.gameplay.Character = parent.bf;
+
 		if (note_states.contains(PRESSED)) {
-			Gameplay.instance.bf.sing_timer = 0.0;
+			bf.sing_timer = 0.0;
 
 			player_notes.forEachAlive(function(note:Note):Void {
 				if (note.exists && note.is_sustain && note.strum_time <= Conductor.song_position + (Conductor.safe_zone_offset * 0.1))
@@ -294,7 +295,7 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 		}
 
 		if (note_states.contains(JUST_PRESSED)) {
-			Gameplay.instance.bf.sing_timer = 0.0;
+			bf.sing_timer = 0.0;
 
 			// possible notes we can hit lol
 			var possible_notes:Array<Note> = [];
@@ -337,13 +338,6 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 				strum.play_animation('default');
 		});
 
-		// if not null, do this shit
-		if (Gameplay.instance == null)
-			return;
-
-		// code become less long.exe
-		var bf:funkin.sprites.gameplay.Character = Gameplay.instance.bf;
-
 		// basically do same shit that would normally happen in Character.hx anyways
 		if (!note_states.contains(PRESSED) && bf.sing_timer >= Conductor.time_between_steps * bf.sing_duration * 0.001)
 			bf.dance();
@@ -369,16 +363,13 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 			}
 		}
 
-		if (Gameplay.instance == null)
-			return;
-
-		Gameplay.instance.call_scripts('on_sing', [note, Gameplay.instance.bf]);
-		Gameplay.instance.call_scripts('note_hit', [note, Gameplay.instance.bf]);
-		Gameplay.instance.call_scripts('noteHit', [note, Gameplay.instance.bf]);
+		parent.call_scripts('on_sing', [note, parent.bf]);
+		parent.call_scripts('note_hit', [note, parent.bf]);
+		parent.call_scripts('noteHit', [note, parent.bf]);
 
 		// nested if statements :skull:
 		if (!note.is_sustain) {
-			Gameplay.instance.combo++;
+			parent.combo++;
 
 			// ms diff
 			var difference:Float = Math.abs(Conductor.song_position - note.strum_time);
@@ -403,22 +394,22 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 					score = 50;
 			}
 
-			var rating_info:RatingInfo = new RatingInfo(0.0, 0.0, {rating: rating, combo: Gameplay.instance.combo});
+			var rating_info:RatingInfo = new RatingInfo(0.0, 0.0, {rating: rating, combo: parent.combo});
 			rating_info.screenCenter();
 			rating_info.x = FlxG.width * 0.55;
 			rating_info.y -= 60;
 
-			Gameplay.instance.add(rating_info);
-			Gameplay.instance.score += score;
+			parent.add(rating_info);
+			parent.score += score;
 		}
 
-		Gameplay.instance.bf.play_animation('sing${Note.NOTE_DIRECTIONS[4][note.id].toUpperCase()}', true);
+		parent.bf.play_animation('sing${Note.NOTE_DIRECTIONS[4][note.id].toUpperCase()}', true);
 		// why are the fnf devs so damn specific
 		health_bar.health_value += 0.023;
 
-		Gameplay.instance.call_scripts('on_sing_post', [note, Gameplay.instance.bf]);
-		Gameplay.instance.call_scripts('note_hit_post', [note, Gameplay.instance.bf]);
-		Gameplay.instance.call_scripts('noteHitPost', [note, Gameplay.instance.bf]);
+		parent.call_scripts('on_sing_post', [note, parent.bf]);
+		parent.call_scripts('note_hit_post', [note, parent.bf]);
+		parent.call_scripts('noteHitPost', [note, parent.bf]);
 	}
 
 	/**
@@ -449,26 +440,23 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 			}
 		}
 
-		if (Gameplay.instance == null)
-			return;
+		parent.call_scripts('on_miss', [note, parent.bf]);
+		parent.call_scripts('note_miss', [note, parent.bf]);
+		parent.call_scripts('noteMiss', [note, parent.bf]);
 
-		Gameplay.instance.call_scripts('on_miss', [note, Gameplay.instance.bf]);
-		Gameplay.instance.call_scripts('note_miss', [note, Gameplay.instance.bf]);
-		Gameplay.instance.call_scripts('noteMiss', [note, Gameplay.instance.bf]);
+		parent.bf.sing_timer = 0.0;
+		parent.bf.play_animation('sing${Note.NOTE_DIRECTIONS[4][note.id].toUpperCase()}miss', true);
 
-		Gameplay.instance.bf.sing_timer = 0.0;
-		Gameplay.instance.bf.play_animation('sing${Note.NOTE_DIRECTIONS[4][note.id].toUpperCase()}miss', true);
+		parent.score -= 10;
 
-		Gameplay.instance.score -= 10;
-
-		Gameplay.instance.combo = 0;
+		parent.combo = 0;
 
 		// bro why so specific lmao
 		health_bar.health_value -= 0.0475;
 
-		Gameplay.instance.call_scripts('on_miss_post', [note, Gameplay.instance.bf]);
-		Gameplay.instance.call_scripts('note_miss_post', [note, Gameplay.instance.bf]);
-		Gameplay.instance.call_scripts('noteMissPost', [note, Gameplay.instance.bf]);
+		parent.call_scripts('on_miss_post', [note, parent.bf]);
+		parent.call_scripts('note_miss_post', [note, parent.bf]);
+		parent.call_scripts('noteMissPost', [note, parent.bf]);
 	}
 
 	/**

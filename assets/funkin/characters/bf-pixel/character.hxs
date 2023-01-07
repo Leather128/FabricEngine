@@ -1,0 +1,30 @@
+function create() {
+    character.load('characters/' + character.character + '/sprites', SPARROW, [ 'images_folder' => false ]);
+
+    character.add_animation('idle', 'BF IDLE', 24);
+
+    character.add_animation('singLEFT', 'BF LEFT NOTE', 24);
+    character.add_animation('singDOWN', 'BF DOWN NOTE', 24);
+    character.add_animation('singUP', 'BF UP NOTE', 24);
+    character.add_animation('singRIGHT', 'BF RIGHT NOTE', 24);
+
+    character.add_animation('singLEFTmiss', 'BF LEFT MISS', 24);
+    character.add_animation('singDOWNmiss', 'BF DOWN MISS', 24);
+    character.add_animation('singUPmiss', 'BF UP MISS', 24);
+    character.add_animation('singRIGHTmiss', 'BF RIGHT MISS', 24);
+
+    character.flipX = !character.flipX;
+
+    character.load_offsets();
+
+    character.scale.set(6.0, 6.0);
+    character.updateHitbox();
+
+    character.dance();
+
+    character.antialiasing = false;
+    character.health_color = FlxColor.fromString('#7bd6f6');
+    
+    character.global_offset.set(300, 150);
+    character.camera_offset.set(-300, -250);
+}
