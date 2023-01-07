@@ -43,6 +43,12 @@ class ModSelect extends FunkinSubScene {
 			mods.add(mod);
 		}
 
+		// dont load the menu if we literally have 0 or 1 mods
+		if (mods.length < 2) {
+			close();
+			return;
+		}
+
 		change_selection();
 	}
 
