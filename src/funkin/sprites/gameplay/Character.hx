@@ -93,7 +93,7 @@ class Character extends Sprite {
     }
 
     override function update(elapsed:Float):Void {
-        if (animation.curAnim != null && animation.curAnim.name.startsWith('sing')) sing_timer += elapsed;
+        if (animation.curAnim != null && animation.name.startsWith('sing')) sing_timer += elapsed;
 
         if (!is_player && sing_timer >= Conductor.time_between_steps * sing_duration * 0.001) {
             dance();

@@ -98,16 +98,42 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 
 		for (section in Gameplay.song.notes) {
 			for (note in section.sectionNotes) {
-				var note_spr:Note = spawn_note(section.mustHitSection ? note[1] < 4 : note[1] > 3, note[0], Std.int(note[1] % 4), note[2], false);
-				note_spr.raw_data = note;
+				var note_sprite:Note = spawn_note(section.mustHitSection ? (note[1] < 4) : (note[1] > 3), note[0], Std.int(note[1] % 4), 0.0, false, false,
+					Std.string(note[3]), false);
+				note_sprite.raw_data = note;
+
+				if (note[2] > 0.0) {
+					var sustain_length_loop:Float = note[2] / Conductor.time_between_steps;
+
+					for (i in 0...Math.floor(sustain_length_loop)) {
+						var note_sustain_sprite:Note = spawn_note(note_sprite.is_player,
+							note_sprite.strum_time + (Conductor.time_between_steps * i) + Conductor.time_between_steps, note_sprite.id, note[2], true,
+							i == Math.floor(sustain_length_loop) - 1, note_sprite.type, false);
+						note_sustain_sprite.raw_data = note;
+						note_sustain_sprite.offset.add(-note_sustain_sprite.width, 0.0);
+						note_sustain_sprite.sustain_parent = note_sprite;
+
+						// funny note miss moment
+						note_sprite.sustain_notes.push(note_sustain_sprite);
+						note_sustain_sprite.sustain_notes = note_sprite.sustain_notes.copy();
+						// funny preloading go brrrr
+						preloaded_notes.push(note_sustain_sprite);
+
+						if (Gameplay.instance != null) {
+							Gameplay.instance.call_scripts('on_note', [note_sustain_sprite]);
+							Gameplay.instance.call_scripts('note_spawn', [note_sustain_sprite]);
+							Gameplay.instance.call_scripts('noteSpawn', [note_sustain_sprite]);
+						}
+					}
+				}
 
 				// funny preloading go brrrr
-				preloaded_notes.push(note_spr);
+				preloaded_notes.push(note_sprite);
 
 				if (Gameplay.instance != null) {
-					Gameplay.instance.call_scripts('on_note', [note_spr]);
-					Gameplay.instance.call_scripts('note_spawn', [note_spr]);
-					Gameplay.instance.call_scripts('noteSpawn', [note_spr]);
+					Gameplay.instance.call_scripts('on_note', [note_sprite]);
+					Gameplay.instance.call_scripts('note_spawn', [note_sprite]);
+					Gameplay.instance.call_scripts('noteSpawn', [note_sprite]);
 				}
 			}
 		}
@@ -122,6 +148,7 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 			var strum_group:FlxTypedSpriteGroup<Strum> = note.is_player ? player_strums : opponent_strums;
 			var note_group:FlxTypedSpriteGroup<Note> = note.is_player ? player_notes : opponent_notes;
 			var strum:Strum = strum_group.members[note.id];
+			var strum_center_y:Float = strum.y + (strum.height / 2.0);
 
 			// note movement
 			note.x = strum.x;
@@ -154,6 +181,16 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 			// note missing
 			if (note.is_player && note.strum_time < Conductor.song_position - Conductor.safe_zone_offset)
 				note_miss(note);
+
+			if (note.exists && note.is_sustain) {
+				if (note.y + note.offset.y * note.scale.y <= strum_center_y) {
+					var rect:flixel.math.FlxRect = new flixel.math.FlxRect(0, 0, note.width / note.scale.x, note.height / note.scale.y);
+					rect.y = (strum_center_y - note.y) / note.scale.y;
+					rect.height -= rect.y;
+
+					note.clipRect = rect;
+				}
+			}
 		}
 
 		// gameplay specific stuff
@@ -163,17 +200,18 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 		while (preloaded_notes.length > 0 && preloaded_notes[0].strum_time - Conductor.song_position < 1500.0) {
 			var note:Note = preloaded_notes[0];
 
-			if (note.is_player)
-				player_notes.add(note);
-			else
-				opponent_notes.add(note);
-			notes.add(note);
+			if (note != null && note.exists) {
+				if (note.is_player)
+					player_notes.add(note);
+				else
+					opponent_notes.add(note);
+				notes.add(note);
+			}
 
 			preloaded_notes.shift();
 		}
 
-		notes.members.sort(function(a:Note, b:Note) return sort_notes(flixel.util.FlxSort.DESCENDING, a, b));
-
+		notes.members.sort(function(a:Note, b:Note):Int return sort_notes(flixel.util.FlxSort.DESCENDING, a, b));
 		note_input();
 	}
 
@@ -219,8 +257,9 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 	 * @param sustain_length Time of the sustain for this note (0 for non-sustain notes).
 	 * @return The note that was spawned.
 	 */
-	public function spawn_note(is_player:Bool, strum_time:Float, id:Int, ?sustain_length:Float = 0.0, ?add_to_notes:Bool = true):Note {
-		var note:Note = new Note(is_player, strum_time, id, sustain_length);
+	public function spawn_note(is_player:Bool, strum_time:Float, id:Int, ?sustain_length:Float = 0.0, ?is_sustain:Bool = false, ?is_sustain_end:Bool = false,
+			?type:String = 'default', ?add_to_notes:Bool = true):Note {
+		var note:Note = new Note(is_player, strum_time, id, sustain_length, is_sustain_end, 'default', type);
 		note.x = -10000;
 		note.y = -10000;
 
@@ -245,11 +284,17 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 			Input.get('keys-4-3')
 		];
 
-		// TODO: add sustain note hitting
+		if (note_states.contains(PRESSED)) {
+			Gameplay.instance.bf.sing_timer = 0.0;
+
+			player_notes.forEachAlive(function(note:Note):Void {
+				if (note.exists && note.is_sustain && note.strum_time <= Conductor.song_position + (Conductor.safe_zone_offset * 0.1))
+					hit_note(note);
+			});
+		}
 
 		if (note_states.contains(JUST_PRESSED)) {
-			if (Gameplay.instance != null)
-				Gameplay.instance.bf.sing_timer = 0.0;
+			Gameplay.instance.bf.sing_timer = 0.0;
 
 			// possible notes we can hit lol
 			var possible_notes:Array<Note> = [];
@@ -286,7 +331,7 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 
 		// animation shit
 		player_strums.forEachAlive(function(strum:Strum):Void {
-			if (note_states[strum.id] == PRESSED && strum.animation.curAnim.name != 'confirm' && strum.animation.curAnim.name != 'press')
+			if (note_states[strum.id] == PRESSED && strum.animation.name != 'confirm' && strum.animation.name != 'press')
 				strum.play_animation('press');
 			else if (note_states[strum.id] == RELEASED)
 				strum.play_animation('default');
@@ -315,6 +360,15 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 		player_notes.remove(note, true);
 		note.destroy();
 
+		if (note.sustain_notes.length > 0) {
+			for (sustain in note.sustain_notes) {
+				if (sustain != note) {
+					sustain.was_hit = true;
+					break;
+				}
+			}
+		}
+
 		if (Gameplay.instance == null)
 			return;
 
@@ -322,38 +376,41 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 		Gameplay.instance.call_scripts('note_hit', [note, Gameplay.instance.bf]);
 		Gameplay.instance.call_scripts('noteHit', [note, Gameplay.instance.bf]);
 
-		Gameplay.instance.combo++;
+		// nested if statements :skull:
+		if (!note.is_sustain) {
+			Gameplay.instance.combo++;
 
-		// ms diff
-		var difference:Float = Math.abs(Conductor.song_position - note.strum_time);
-		var rating:String = 'sick';
-		var score:Int = 350;
+			// ms diff
+			var difference:Float = Math.abs(Conductor.song_position - note.strum_time);
+			var rating:String = 'sick';
+			var score:Int = 350;
 
-		// funny ratings
-		if (difference > Conductor.safe_zone_offset * 0.9)
-			rating = 'shit';
-		else if (difference > Conductor.safe_zone_offset * 0.75)
-			rating = 'bad';
-		else if (difference > Conductor.safe_zone_offset * 0.2)
-			rating = 'good';
+			// funny ratings
+			if (difference > Conductor.safe_zone_offset * 0.9)
+				rating = 'shit';
+			else if (difference > Conductor.safe_zone_offset * 0.75)
+				rating = 'bad';
+			else if (difference > Conductor.safe_zone_offset * 0.2)
+				rating = 'good';
 
-		// rating info
-		switch (rating) {
-			case 'good':
-				score = 200;
-			case 'bad':
-				score = 100;
-			case 'shit':
-				score = 50;
+			// rating info
+			switch (rating) {
+				case 'good':
+					score = 200;
+				case 'bad':
+					score = 100;
+				case 'shit':
+					score = 50;
+			}
+
+			var rating_info:RatingInfo = new RatingInfo(0.0, 0.0, {rating: rating, combo: Gameplay.instance.combo});
+			rating_info.screenCenter();
+			rating_info.x = FlxG.width * 0.55;
+			rating_info.y -= 60;
+
+			Gameplay.instance.add(rating_info);
+			Gameplay.instance.score += score;
 		}
-
-		var rating_info:RatingInfo = new RatingInfo(0.0, 0.0, {rating: rating, combo: Gameplay.instance.combo});
-		rating_info.screenCenter();
-		rating_info.x = FlxG.width * 0.55;
-		rating_info.y -= 60;
-
-		Gameplay.instance.add(rating_info);
-		Gameplay.instance.score += score;
 
 		Gameplay.instance.bf.play_animation('sing${Note.NOTE_DIRECTIONS[4][note.id].toUpperCase()}', true);
 		// why are the fnf devs so damn specific
@@ -371,10 +428,25 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 	public function note_miss(note:Note):Void {
 		var note_group:FlxTypedSpriteGroup<Note> = note.is_player ? player_notes : opponent_notes;
 
+		if (note.was_hit) {
+			notes.remove(note, true);
+			note_group.remove(note, true);
+			note.destroy();
+			return;
+		}
+
 		if (note.exists) {
 			notes.remove(note, true);
 			note_group.remove(note, true);
 			note.destroy();
+
+			for (sustain_note in note.sustain_notes) {
+				notes.remove(sustain_note, true);
+				note_group.remove(sustain_note, true);
+				sustain_note.destroy();
+
+				health_bar.health_value -= 0.01;
+			}
 		}
 
 		if (Gameplay.instance == null)

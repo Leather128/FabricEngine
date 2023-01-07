@@ -11,6 +11,11 @@ class Sprite extends flixel.FlxSprite {
 	 */
 	public var offsets:Map<String, flixel.math.FlxPoint> = [];
 
+	/**
+	 * Toggle for playing animations that aren't forced.
+	 */
+	public var play_animations:Bool = true;
+
 	// Literally the same as the normal new function but automatically sets antialiasing to true.
 	public function new(?x:Float = 0.0, ?y:Float = 0.0, ?antialiased:Null<Bool> = null) {
 		super(x, y);
@@ -87,6 +92,8 @@ class Sprite extends flixel.FlxSprite {
 	 * @return `this` (chaining purposes).
 	 */
 	public function play_animation(name:String, ?forced:Bool = false, ?reverse:Bool = false, ?frame:Int = 0):Sprite {
+		if (!forced && !play_animations) return this;
+		
 		if (animation.exists(name))
 			animation.play(name, forced, reverse, frame);
 		// offsets

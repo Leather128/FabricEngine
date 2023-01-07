@@ -260,11 +260,11 @@ class Gameplay extends FunkinScene {
 
 	override function on_beat():Void {
 		// funny checks
-		if (bf.animation.curAnim != null && !bf.animation.curAnim.name.startsWith('sing'))
+		if (bf.animation.curAnim != null && !bf.animation.name.startsWith('sing'))
 			bf.dance();
-		if (dad != gf && dad.animation.curAnim != null && !dad.animation.curAnim.name.startsWith('sing'))
+		if (dad != gf && dad.animation.curAnim != null && !dad.animation.name.startsWith('sing'))
 			dad.dance();
-		if (gf.animation.curAnim != null && !gf.animation.curAnim.name.startsWith('sing'))
+		if (gf.animation.curAnim != null && !gf.animation.name.startsWith('sing'))
 			gf.dance();
 
 		if (camera_bouncing && Conductor.beat % 4 == 0) {

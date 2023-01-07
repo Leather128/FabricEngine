@@ -56,6 +56,7 @@ class Main extends openfl.display.Sprite {
 		// default flixel type beats
 		FlxG.stage.addEventListener(openfl.events.KeyboardEvent.KEY_DOWN, key_down);
 		flixel.graphics.FlxGraphic.defaultPersist = true;
+		flixel.FlxSprite.defaultAntialiasing = true;
 	}
 
 	/**

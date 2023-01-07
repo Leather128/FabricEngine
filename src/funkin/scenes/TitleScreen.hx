@@ -188,7 +188,7 @@ class TitleScreen extends FunkinScene {
 
 		// funny animations
 		title.play_animation('bump', true);
-		gf.play_animation(gf.animation.curAnim.name == 'danceLeft' ? 'danceRight' : 'danceLeft', true);
+		gf.play_animation(gf.animation.name == 'danceLeft' ? 'danceRight' : 'danceLeft', true);
 
 		// haha if not in intro don't run intro code :O
 		if (!in_intro)

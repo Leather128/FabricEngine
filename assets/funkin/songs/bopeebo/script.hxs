@@ -1,0 +1,5 @@
+function on_beat(beat:Int) {
+    if (beat % 8 == 7) {
+        bf.play_animation('hey', true);
+    }
+}
