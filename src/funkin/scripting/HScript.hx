@@ -32,6 +32,11 @@ class HScript extends Script {
 		'X' => flixel.util.FlxAxes.X,
 		'Y' => flixel.util.FlxAxes.Y,
 		'XY' => flixel.util.FlxAxes.XY,
+		// flixel.text.FlxTextBorderStyle //
+		'NONE' => flixel.text.FlxText.FlxTextBorderStyle.NONE,
+		'SHADOW' => flixel.text.FlxText.FlxTextBorderStyle.SHADOW,
+		'OUTLINE' => flixel.text.FlxText.FlxTextBorderStyle.OUTLINE,
+		'OUTLINE_FAST' => flixel.text.FlxText.FlxTextBorderStyle.OUTLINE_FAST,
 		// import.hx //
 		'Input' => Input,
 		'Sprite' => Sprite,
@@ -53,11 +58,13 @@ class HScript extends Script {
 		'FlxPoint' => flixel.math.FlxPoint.FlxBasePoint,
 		'FlxRect' => flixel.math.FlxRect,
 		'FlxSound' => flixel.system.FlxSound,
+		'FlxText' => flixel.text.FlxText,
 		'FlxRuntimeShader' => flixel.addons.display.FlxRuntimeShader,
 		'ScriptedScene' => funkin.scenes.ScriptedScene,
 		'ScriptedSubScene' => funkin.scenes.subscenes.ScriptedSubScene,
 		'Math' => Math,
 		'Std' => Std,
+		'Main' => Main,
 	];
 
 	// same docs as Script lmao
@@ -91,6 +98,7 @@ class HScript extends Script {
 	public function new(path:String, call_new:Bool = true) {
         // Allows typing of variables ex: 'var three:Int = 3;', 'JSON Compatibility', and Haxe Metadata declarations in HScript
 		parser.allowTypes = parser.allowJSON = parser.allowMetadata = true;
+		interp.allowPublicVariables = interp.allowStaticVariables = true;
 
 		// loop through extensions to make sure the path exists
 		for (ext in file_extensions) {
@@ -203,7 +211,7 @@ class HScript extends Script {
 		// trace dumb >_<
 		set('trace', function(value:Dynamic):Void {
 			// complicated shit (i would use actually haxe trace but this faster i think + that one doesn't get file path correct)
-			Sys.println('${hscript_path}:${interp.posInfos().lineNumber}: ${base.Log.ascii_colors['cyan']}[SCRIPT] ${base.Log.ascii_colors['default']}${value}');
+			Sys.println('${hscript_path}:${interp.posInfos().lineNumber}: ${base.Log.ascii_colors['cyan']}[ SCRIPTS ] ${base.Log.ascii_colors['default']}${value}');
 		});
 		// load other scripts
 		set('load', function(path:String, call_new:Bool = true):Script {
@@ -245,8 +253,15 @@ class HScript extends Script {
 	 * Sets the current script object to `obj`.
 	 * @param obj Object to set it to.
 	 */
-	public override function set_script_object(obj:Dynamic):Void
+	public override function set_script_object(obj:Dynamic):Void {
+		var obj_class:Dynamic = Type.getClass(obj);
+
+		for (key in Type.getClassFields(obj_class)) {
+			interp.staticVariables.set(key, Reflect.getProperty(obj_class, key));
+		}
+
 		interp.scriptObject = obj;
+	}
 
 	/**
 	 * Destroys this script.

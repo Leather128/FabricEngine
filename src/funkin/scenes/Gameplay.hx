@@ -102,6 +102,11 @@ class Gameplay extends FunkinScene {
 	public var camera_moving(default, set):Bool = true;
 
 	/**
+	 * Whether or not the camera is currently tracking the in-game characters.
+	 */
+	public var camera_tracks:Bool = true;
+
+	/**
 	 * Whether or not the song has started yet.
 	 */
 	public var song_started:Bool = false;
@@ -140,6 +145,8 @@ class Gameplay extends FunkinScene {
 	}
 
 	override function create():Void {
+		can_select_mods = false;
+
 		// load song fallbacks
 		if (song == null)
 			song = SongHelper.load_song('tutorial/normal');
@@ -276,6 +283,7 @@ class Gameplay extends FunkinScene {
 
 		// preferred function naming ig
 		call_scripts('on_beat', [Conductor.beat, Conductor.beat_f]);
+		call_scripts('beat_hit', [Conductor.beat, Conductor.beat_f]);
 		call_scripts('beatHit', [Conductor.beat, Conductor.beat_f]);
 
 		super.on_beat();
@@ -284,6 +292,7 @@ class Gameplay extends FunkinScene {
 	override function on_step():Void {
 		// preferred function naming ig
 		call_scripts('on_step', [Conductor.step, Conductor.step_f]);
+		call_scripts('step_hit', [Conductor.step, Conductor.step_f]);
 		call_scripts('stepHit', [Conductor.step, Conductor.step_f]);
 
 		super.on_step();
@@ -312,12 +321,20 @@ class Gameplay extends FunkinScene {
 	}
 
 	/**
-	 * Loads all scripts for the current script (global or not).
+	 * Loads all scripts for the current song (global or not).
 	 */
 	public function load_song_scripts():Void {
 		// load song specific scripts
-		for (dir in sys.FileSystem.readDirectory(Assets.asset('songs/${song.song.toLowerCase()}'))) {
+		for (dir in Assets.get_dirs('songs/${song.song.toLowerCase()}')) {
 			var script:Script = Script.load('songs/${song.song.toLowerCase()}/${dir}');
+			if (script != null) {
+				scripts.push(script);
+				script.call('create');
+			}
+		}
+
+		for (dir in Assets.get_dirs('scripts/autoload')) {
+			var script:Script = Script.load('scripts/autoload/${dir}');
 			if (script != null) {
 				scripts.push(script);
 				script.call('create');
@@ -329,9 +346,7 @@ class Gameplay extends FunkinScene {
 	 * Updates the camera position to the current target. Pretty simple.
 	 */
 	public function update_camera_position():Void {
-		if (Conductor.beat < 0)
-			return;
-		if (song.notes.length - 1 < Math.floor(Conductor.beat / 4))
+		if (!camera_tracks || Conductor.beat < 0 || song.notes.length - 1 < Math.floor(Conductor.beat / 4))
 			return;
 
 		var must_hit_section:Bool = song.notes[Math.floor(Conductor.beat / 4)].mustHitSection;

@@ -22,7 +22,7 @@ class Input {
 		"accept_alt" => SPACE,
 		"exit" => ESCAPE,
 		"exit_alt" => BACKSPACE,
-		"mod_select" => GRAVEACCENT,
+		"mod_select" => TAB,
 		"mod_select_alt" => SHIFT,
 		// note keybinds
 		"keys-4-0" => LEFT,

@@ -67,6 +67,11 @@ class Character extends Sprite {
      */
     public var sing_duration:Float = 4.0;
 
+    /**
+     * Whether or not the current animation overrides the dance functionality.
+     */
+    public var special_animation:Bool = false;
+
     public function new(x:Float = 0.0, y:Float = 0.0, character:String = 'bf', ?is_player:Bool = false) {
         super(x, y);
 
@@ -93,7 +98,16 @@ class Character extends Sprite {
     }
 
     override function update(elapsed:Float):Void {
-        if (animation.curAnim != null && animation.name.startsWith('sing')) sing_timer += elapsed;
+        if (animation.curAnim == null) {
+            super.update(elapsed);
+            return;
+        }
+
+        if (animation.name.startsWith('sing')) sing_timer += elapsed;
+        if (special_animation && animation.curAnim.finished) {
+            special_animation = false;
+            dance();
+        }
 
         if (!is_player && sing_timer >= Conductor.time_between_steps * sing_duration * 0.001) {
             dance();
@@ -109,13 +123,15 @@ class Character extends Sprite {
      * Can be customized with scripting and/or the `dance_steps` property.
      */
     public function dance():Void {
-        // dance step incrementing
-        dance_step += 1;
-        if (dance_step > dance_steps.length - 1) dance_step = 0;
-        // default behaviour
-        play_animation(dance_steps[dance_step]);
-        // custom behaviour
-        script.call('dance');
+        if (!special_animation) {
+            // dance step incrementing
+            dance_step += 1;
+            if (dance_step > dance_steps.length - 1) dance_step = 0;
+            // default behaviour
+            play_animation(dance_steps[dance_step]);
+            // custom behaviour
+            script.call('dance');
+        }
     }
 
     /**

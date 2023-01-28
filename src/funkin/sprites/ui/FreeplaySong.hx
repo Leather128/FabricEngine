@@ -16,11 +16,6 @@ class FreeplaySong extends flixel.group.FlxSpriteGroup {
 	public var song_bpm:Float = 0.0;
 
 	/**
-	 * Index of this song in a list of songs.
-	 */
-	public var index:Int = 0;
-
-	/**
 	 * Current song alphabet in this freeplay song.
 	 */
 	public var song:Alphabet;
@@ -32,7 +27,6 @@ class FreeplaySong extends flixel.group.FlxSpriteGroup {
 
 	public function new(x:Float = 0.0, y:Float = 0.0, song_info:FreeplaySongData, ?index:Int = 0) {
 		super(x, y);
-		this.index = index;
 
 		// set properties
 		song_name = song_info.name;
@@ -50,19 +44,13 @@ class FreeplaySong extends flixel.group.FlxSpriteGroup {
 		// start spawning sprites
 
 		song = new Alphabet(0, 0, song_name);
+		song.is_menu_item = true;
+		song.ID = index;
 		add(song);
 
 		icon = new HealthIcon(0, 0, song_icon, song_icon_antialiased);
 		icon.tracked = song;
 		add(icon);
-	}
-
-	override function update(elapsed:Float):Void {
-		var remapped_y:Float = FlxMath.remapToRange(index, 0, 1, 0, 1.3);
-		// 60 fps elasped = 0.016, old lerp was 0.16, so around 10x elapsed is accurate
-		setPosition(FlxMath.lerp(x, (index * 20.0) + 90.0, elapsed * 10.0), FlxMath.lerp(y, (remapped_y * 120.0) + (FlxG.height * 0.48), elapsed * 10.0));
-
-		super.update(elapsed);
 	}
 }
 

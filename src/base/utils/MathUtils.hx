@@ -12,6 +12,6 @@ class MathUtils {
      * @return The rounded value of that number.
      */
     public static function round_decimal(number:Float, precision:Int):Float {
-        return Math.fround(number * Math.pow(10.0, precision)) / Math.pow(10.0, precision);
+        return Math.fround(number * (10^precision)) / (10^precision);
     }
 }

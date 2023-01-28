@@ -108,7 +108,7 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 
 					for (i in 0...Math.floor(sustain_length_loop)) {
 						var note_sustain_sprite:Note = spawn_note(note_sprite.is_player,
-							note_sprite.strum_time + (Conductor.time_between_steps * i) + Conductor.time_between_steps, note_sprite.id, note[2], true,
+							note_sprite.strum_time + (Conductor.time_between_steps * (i + 0.5)), note_sprite.id, note[2], true,
 							i == Math.floor(sustain_length_loop) - 1, note_sprite.type, false);
 						note_sustain_sprite.raw_data = note;
 						note_sustain_sprite.offset.add(-note_sustain_sprite.width, 0.0);
@@ -182,7 +182,7 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 
 			// note missing
 			if (note.is_player && note.strum_time < Conductor.song_position - Conductor.safe_zone_offset)
-				note_miss(note);
+				miss_note(note);
 
 			if (note.exists && note.is_sustain) {
 				if (note.y + note.offset.y * note.scale.y <= strum_center_y) {
@@ -401,6 +401,10 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 
 			parent.add(rating_info);
 			parent.score += score;
+
+			parent.call_scripts('on_rating', [rating, score, rating_info, difference]);
+			parent.call_scripts('pop_up_score', [rating, score, rating_info, difference]);
+			parent.call_scripts('popUpScore', [rating, score, rating_info, difference]);
 		}
 
 		parent.bf.play_animation('sing${Note.NOTE_DIRECTIONS[4][note.id].toUpperCase()}', true);
@@ -416,7 +420,7 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 	 * Misses specified `note`.
 	 * @param note Note to miss.
 	 */
-	public function note_miss(note:Note):Void {
+	public function miss_note(note:Note):Void {
 		var note_group:FlxTypedSpriteGroup<Note> = note.is_player ? player_notes : opponent_notes;
 
 		if (note.was_hit) {

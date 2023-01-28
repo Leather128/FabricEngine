@@ -33,7 +33,7 @@ class ModSelect extends FunkinSubScene {
 
 		// reads all folders / files in the assets folder
 		for (dir in sys.FileSystem.readDirectory(Assets.absolute_path('assets'))) {
-			if (!sys.FileSystem.isDirectory(Assets.absolute_path('assets/${dir}')))
+			if (!sys.FileSystem.exists(Assets.absolute_path('assets/${dir}/mod.xml')))
 				continue;
 
 			if (dir == Assets.preferred_mod)

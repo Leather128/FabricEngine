@@ -15,11 +15,14 @@ class HealthIcon extends TrackingSprite {
      * @param character Icon to load (starts at 'assets/images/gameplay/icons/icon-')
      * @param antialiased What to set antialiasing to.
      */
-    public function load_icon(character:String = 'face', antialiased:Bool = true) {
+    public function load_icon(character:String = 'face', antialiased:Bool = true):Void {
         antialiasing = antialiased;
 
         // load icons
-        load('gameplay/icons/icon-${character}', IMAGE, [ 'animated' => true, 'width' => 150, 'height' => 150 ]);
+        if (Assets.exists('images/gameplay/icons/icon-${character}.png'))
+            load('gameplay/icons/icon-${character}', IMAGE, [ 'animated' => true, 'width' => 150, 'height' => 150 ]);
+        else
+            load('gameplay/icons/${character}', IMAGE, [ 'animated' => true, 'width' => 150, 'height' => 150 ]);
 
         // add aniamtions
         animation.add('alive', [0], 24, true);

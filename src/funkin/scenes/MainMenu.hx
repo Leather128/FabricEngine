@@ -112,8 +112,6 @@ class MainMenu extends FunkinScene {
 
 		if (Input.is('exit'))
 			FlxG.switchState(new TitleScreen());
-		if (Input.is('mod_select'))
-			openSubState(new funkin.scenes.subscenes.ModSelect());
 		if (Input.is('nine'))
 			FlxG.switchState(new ScriptedScene('Test'));
 	}

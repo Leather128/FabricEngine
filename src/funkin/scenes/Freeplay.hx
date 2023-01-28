@@ -125,8 +125,6 @@ class Freeplay extends FunkinScene {
 			play_song();
 		if (Input.is('f5'))
 			song_thread_active = false;
-		if (Input.is('mod_select'))
-			openSubState(new funkin.scenes.subscenes.ModSelect());
 
 		// score //
 		// equal to about 0.4 at 60 fps
@@ -156,7 +154,7 @@ class Freeplay extends FunkinScene {
 
 		songs_group.forEach(function(item:FreeplaySong):Void {
 			item.alpha = songs_group.members.indexOf(item) == index ? 1 : 0.6;
-			item.index = songs_group.members.indexOf(item) - index;
+			item.song.ID = songs_group.members.indexOf(item) - index;
 		});
 
 		change_difficulty();
@@ -177,7 +175,10 @@ class Freeplay extends FunkinScene {
 		else if (difficulty > songs[index].difficulties.length - 1)
 			difficulty = 0;
 
-		diff_text.text = '< ${songs[index].difficulties[difficulty].toUpperCase()} >';
+		if (songs[index].difficulties.length > 1)
+			diff_text.text = '< ${songs[index].difficulties[difficulty].toUpperCase()} >';
+		else
+			diff_text.text = songs[index].difficulties[difficulty].toUpperCase();
 	}
 
 	/**

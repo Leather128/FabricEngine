@@ -57,6 +57,7 @@ class Main extends openfl.display.Sprite {
 		FlxG.stage.addEventListener(openfl.events.KeyboardEvent.KEY_DOWN, key_down);
 		flixel.graphics.FlxGraphic.defaultPersist = true;
 		flixel.FlxSprite.defaultAntialiasing = true;
+		FlxG.keys.preventDefaultKeys = [TAB];
 	}
 
 	/**

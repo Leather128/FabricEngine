@@ -151,8 +151,8 @@ class TitleScreen extends FunkinScene {
 		if (!initialized)
 			return;
 
-		if (!in_intro && Input.is('mod_select'))
-			openSubState(new funkin.scenes.subscenes.ModSelect());
+		can_select_mods = !in_intro;
+		
 		if (Input.is('exit')) {
 			FlxG.sound.play(Assets.audio('sfx/menus/cancel'), 0.75).onComplete = function():Void {
 				trace('Exiting the game!', LOG);

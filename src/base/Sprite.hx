@@ -89,6 +89,8 @@ class Sprite extends flixel.FlxSprite {
 	 * Play the specified animation using `animation.play()`.
 	 * @param name Name of the animation to play.
 	 * @param forced Whether or not to force it to play.
+	 * @param reverse Whether or not the animation is reversed.
+	 * @param frame The frame to start the animation on.
 	 * @return `this` (chaining purposes).
 	 */
 	public function play_animation(name:String, ?forced:Bool = false, ?reverse:Bool = false, ?frame:Int = 0):Sprite {

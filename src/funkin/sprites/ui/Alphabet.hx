@@ -1,5 +1,6 @@
 package funkin.sprites.ui;
 
+import flixel.math.FlxMath;
 import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
 
 /**
@@ -7,6 +8,11 @@ import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
  * @author Leather128
  */
 class Alphabet extends FlxTypedSpriteGroup<AlphabetChar> {
+	/**
+	 * Explains itself.
+	 */
+	public var is_menu_item:Bool = false;
+
 	/**
 	 * @param x X
 	 * @param y Y
@@ -32,6 +38,16 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetChar> {
 
 			alphabet_x += alphabet_char.width;
 		}
+	}
+
+	public override function update(elapsed:Float):Void {
+		if (is_menu_item) {
+			var remapped_y:Float = FlxMath.remapToRange(ID, 0, 1, 0, 1.3);
+			// 60 fps elasped = 0.016, old lerp was 0.16, so around 10x elapsed is accurate
+			setPosition(FlxMath.lerp(x, (ID * 20.0) + 90.0, elapsed * 10.0), FlxMath.lerp(y, (remapped_y * 120.0) + (FlxG.height * 0.48), elapsed * 10.0));
+		}
+
+		super.update(elapsed);
 	}
 }
 

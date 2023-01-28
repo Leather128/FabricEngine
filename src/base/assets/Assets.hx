@@ -47,6 +47,36 @@ class Assets {
     public static function exists(path:String, ?mod:String):Bool
         return sys.FileSystem.exists(asset(path, mod));
 
+    public static function get_dirs(path:String, ?mod:String):Array<String> {
+        var dirs:Array<String> = [];
+
+        if (mod != null && exists(path, mod)) {
+            for (dir in sys.FileSystem.readDirectory(absolute_path('assets/$mod/$path'))) {
+                dirs.push(dir);
+            }
+        }
+        
+        if (preferred_mod != 'funkin' && sys.FileSystem.exists(absolute_path('assets/$preferred_mod/$path'))) {
+            for (dir in sys.FileSystem.readDirectory(absolute_path('assets/$preferred_mod/$path'))) {
+                dirs.push(dir);
+            }
+        }
+
+        if (sys.FileSystem.exists(absolute_path('assets/funkin/$path'))) {
+            for (dir in sys.FileSystem.readDirectory(absolute_path('assets/funkin/$path'))) {
+                dirs.push(dir);
+            }
+        }
+
+        if (sys.FileSystem.exists(absolute_path('assets/$path'))) {
+            for (dir in sys.FileSystem.readDirectory(absolute_path('assets/$path'))) {
+                dirs.push(dir);
+            }
+        }
+
+        return dirs;
+    }
+
     /**
      * Returns the absolute path of `path` from the assets folder.
      * 
@@ -61,6 +91,9 @@ class Assets {
 
         if (preferred_mod != null && preferred_mod != 'funkin' && sys.FileSystem.exists(absolute_path('assets/$preferred_mod/$path'))) // If the file exists in preferred_mod then return that.
             return absolute_path('assets/$preferred_mod/$path');
+
+        if (sys.FileSystem.exists(absolute_path('assets/$path'))) // funny assets folder
+            return absolute_path('assets/$path');
 
         #if debug if (!Main.developer_build || override_developer_mode) { #end
         return absolute_path('assets/funkin/$path');

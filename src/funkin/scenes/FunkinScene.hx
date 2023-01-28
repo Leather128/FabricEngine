@@ -21,6 +21,11 @@ class FunkinScene extends flixel.addons.ui.FlxUIState {
 	private var clear_cache:Bool = true;
 
 	/**
+	 * Whether or not you can select a mod in this scene.
+	 */
+	public var can_select_mods:Bool = true;
+
+	/**
 	 * @param clear_cache Whether or not to automatically clear the cache when transitioning into this scene.
 	 */
 	public function new(?clear_cache:Bool = true) {
@@ -65,6 +70,8 @@ class FunkinScene extends flixel.addons.ui.FlxUIState {
 		// We reload state here instead of in the same place as fullscreen just to allow states to manually do things before the state gets reloaded (could be useful)
 		if (Input.is('f5'))
 			FlxG.resetState();
+		if (can_select_mods && Input.is('mod_select'))
+			openSubState(new funkin.scenes.subscenes.ModSelect());
 
 		super.update(elapsed);
 	}
