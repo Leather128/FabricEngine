@@ -1,5 +1,5 @@
 package funkin.scenes;
 
-class OptionsMenu extends FunkinScene {
+class OptionsMenu extends ScriptedScene {
     
 }

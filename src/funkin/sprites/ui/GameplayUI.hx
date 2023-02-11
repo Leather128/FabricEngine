@@ -186,7 +186,7 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 
 			if (note.exists && note.is_sustain) {
 				if (note.y + note.offset.y * note.scale.y <= strum_center_y) {
-					var rect:flixel.math.FlxRect = new flixel.math.FlxRect(0, 0, note.width / note.scale.x, note.height / note.scale.y);
+					var rect:flixel.math.FlxRect = new flixel.math.FlxRect(0, 0, note.frameWidth / note.scale.x, note.frameHeight / note.scale.y);
 					rect.y = (strum_center_y - note.y) / note.scale.y;
 					rect.height -= rect.y;
 

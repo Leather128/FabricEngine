@@ -59,6 +59,8 @@ class HScript extends Script {
 		'FlxRect' => flixel.math.FlxRect,
 		'FlxSound' => flixel.system.FlxSound,
 		'FlxText' => flixel.text.FlxText,
+		'FlxGroup' => flixel.group.FlxGroup,
+		'FlxSpriteGroup' => flixel.group.FlxSpriteGroup,
 		'FlxRuntimeShader' => flixel.addons.display.FlxRuntimeShader,
 		'ScriptedScene' => funkin.scenes.ScriptedScene,
 		'ScriptedSubScene' => funkin.scenes.subscenes.ScriptedSubScene,

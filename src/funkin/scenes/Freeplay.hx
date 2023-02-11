@@ -8,7 +8,7 @@ import funkin.sprites.ui.FreeplaySong;
  * The freeplay menu.
  * @author Leather128
  */
-class Freeplay extends FunkinScene {
+class Freeplay extends ScriptedScene {
 	// private variables
 	var bg:Sprite = new Sprite().load('menus/background_grayscale');
 	var songs:Array<FreeplaySongData> = [];

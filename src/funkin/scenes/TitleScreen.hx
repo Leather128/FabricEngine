@@ -12,7 +12,7 @@ import funkin.sprites.ui.Alphabet;
  * The title screen for the game.
  * @author Leather128
  */
-class TitleScreen extends FunkinScene {
+class TitleScreen extends ScriptedScene {
 	/**
 	 * Current intro xml data.
 	 */
@@ -266,6 +266,8 @@ class TitleScreen extends FunkinScene {
 
 		// play specified music
 		FlxG.sound.playMusic(Assets.audio('music/menus/${music_title}'));
+		FlxG.sound.music.persist = true;
+		FlxG.sound.music.looped = true;
 	}
 
 	/**

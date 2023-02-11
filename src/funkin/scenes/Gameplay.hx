@@ -10,7 +10,7 @@ import flixel.system.FlxSound;
  * The actual main gameplay of the game.
  * @author Leather128
  */
-class Gameplay extends FunkinScene {
+class Gameplay extends ScriptedScene {
 	/**
 	 * Current active instance of the `Gameplay` class.
 	 */

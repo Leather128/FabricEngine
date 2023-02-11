@@ -6,7 +6,7 @@ import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
  * Subscene to allow you to select a mod from anywhere supported.
  * @author Leather128
  */
-class ModSelect extends FunkinSubScene {
+class ModSelect extends ScriptedSubScene {
 	var hud_camera:flixel.FlxCamera = new flixel.FlxCamera();
 
 	public var mods:FlxTypedSpriteGroup<funkin.sprites.ui.MenuMod> = new FlxTypedSpriteGroup<funkin.sprites.ui.MenuMod>();
@@ -22,7 +22,7 @@ class ModSelect extends FunkinSubScene {
 		hud_camera.bgColor.alpha = 0;
 		FlxG.cameras.add(hud_camera, false);
 
-		var bg:Sprite = cast new Sprite().makeGraphic(FlxG.width - 16, FlxG.height - 16, flixel.util.FlxColor.BLACK);
+		var bg:Sprite = cast(new Sprite().makeGraphic(FlxG.width - 16, FlxG.height - 16, flixel.util.FlxColor.BLACK));
 		bg.screenCenter();
 		bg.alpha = 0.6;
 		bg.cameras = [hud_camera];

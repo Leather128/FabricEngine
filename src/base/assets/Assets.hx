@@ -184,6 +184,14 @@ class Assets {
     }
 
     /**
+     * Alias for `audio(path, mod)`
+     * @return Return of `audio(path, mod)`
+     */
+    public static function sound(path:String, ?mod:String):flixel.system.FlxAssets.FlxSoundAsset {
+        return audio(path, mod);
+    }
+
+    /**
      * Load and return the name of the font from the specified `path`.
      * 
      * (starts in the `assets/fonts` folder if not specified)

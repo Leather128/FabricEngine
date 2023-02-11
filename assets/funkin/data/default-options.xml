@@ -19,7 +19,6 @@
 
     <save name='misc'>
         <bool key='play-freeplay-songs' value='true' />
-        <bool key='auto-pause' value='false' />
     </save>
 
     <save name='engine'>

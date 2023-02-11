@@ -56,4 +56,13 @@ class StringUtils {
 
 		return formatted_bytes;
 	}
+
+	public static function class_name(obj:Dynamic):String {
+		if (obj != null) {
+			var class_path:String = Type.getClassName(Type.getClass(obj));
+			return class_path.split('.')[class_path.split('.').length - 1];
+		}
+		
+		return 'Null';
+	}
 }

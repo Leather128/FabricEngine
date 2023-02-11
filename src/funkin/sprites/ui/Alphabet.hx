@@ -20,7 +20,7 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetChar> {
 	 * @param bold (Optional) Bold alphabet toggle.
 	 * @author Leather128
 	 */
-	public function new(x:Float = 0.0, y:Float = 0.0, text:String, bold:Bool = true) {
+	public function new(x:Float = 0.0, y:Float = 0.0, text:String, bold:Bool = true, ?size:Float = 1.0) {
 		super(x, y);
 
 		var alphabet_x:Float = 0.0;
@@ -29,11 +29,11 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetChar> {
 			var character:String = text.charAt(i);
 
 			if (character == ' ') {
-				alphabet_x += 40;
+				alphabet_x += 40 * size;
 				continue;
 			}
 
-			var alphabet_char:AlphabetChar = new AlphabetChar(alphabet_x, 0, character, bold);
+			var alphabet_char:AlphabetChar = new AlphabetChar(alphabet_x, 0, character, bold, 0, size);
 			add(alphabet_char);
 
 			alphabet_x += alphabet_char.width;
@@ -88,12 +88,13 @@ class AlphabetChar extends Sprite {
 	 * @param bold (Optional) Bold alphabet toggle.
 	 * @param row (Optional) Row of the character (NON BOLD ONLY).
 	 */
-	public function new(x:Float = 0.0, y:Float = 0.0, raw_character:String, bold:Bool = true, row:Int = 0) {
+	public function new(x:Float = 0.0, y:Float = 0.0, raw_character:String, bold:Bool = true, row:Int = 0, ?size:Float = 1.0) {
 		super(x, y);
 		// shouldn't happen, but just in case
 		if (character == ' ')
 			return;
 
+		scale.set(size, size);
 		character = convert(raw_character);
 
 		uses_outline = bold && !alphabet.contains(character.toLowerCase());
@@ -114,7 +115,7 @@ class AlphabetChar extends Sprite {
 			play_animation('character', true);
 
 			// i love scaling and offsets
-			scale.set(1.5, 1.5);
+			scale.set(1.5 * size, 1.5 * size);
 			updateHitbox();
 
 			set_offsets(raw_character, bold, row);

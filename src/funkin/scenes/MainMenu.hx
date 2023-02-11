@@ -6,7 +6,7 @@ import funkin.sprites.ui.AtlasList;
  * The main menu of the game.
  * @author Leather128
  */
-class MainMenu extends FunkinScene {
+class MainMenu extends ScriptedScene {
 	// background lmao
 	var bg:Sprite = new Sprite().load('menus/background');
 
