@@ -48,26 +48,15 @@ class FunkinScene extends flixel.addons.ui.FlxUIState {
 	}
 
 	override function update(elapsed:Float):Void {
-		// Music stuff //
-
-		// Set float beat and step
-		Conductor.beat_f = Conductor.song_position / Conductor.time_between_beats;
-		Conductor.step_f = Conductor.song_position / Conductor.time_between_steps;
-
-		// Set normal beat and step
-		Conductor.beat = Math.floor(Conductor.beat_f);
-		Conductor.step = Math.floor(Conductor.step_f);
-
 		if (Conductor.beat > last_beat)
 			on_beat();
 		if (Conductor.step > last_step)
 			on_step();
 
-		// Set old beat and step to the current ones after detecting changes
-		last_beat = Conductor.beat;
-		last_step = Conductor.step;
+		// set old beat and step to the current ones after detecting changes
+		last_beat = Conductor.beat; last_step = Conductor.step;
 
-		// We reload state here instead of in the same place as fullscreen just to allow states to manually do things before the state gets reloaded (could be useful)
+		// we reload state here instead of in the same place as fullscreen just to allow states to manually do things before the state gets reloaded (could be useful)
 		if (Input.is('f5'))
 			FlxG.resetState();
 		if (can_select_mods && Input.is('mod_select'))
@@ -103,6 +92,11 @@ class FunkinScene extends flixel.addons.ui.FlxUIState {
 	override function closeSubState():Void {
 		persistentUpdate = true;
 		super.closeSubState();
+	}
+
+	override function destroy():Void {
+		super.destroy();
+		clear_memory();
 	}
 
 	/**

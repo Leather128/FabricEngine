@@ -99,6 +99,10 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 
 		for (section in Gameplay.song.notes) {
 			for (note in section.sectionNotes) {
+				// fuck you psych events :middlefinger:
+				if (note[1] == -1)
+					continue;
+
 				var note_sprite:Note = spawn_note(section.mustHitSection ? (note[1] < 4) : (note[1] > 3), note[0], Std.int(note[1] % 4), 0.0, false, false,
 					Std.string(note[3]), false);
 				note_sprite.raw_data = note;
@@ -513,6 +517,9 @@ class GameplayUI extends flixel.group.FlxSpriteGroup {
 			if (countdown.sound != '')
 				FlxG.sound.play(Assets.audio('sfx/gameplay/countdown/${countdown.sound}-${countdown_skin.att.skin}'),
 					Std.parseFloat(countdown.skin.att.volume));
+			
+			parent.call_scripts('on_countdown', [timer.elapsedLoops]);
+			parent.call_scripts('onCountdown', [timer.elapsedLoops]);
 		}, 4);
 	}
 

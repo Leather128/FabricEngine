@@ -97,7 +97,7 @@ class TitleScreen extends ScriptedScene {
 		persistentUpdate = persistentDraw;
 
 		new flixel.util.FlxTimer().start(1, function(_):Void {
-			Conductor.bpm = Std.parseFloat(data.att.bpm);
+			Conductor.set_bpm(Std.parseFloat(data.att.bpm));
 			play_music('normal');
 			FlxG.sound.music.fadeIn(4, 0, 0.7);
 

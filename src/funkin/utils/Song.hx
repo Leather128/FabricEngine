@@ -48,12 +48,12 @@ package funkin.utils;
 	/**
 	 * Song GF Character (Optional).
 	 */
-	var gf:Null<String>;
+	var ?gf:Null<String>;
 
 	/**
 	 * Song Stage (Optional).
 	 */
-	var stage:Null<String>;
+	var ?stage:Null<String>;
 }
 
 /**
@@ -71,7 +71,7 @@ typedef Section = {
 	/**
 	 * Length of the section in steps (16 is the default).
 	 */
-	var lengthInSteps:Int;
+	var ?lengthInSteps:Null<Int>;
 
 	/**
 	 * Whether or not this section is one that focuses on Player 1 (BF).

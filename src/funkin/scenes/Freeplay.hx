@@ -259,7 +259,8 @@ class Freeplay extends ScriptedScene {
 					FlxG.sound.playMusic(audio_data);
 					FlxG.sound.music.fadeIn();
 
-					Conductor.bpm = songs[_index].bpm;
+
+					Conductor.set_bpm(songs[_index].bpm);
 				}
 			});
 		}
