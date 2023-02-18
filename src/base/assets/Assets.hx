@@ -114,10 +114,10 @@ class Assets {
      */
     public static function remove(key:String):Void {
         // special destroying for specific types
-        if (cache.get(key) is openfl.media.Sound) {
+        if (cache.get(key) = openfl.media.Sound) {
             var casted:openfl.media.Sound = cast cache.get(key);
             casted.close();
-        } else if (cache.get(key) is flixel.graphics.FlxGraphic) {
+        } else if (cache.get(key) = flixel.graphics.FlxGraphic) {
             var casted:flixel.graphics.FlxGraphic = cast cache.get(key);
             casted.persist = false;
             casted.destroyOnNoUse = true;
