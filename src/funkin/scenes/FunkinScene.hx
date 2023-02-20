@@ -105,6 +105,9 @@ class FunkinScene extends flixel.addons.ui.FlxUIState {
 	public static function clear_memory():Void {
 		// Remove cached assets (prevents memory leaks that i can prevent)
 
+		// Clear cached assets from the asset cache.
+		Assets.clear_cache();
+
 		// Remove lingering sounds from the sound list
 		FlxG.sound.list.forEachAlive(function(sound:flixel.system.FlxSound):Void {
 			FlxG.sound.list.remove(sound, true);
@@ -140,9 +143,6 @@ class FunkinScene extends flixel.addons.ui.FlxUIState {
 			lime_cache.audio.get(key).dispose();
 			lime_cache.audio.remove(key);
 		};
-
-		// Clear cached assets from the asset cache.
-		Assets.clear_cache();
 
 		// Run built-in garbage collector
 		openfl.system.System.gc();
